@@ -1,0 +1,1896 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scoring System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
+            --secondary: #10b981;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --light: #f3f4f6;
+            --dark: #1f2937;
+            --gray: #6b7280;
+            --light-gray: #e5e7eb;
+            --white: #ffffff;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            min-height: 100vh;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            font-size: 28px;
+            color: var(--primary);
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            padding: 10px 15px 10px 40px;
+            border: 1px solid var(--light-gray);
+            border-radius: 8px;
+            font-size: 14px;
+            width: 200px;
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+
+        .language-selector {
+            position: relative;
+        }
+
+        .language-btn {
+            background: var(--white);
+            border: 1px solid var(--light-gray);
+            border-radius: 8px;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .language-btn:hover {
+            border-color: var(--primary);
+        }
+
+        .language-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--white);
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            z-index: 100;
+            min-width: 150px;
+            display: none;
+            overflow: hidden;
+        }
+
+        .language-dropdown.active {
+            display: block;
+        }
+
+        .language-option {
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .language-option:hover {
+            background: var(--light);
+        }
+
+        .admin-btn {
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .admin-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .admin-panel {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow-lg);
+            display: none;
+        }
+
+        .admin-panel.active {
+            display: block;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .admin-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .close-admin {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: var(--gray);
+            cursor: pointer;
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+        }
+
+        .file-input-label {
+            background: var(--secondary);
+            color: var(--white);
+            border-radius: 8px;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .file-input-label:hover {
+            background: #059669;
+        }
+
+        .export-btn, .save-btn {
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .export-btn:hover, .save-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .save-btn {
+            background: var(--success);
+        }
+
+        .save-btn:hover {
+            background: #16a34a;
+        }
+
+        .dashboard {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .dashboard-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .stat-card {
+            background: var(--white);
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-card.active {
+            border: 2px solid var(--primary);
+        }
+
+        .stat-icon {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .stat-card.total .stat-icon {
+            color: var(--primary);
+        }
+
+        .stat-card.target .stat-icon {
+            color: var(--success);
+        }
+
+        .stat-card.close .stat-icon {
+            color: var(--warning);
+        }
+
+        .stat-card.attention .stat-icon {
+            color: var(--danger);
+        }
+
+        .stat-card.zero .stat-icon {
+            color: var(--danger);
+        }
+
+        .stat-card.average .stat-icon {
+            color: var(--secondary);
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--gray);
+        }
+
+        .table-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow-lg);
+            overflow-x: auto;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .table-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .last-updated {
+            font-size: 14px;
+            color: var(--gray);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+        }
+
+        th {
+            background: var(--light);
+            font-weight: 600;
+            color: var(--dark);
+            position: sticky;
+            top: 0;
+        }
+
+        tr:nth-child(even) {
+            background: rgba(243, 244, 246, 0.5);
+        }
+
+        tr:hover {
+            background: rgba(229, 231, 235, 0.5);
+        }
+
+        .rank {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .player {
+            font-weight: 500;
+        }
+
+        .week-score {
+            font-weight: 500;
+        }
+
+        .left-to-achieve {
+            font-weight: 500;
+        }
+
+        .status-done {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .status-gray {
+            color: var(--gray);
+        }
+
+        .status-yellow {
+            color: var(--warning);
+        }
+
+        .status-red {
+            color: var(--danger);
+        }
+
+        .zero-score {
+            color: var(--danger);
+            font-weight: 600;
+        }
+
+        .zero-score::after {
+            content: " ⚠️";
+            font-size: 16px;
+        }
+
+        .editable {
+            background: transparent;
+            border: 1px solid transparent;
+            padding: 5px;
+            border-radius: 4px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .editable:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(79, 70, 229, 0.1);
+        }
+
+        .login-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none;
+        }
+
+        .login-modal.active {
+            display: flex;
+        }
+
+        .login-form {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 30px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .login-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--light-gray);
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+        }
+
+        .login-btn {
+            width: 100%;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            padding: 12px 15px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .login-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .cancel-btn {
+            width: 100%;
+            background: transparent;
+            color: var(--gray);
+            border: 1px solid var(--light-gray);
+            border-radius: 8px;
+            padding: 12px 15px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .cancel-btn:hover {
+            background: var(--light);
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--white);
+            border-radius: 8px;
+            padding: 15px 20px;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transform: translateX(120%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            border-left: 4px solid var(--success);
+        }
+
+        .notification.error {
+            border-left: 4px solid var(--danger);
+        }
+
+        .notification i {
+            font-size: 20px;
+        }
+
+        .notification.success i {
+            color: var(--success);
+        }
+
+        .notification.error i {
+            color: var(--danger);
+        }
+
+        .notification-message {
+            font-weight: 500;
+        }
+
+        .debug-panel {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-width: 400px;
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 9999;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .debug-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #444;
+        }
+
+        .debug-title {
+            font-weight: bold;
+            color: #4ade80;
+        }
+
+        .debug-close {
+            background: none;
+            border: none;
+            color: #999;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .debug-close:hover {
+            color: white;
+        }
+
+        .debug-content {
+            line-height: 1.4;
+        }
+
+        .debug-entry {
+            margin-bottom: 5px;
+            padding: 3px 0;
+        }
+
+        .debug-entry.error {
+            color: #f87171;
+        }
+
+        .debug-entry.warning {
+            color: #fbbf24;
+        }
+
+        .debug-entry.success {
+            color: #4ade80;
+        }
+
+        .debug-entry.info {
+            color: #60a5fa;
+        }
+
+        .debug-toggle {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 16px;
+            cursor: pointer;
+            z-index: 9998;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .debug-toggle:hover {
+            background: rgba(0, 0, 0, 0.9);
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .header-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .search-box input {
+                width: 150px;
+            }
+
+            .dashboard-stats {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+
+            .table-container {
+                padding: 15px;
+            }
+
+            th, td {
+                padding: 8px 10px;
+                font-size: 14px;
+            }
+
+            .debug-panel {
+                max-width: calc(100vw - 40px);
+                left: 20px;
+                right: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-trophy"></i>
+                <h1 data-i18n="appTitle">Scoring System</h1>
+            </div>
+            <div class="header-actions">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search players..." data-i18n-placeholder="searchPlaceholder">
+                </div>
+                <div class="language-selector">
+                    <div class="language-btn" id="languageBtn">
+                        <i class="fas fa-globe"></i>
+                        <span id="currentLang">RO</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="language-dropdown" id="languageDropdown">
+                        <div class="language-option" data-lang="ro">
+                            <i class="fas fa-flag"></i>
+                            <span>Română</span>
+                        </div>
+                        <div class="language-option" data-lang="en">
+                            <i class="fas fa-flag"></i>
+                            <span>English</span>
+                        </div>
+                        <div class="language-option" data-lang="es">
+                            <i class="fas fa-flag"></i>
+                            <span>Español</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="admin-btn" id="adminBtn">
+                    <i class="fas fa-user-shield"></i>
+                    <span data-i18n="adminPanel">Admin Panel</span>
+                </button>
+            </div>
+        </header>
+
+        <div class="admin-panel" id="adminPanel">
+            <div class="admin-header">
+                <h2 class="admin-title" data-i18n="adminPanel">Admin Panel</h2>
+                <button class="close-admin" id="closeAdmin">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="admin-actions">
+                <div class="file-input-wrapper">
+                    <input type="file" id="fileInput" accept=".xlsx, .xls">
+                    <label for="fileInput" class="file-input-label">
+                        <i class="fas fa-file-excel"></i>
+                        <span data-i18n="importExcel">Import Excel</span>
+                    </label>
+                </div>
+                <button class="export-btn" id="exportBtn">
+                    <i class="fas fa-download"></i>
+                    <span data-i18n="exportData">Export Data</span>
+                </button>
+                <button class="save-btn" id="saveBtn">
+                    <i class="fas fa-save"></i>
+                    <span data-i18n="saveData">Save Data</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="dashboard">
+            <h2 class="dashboard-title" data-i18n="dashboard">Dashboard</h2>
+            <div class="dashboard-stats">
+                <div class="stat-card total" data-filter="all">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-value" id="totalPlayers">0</div>
+                    <div class="stat-label" data-i18n="totalPlayers">Total Players</div>
+                </div>
+                <div class="stat-card target" data-filter="target">
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-value" id="targetAchieved">0</div>
+                    <div class="stat-label" data-i18n="targetAchieved">Target Achieved</div>
+                </div>
+                <div class="stat-card close" data-filter="close">
+                    <div class="stat-icon">
+                        <i class="fas fa-hourglass-half"></i>
+                    </div>
+                    <div class="stat-value" id="closeToTarget">0</div>
+                    <div class="stat-label" data-i18n="closeToTarget">Close to Target</div>
+                </div>
+                <div class="stat-card attention" data-filter="attention">
+                    <div class="stat-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="stat-value" id="attentionNeeded">0</div>
+                    <div class="stat-label" data-i18n="attentionNeeded">Attention Needed</div>
+                </div>
+                <div class="stat-card zero" data-filter="zero">
+                    <div class="stat-icon">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                    <div class="stat-value" id="zeroPoints">0</div>
+                    <div class="stat-label" data-i18n="zeroPoints">Zero Points</div>
+                </div>
+                <div class="stat-card average">
+                    <div class="stat-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-value" id="weeklyAverage">0</div>
+                    <div class="stat-label" data-i18n="weeklyAverage">Weekly Average</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <div class="table-header">
+                <h2 class="table-title" data-i18n="ranking">Ranking</h2>
+                <div class="last-updated" id="lastUpdated">
+                    <i class="fas fa-clock"></i>
+                    <span data-i18n="lastUpdated">Last updated:</span>
+                    <span id="updateTime">Never</span>
+                </div>
+            </div>
+            <table id="rankingTable">
+                <thead>
+                    <tr>
+                        <th data-i18n="rank">Rank</th>
+                        <th data-i18n="player">Player</th>
+                        <th data-i18n="totalScores">Total Scores</th>
+                        <th data-i18n="weekScore">Week Score</th>
+                        <th data-i18n="leftToAchieve">Left to Achieve</th>
+                    </tr>
+                </thead>
+                <tbody id="rankingBody">
+                    <!-- Table rows will be generated here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="login-modal" id="loginModal">
+        <div class="login-form">
+            <h2 class="login-title" data-i18n="adminLogin">Admin Login</h2>
+            <div class="form-group">
+                <label for="password" data-i18n="password">Password</label>
+                <input type="password" id="password" placeholder="Enter password...">
+            </div>
+            <button class="login-btn" id="loginBtn" data-i18n="login">Login</button>
+            <button class="cancel-btn" id="cancelLogin" data-i18n="cancel">Cancel</button>
+        </div>
+    </div>
+
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <div class="notification-message" id="notificationMessage"></div>
+    </div>
+
+    <button class="debug-toggle" id="debugToggle" title="Toggle Debug Panel">
+        <i class="fas fa-bug"></i>
+    </button>
+
+    <div class="debug-panel" id="debugPanel" style="display: none;">
+        <div class="debug-header">
+            <div class="debug-title">Debug Console</div>
+            <button class="debug-close" id="debugClose">×</button>
+        </div>
+        <div class="debug-content" id="debugContent"></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script>
+        // Translation data
+        const translations = {
+            ro: {
+                appTitle: "Sistem de Punctaj",
+                searchPlaceholder: "Caută jucători...",
+                adminPanel: "Panou Admin",
+                importExcel: "Import Excel",
+                exportData: "Export Date",
+                saveData: "Salvează Date",
+                dashboard: "Panou",
+                totalPlayers: "Total Jucători",
+                targetAchieved: "Target Atins",
+                closeToTarget: "Aproape de Target",
+                attentionNeeded: "Atenție",
+                zeroPoints: "0 Puncte",
+                weeklyAverage: "Media Săptămânii",
+                ranking: "Clasament",
+                lastUpdated: "Ultima actualizare:",
+                rank: "Poziție",
+                player: "Jucător",
+                totalScores: "Punctaj Total",
+                weekScore: "Punctaj Săptămână",
+                leftToAchieve: "Până la Target",
+                adminLogin: "Autentificare Admin",
+                password: "Parolă",
+                login: "Autentificare",
+                cancel: "Anulează",
+                dataSaved: "Date salvate cu succes!",
+                dataLoaded: "Date încărcate cu succes!",
+                loginSuccess: "Autentificare reușită!",
+                loginError: "Parolă incorectă!",
+                exportSuccess: "Date exportate cu succes!",
+                importSuccess: "Date importate cu succes!",
+                noDataFound: "Nu s-au găsit date salvate. Se încarcă date de test.",
+                never: "Niciodată",
+                minutes: "minute",
+                hours: "ore",
+                days: "zile",
+                done: "Realizat"
+            },
+            en: {
+                appTitle: "Scoring System",
+                searchPlaceholder: "Search players...",
+                adminPanel: "Admin Panel",
+                importExcel: "Import Excel",
+                exportData: "Export Data",
+                saveData: "Save Data",
+                dashboard: "Dashboard",
+                totalPlayers: "Total Players",
+                targetAchieved: "Target Achieved",
+                closeToTarget: "Close to Target",
+                attentionNeeded: "Attention Needed",
+                zeroPoints: "Zero Points",
+                weeklyAverage: "Weekly Average",
+                ranking: "Ranking",
+                lastUpdated: "Last updated:",
+                rank: "Rank",
+                player: "Player",
+                totalScores: "Total Scores",
+                weekScore: "Week Score",
+                leftToAchieve: "Left to Achieve",
+                adminLogin: "Admin Login",
+                password: "Password",
+                login: "Login",
+                cancel: "Cancel",
+                dataSaved: "Data saved successfully!",
+                dataLoaded: "Data loaded successfully!",
+                loginSuccess: "Login successful!",
+                loginError: "Incorrect password!",
+                exportSuccess: "Data exported successfully!",
+                importSuccess: "Data imported successfully!",
+                noDataFound: "No saved data found. Loading test data.",
+                never: "Never",
+                minutes: "minutes",
+                hours: "hours",
+                days: "days",
+                done: "Done"
+            },
+            es: {
+                appTitle: "Sistema de Puntuación",
+                searchPlaceholder: "Buscar jugadores...",
+                adminPanel: "Panel de Admin",
+                importExcel: "Importar Excel",
+                exportData: "Exportar Datos",
+                saveData: "Guardar Datos",
+                dashboard: "Panel de Control",
+                totalPlayers: "Total Jugadores",
+                targetAchieved: "Objetivo Alcanzado",
+                closeToTarget: "Cerca del Objetivo",
+                attentionNeeded: "Atención Requerida",
+                zeroPoints: "Cero Puntos",
+                weeklyAverage: "Promedio Semanal",
+                ranking: "Clasificación",
+                lastUpdated: "Última actualización:",
+                rank: "Rango",
+                player: "Jugador",
+                totalScores: "Puntuación Total",
+                weekScore: "Puntuación Semanal",
+                leftToAchieve: "Restante para Objetivo",
+                adminLogin: "Inicio de Sesión Admin",
+                password: "Contraseña",
+                login: "Iniciar Sesión",
+                cancel: "Cancelar",
+                dataSaved: "¡Datos guardados con éxito!",
+                dataLoaded: "¡Datos cargados con éxito!",
+                loginSuccess: "¡Inicio de sesión exitoso!",
+                loginError: "¡Contraseña incorrecta!",
+                exportSuccess: "¡Datos exportados con éxito!",
+                importSuccess: "¡Datos importados con éxito!",
+                noDataFound: "No se encontraron datos guardados. Cargando datos de prueba.",
+                never: "Nunca",
+                minutes: "minutos",
+                hours: "horas",
+                days: "días",
+                done: "Hecho"
+            }
+        };
+
+        // Debug System
+        class DebugSystem {
+            constructor() {
+                this.enabled = true;
+                this.messages = [];
+                this.maxMessages = 50;
+                this.panel = document.getElementById('debugPanel');
+                this.content = document.getElementById('debugContent');
+                this.toggle = document.getElementById('debugToggle');
+                this.closeBtn = document.getElementById('debugClose');
+                
+                this.init();
+            }
+
+            init() {
+                if (this.toggle) {
+                    this.toggle.addEventListener('click', () => this.togglePanel());
+                }
+                
+                if (this.closeBtn) {
+                    this.closeBtn.addEventListener('click', () => this.hidePanel());
+                }
+
+                // Keyboard shortcut
+                document.addEventListener('keydown', (e) => {
+                    if (e.ctrlKey && e.key === 'd') {
+                        e.preventDefault();
+                        this.togglePanel();
+                    }
+                });
+
+                this.log('Debug system initialized', 'success');
+            }
+
+            log(message, type = 'info') {
+                if (!this.enabled) return;
+
+                const timestamp = new Date().toLocaleTimeString();
+                const entry = {
+                    timestamp,
+                    message,
+                    type
+                };
+
+                this.messages.push(entry);
+                if (this.messages.length > this.maxMessages) {
+                    this.messages.shift();
+                }
+
+                console.log(`[${timestamp}] ${type.toUpperCase()}: ${message}`);
+                this.updatePanel();
+            }
+
+            error(message, error = null) {
+                this.log(message, 'error');
+                if (error) {
+                    console.error(error);
+                    this.log(`Error details: ${error.message || error}`, 'error');
+                }
+            }
+
+            warning(message) {
+                this.log(message, 'warning');
+            }
+
+            success(message) {
+                this.log(message, 'success');
+            }
+
+            updatePanel() {
+                if (!this.content || !this.panel) return;
+
+                this.content.innerHTML = this.messages.map(entry => 
+                    `<div class="debug-entry ${entry.type}">
+                        [${entry.timestamp}] ${entry.message}
+                    </div>`
+                ).join('');
+            }
+
+            togglePanel() {
+                if (this.panel) {
+                    this.panel.style.display = this.panel.style.display === 'none' ? 'block' : 'none';
+                }
+            }
+
+            showPanel() {
+                if (this.panel) {
+                    this.panel.style.display = 'block';
+                }
+            }
+
+            hidePanel() {
+                if (this.panel) {
+                    this.panel.style.display = 'none';
+                }
+            }
+        }
+
+        // Initialize debug system
+        const debug = new DebugSystem();
+
+        // Application state
+        let currentLang = 'ro';
+        let isAdmin = false;
+        let players = [];
+        let lastUpdateTime = null;
+        let activeFilter = 'all';
+        let searchQuery = '';
+        let binId = null;
+        let binApiKey = '$2a$10$I60NBT4pk3BA7ArOeYJz3u.sWAjfQa/fnRTc14k5TMvCABDZo7Kiy';
+
+        // DOM elements cache
+        const elements = {};
+
+        // Cache DOM elements
+        function cacheElements() {
+            debug.log('Caching DOM elements...');
+            
+            const elementIds = [
+                'languageBtn', 'languageDropdown', 'adminBtn', 'adminPanel', 
+                'closeAdmin', 'fileInput', 'exportBtn', 'saveBtn', 'loginModal', 
+                'loginBtn', 'cancelLogin', 'password', 'notification', 
+                'notificationMessage', 'searchInput', 'rankingBody', 'updateTime',
+                'totalPlayers', 'targetAchieved', 'closeToTarget',
+                'attentionNeeded', 'zeroPoints', 'weeklyAverage',
+                'currentLang', 'debugPanel', 'debugToggle', 'debugClose'
+            ];
+
+            elementIds.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    elements[id] = element;
+                    debug.log(`Element cached: ${id}`, 'success');
+                } else {
+                    debug.warning(`Element not found: ${id}`);
+                }
+            });
+
+            // Cache elements by class
+            const classElements = {
+                'languageOptions': document.querySelectorAll('.language-option'),
+                'statCards': document.querySelectorAll('.stat-card')
+            };
+
+            Object.keys(classElements).forEach(key => {
+                elements[key] = classElements[key];
+                debug.log(`Elements cached by class: ${key} (${classElements[key].length} items)`);
+            });
+        }
+
+        // Check critical elements
+        function checkCriticalElements() {
+            const critical = [
+                'languageBtn', 'adminBtn', 'loginBtn', 'cancelLogin',
+                'fileInput', 'exportBtn', 'saveBtn', 'searchInput'
+            ];
+
+            const missing = critical.filter(id => !elements[id]);
+            
+            if (missing.length > 0) {
+                debug.error(`Missing critical elements: ${missing.join(', ')}`);
+                return false;
+            }
+
+            debug.success('All critical elements found');
+            return true;
+        }
+
+        // Initialize app
+        function initApp() {
+            try {
+                debug.log('=== Initializing Application ===');
+                
+                // Cache elements
+                cacheElements();
+                
+                // Check critical elements
+                if (!checkCriticalElements()) {
+                    throw new Error('Critical elements missing');
+                }
+                
+                // Load language
+                loadLanguage();
+                
+                // Load data
+                loadData();
+                
+                // Setup event listeners
+                setupEventListeners();
+                
+                // Update UI
+                updateDashboard();
+                renderTable();
+                updateLastUpdatedTime();
+                
+                debug.success('Application initialized successfully');
+                showNotification('Application ready!', 'success');
+                
+            } catch (error) {
+                debug.error('Application initialization failed', error);
+                showNotification(`Initialization failed: ${error.message}`, 'error');
+            }
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            try {
+                debug.log('Setting up event listeners...');
+                
+                // Language button
+                if (elements.languageBtn) {
+                    elements.languageBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        debug.log('Language button clicked');
+                        if (elements.languageDropdown) {
+                            elements.languageDropdown.classList.toggle('active');
+                        }
+                    });
+                    debug.success('Language button listener attached');
+                }
+
+                // Language options
+                if (elements.languageOptions) {
+                    elements.languageOptions.forEach(option => {
+                        option.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            const lang = option.getAttribute('data-lang');
+                            debug.log(`Language selected: ${lang}`);
+                            changeLanguage(lang);
+                            if (elements.languageDropdown) {
+                                elements.languageDropdown.classList.remove('active');
+                            }
+                        });
+                    });
+                    debug.success('Language options listeners attached');
+                }
+
+                // Admin button
+                if (elements.adminBtn) {
+                    elements.adminBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        debug.log('Admin button clicked');
+                        if (isAdmin) {
+                            if (elements.adminPanel) {
+                                elements.adminPanel.classList.toggle('active');
+                            }
+                        } else {
+                            if (elements.loginModal) {
+                                elements.loginModal.classList.add('active');
+                            }
+                        }
+                    });
+                    debug.success('Admin button listener attached');
+                }
+
+                // Close admin panel
+                if (elements.closeAdmin) {
+                    elements.closeAdmin.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        debug.log('Close admin clicked');
+                        if (elements.adminPanel) {
+                            elements.adminPanel.classList.remove('active');
+                        }
+                    });
+                    debug.success('Close admin listener attached');
+                }
+
+                // Login button
+                if (elements.loginBtn) {
+                    elements.loginBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        debug.log('Login button clicked');
+                        const password = elements.password ? elements.password.value : '';
+                        if (password === 'diasporaromana123') {
+                            isAdmin = true;
+                            if (elements.loginModal) {
+                                elements.loginModal.classList.remove('active');
+                            }
+                            if (elements.adminPanel) {
+                                elements.adminPanel.classList.add('active');
+                            }
+                            showNotification(translations[currentLang].loginSuccess, 'success');
+                            if (elements.password) {
+                                elements.password.value = '';
+                            }
+                        } else {
+                            showNotification(translations[currentLang].loginError, 'error');
+                        }
+                    });
+                    debug.success('Login button listener attached');
+                }
+
+                // Cancel login
+                if (elements.cancelLogin) {
+                    elements.cancelLogin.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        debug.log('Cancel login clicked');
+                        if (elements.loginModal) {
+                            elements.loginModal.classList.remove('active');
+                        }
+                        if (elements.password) {
+                            elements.password.value = '';
+                        }
+                    });
+                    debug.success('Cancel login listener attached');
+                }
+
+                // File input
+                if (elements.fileInput) {
+                    elements.fileInput.addEventListener('change', (e) => {
+                        debug.log('File input changed');
+                        handleFileImport(e);
+                    });
+                    debug.success('File input listener attached');
+                }
+
+                // Export button
+                if (elements.exportBtn) {
+                    elements.exportBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        debug.log('Export button clicked');
+                        exportData();
+                    });
+                    debug.success('Export button listener attached');
+                }
+
+                // Save button
+                if (elements.saveBtn) {
+                    elements.saveBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        debug.log('Save button clicked');
+                        saveData();
+                    });
+                    debug.success('Save button listener attached');
+                }
+
+                // Search input
+                if (elements.searchInput) {
+                    elements.searchInput.addEventListener('input', (e) => {
+                        searchQuery = e.target.value.toLowerCase();
+                        debug.log(`Search query: ${searchQuery}`);
+                        renderTable();
+                    });
+                    debug.success('Search input listener attached');
+                }
+
+                // Stat cards
+                if (elements.statCards) {
+                    elements.statCards.forEach(card => {
+                        card.addEventListener('click', () => {
+                            const filter = card.getAttribute('data-filter');
+                            debug.log(`Stat card clicked: ${filter}`);
+                            setActiveFilter(filter);
+                        });
+                    });
+                    debug.success('Stat cards listeners attached');
+                }
+
+                // Close dropdowns when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!e.target.closest('.language-selector') && elements.languageDropdown) {
+                        elements.languageDropdown.classList.remove('active');
+                    }
+                });
+
+                debug.success('All event listeners attached successfully');
+                
+            } catch (error) {
+                debug.error('Failed to setup event listeners', error);
+                throw error;
+            }
+        }
+
+        // Language functions
+        function changeLanguage(lang) {
+            try {
+                debug.log(`Changing language to: ${lang}`);
+                currentLang = lang;
+                if (elements.currentLang) {
+                    elements.currentLang.textContent = lang.toUpperCase();
+                }
+                loadLanguage();
+                updateDashboard();
+                renderTable();
+                updateLastUpdatedTime();
+                debug.success(`Language changed to: ${lang}`);
+            } catch (error) {
+                debug.error('Failed to change language', error);
+            }
+        }
+
+        function loadLanguage() {
+            try {
+                debug.log('Loading language...');
+                document.querySelectorAll('[data-i18n]').forEach(element => {
+                    const key = element.getAttribute('data-i18n');
+                    if (translations[currentLang] && translations[currentLang][key]) {
+                        element.textContent = translations[currentLang][key];
+                    }
+                });
+
+                document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+                    const key = element.getAttribute('data-i18n-placeholder');
+                    if (translations[currentLang] && translations[currentLang][key]) {
+                        element.placeholder = translations[currentLang][key];
+                    }
+                });
+                debug.success('Language loaded');
+            } catch (error) {
+                debug.error('Failed to load language', error);
+            }
+        }
+
+        // Data functions
+        function loadData() {
+            try {
+                debug.log('Loading data...');
+                
+                // Try localStorage
+                const savedData = localStorage.getItem('scoringSystemData');
+                if (savedData) {
+                    try {
+                        const data = JSON.parse(savedData);
+                        players = data.players || [];
+                        lastUpdateTime = data.lastUpdateTime || null;
+                        debug.success(`Loaded ${players.length} players from localStorage`);
+                        return;
+                    } catch (error) {
+                        debug.error('Failed to parse saved data', error);
+                    }
+                }
+
+                // Load test data
+                loadTestData();
+                
+            } catch (error) {
+                debug.error('Failed to load data', error);
+                loadTestData();
+            }
+        }
+
+        function loadTestData() {
+            try {
+                debug.log('Loading test data...');
+                players = [
+                    { player: "Player 1", startingPoints: 1000, targetPoints: 1200, totalScores: 1150 },
+                    { player: "Player 2", startingPoints: 1000, targetPoints: 1200, totalScores: 1050 },
+                    { player: "Player 3", startingPoints: 1000, targetPoints: 1200, totalScores: 1250 },
+                    { player: "Player 4", startingPoints: 1000, targetPoints: 1200, totalScores: 950 },
+                    { player: "Player 5", startingPoints: 1000, targetPoints: 1200, totalScores: 1000 },
+                    { player: "Player 6", startingPoints: 1000, targetPoints: 1200, totalScores: 800 },
+                    { player: "Player 7", startingPoints: 1000, targetPoints: 1200, totalScores: 1200 },
+                    { player: "Player 8", startingPoints: 1000, targetPoints: 1200, totalScores: 700 }
+                ];
+                lastUpdateTime = new Date();
+                debug.success(`Loaded ${players.length} test players`);
+                showNotification(translations[currentLang].noDataFound, 'error');
+            } catch (error) {
+                debug.error('Failed to load test data', error);
+            }
+        }
+
+        function saveData() {
+            try {
+                debug.log('Saving data...');
+                const data = {
+                    players: players,
+                    lastUpdateTime: new Date()
+                };
+
+                // Save to localStorage
+                localStorage.setItem('scoringSystemData', JSON.stringify(data));
+                debug.success('Data saved to localStorage');
+
+                // Try JSONBin
+                if (binId) {
+                    fetch(`https://api.jsonbin.io/v3/b/${binId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Master-Key': binApiKey
+                        },
+                        body: JSON.stringify(data)
+                    })
+                    .then(response => {
+                        if (!response.ok) throw new Error('Network response was not ok');
+                        return response.json();
+                    })
+                    .then(data => {
+                        lastUpdateTime = new Date();
+                        updateLastUpdatedTime();
+                        debug.success('Data saved to JSONBin');
+                        showNotification(translations[currentLang].dataSaved, 'success');
+                    })
+                    .catch(error => {
+                        debug.error('Failed to save to JSONBin', error);
+                        showNotification('Data saved locally only', 'success');
+                    });
+                } else {
+                    // Create new bin
+                    fetch('https://api.jsonbin.io/v3/b', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Master-Key': binApiKey,
+                            'X-Bin-Name': 'Scoring System Data'
+                        },
+                        body: JSON.stringify(data)
+                    })
+                    .then(response => {
+                        if (!response.ok) throw new Error('Network response was not ok');
+                        return response.json();
+                    })
+                    .then(data => {
+                        binId = data.metadata.id;
+                        lastUpdateTime = new Date();
+                        updateLastUpdatedTime();
+                        debug.success(`New JSONBin created: ${binId}`);
+                        showNotification(translations[currentLang].dataSaved, 'success');
+                    })
+                    .catch(error => {
+                        debug.error('Failed to create JSONBin', error);
+                        showNotification('Data saved locally only', 'success');
+                    });
+                }
+            } catch (error) {
+                debug.error('Failed to save data', error);
+                showNotification('Failed to save data', 'error');
+            }
+        }
+
+        function exportData() {
+            try {
+                debug.log('Exporting data...');
+                const exportData = players.map(player => ({
+                    Rank: calculateRank(player),
+                    Player: player.player,
+                    'Starting Points': player.startingPoints,
+                    'Target Points': player.targetPoints,
+                    'Total Scores': player.totalScores,
+                    'Week Score': player.totalScores - player.startingPoints,
+                    'Left to Achieve': player.targetPoints - player.totalScores
+                }));
+
+                const worksheet = XLSX.utils.json_to_sheet(exportData);
+                const workbook = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(workbook, worksheet, 'Scoring Data');
+                XLSX.writeFile(workbook, 'scoring_data.xlsx');
+                
+                debug.success('Data exported successfully');
+                showNotification(translations[currentLang].exportSuccess, 'success');
+            } catch (error) {
+                debug.error('Failed to export data', error);
+                showNotification('Failed to export data', 'error');
+            }
+        }
+
+        function handleFileImport(event) {
+            try {
+                debug.log('Handling file import...');
+                const file = event.target.files[0];
+                if (!file) {
+                    debug.warning('No file selected');
+                    return;
+                }
+
+                debug.log(`File selected: ${file.name} (${file.size} bytes)`);
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        debug.log('FileReader onload triggered');
+                        const data = new Uint8Array(e.target.result);
+                        const workbook = XLSX.read(data, { type: 'array' });
+                        debug.log(`Workbook loaded with ${workbook.SheetNames.length} sheets`);
+                        
+                        const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                        const jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+                        debug.log(`Sheet converted to JSON with ${jsonData.length} rows`);
+
+                        // Process imported data
+                        players = [];
+                        for (let i = 1; i < jsonData.length; i++) {
+                            const row = jsonData[i];
+                            if (row[1]) { // Check if player name exists
+                                players.push({
+                                    player: row[1],
+                                    startingPoints: row[2] || 0,
+                                    targetPoints: row[3] || 0,
+                                    totalScores: row[4] || 0
+                                });
+                                debug.log(`Added player: ${row[1]}`);
+                            }
+                        }
+
+                        debug.log(`Processed ${players.length} players`);
+                        lastUpdateTime = new Date();
+                        updateDashboard();
+                        renderTable();
+                        updateLastUpdatedTime();
+                        saveData();
+                        showNotification(translations[currentLang].importSuccess, 'success');
+                    } catch (error) {
+                        debug.error('Error processing file', error);
+                        showNotification(`Error processing file: ${error.message}`, 'error');
+                    }
+                };
+                
+                reader.onerror = function() {
+                    debug.error('FileReader error');
+                    showNotification('Error reading file', 'error');
+                };
+                
+                reader.readAsArrayBuffer(file);
+                event.target.value = '';
+            } catch (error) {
+                debug.error('Failed to handle file import', error);
+                showNotification('Failed to import file', 'error');
+            }
+        }
+
+        // Calculation functions
+        function calculateWeekScore(player) {
+            return player.totalScores - player.startingPoints;
+        }
+
+        function calculateLeftToAchieve(player) {
+            return player.targetPoints - player.totalScores;
+        }
+
+        function calculateRank(player) {
+            const sortedPlayers = [...players].sort((a, b) => {
+                const weekScoreA = calculateWeekScore(a);
+                const weekScoreB = calculateWeekScore(b);
+                if (weekScoreB !== weekScoreA) {
+                    return weekScoreB - weekScoreA;
+                }
+                return a.player.localeCompare(b.player);
+            });
+            return sortedPlayers.findIndex(p => p.player === player.player) + 1;
+        }
+
+        function getStatusClass(player) {
+            const leftToAchieve = calculateLeftToAchieve(player);
+            if (leftToAchieve <= 0) return 'status-done';
+            if (leftToAchieve < 200) return 'status-gray';
+            if (leftToAchieve < 500) return 'status-yellow';
+            return 'status-red';
+        }
+
+        function getStatusText(player) {
+            const leftToAchieve = calculateLeftToAchieve(player);
+            if (leftToAchieve <= 0) return translations[currentLang].done;
+            return leftToAchieve;
+        }
+
+        // UI functions
+        function updateDashboard() {
+            try {
+                debug.log('Updating dashboard...');
+                const totalPlayers = players.length;
+                const targetAchieved = players.filter(p => calculateLeftToAchieve(p) <= 0).length;
+                const closeToTarget = players.filter(p => calculateLeftToAchieve(p) > 0 && calculateLeftToAchieve(p) < 200).length;
+                const attentionNeeded = players.filter(p => calculateLeftToAchieve(p) >= 500).length;
+                const zeroPoints = players.filter(p => calculateWeekScore(p) === 0).length;
+                const weeklyAverage = totalPlayers > 0 ? 
+                    Math.round(players.reduce((sum, p) => sum + calculateWeekScore(p), 0) / totalPlayers) : 0;
+
+                if (elements.totalPlayers) elements.totalPlayers.textContent = totalPlayers;
+                if (elements.targetAchieved) elements.targetAchieved.textContent = targetAchieved;
+                if (elements.closeToTarget) elements.closeToTarget.textContent = closeToTarget;
+                if (elements.attentionNeeded) elements.attentionNeeded.textContent = attentionNeeded;
+                if (elements.zeroPoints) elements.zeroPoints.textContent = zeroPoints;
+                if (elements.weeklyAverage) elements.weeklyAverage.textContent = weeklyAverage;
+
+                debug.success('Dashboard updated');
+            } catch (error) {
+                debug.error('Failed to update dashboard', error);
+            }
+        }
+
+        function renderTable() {
+            try {
+                debug.log('Rendering table...');
+                
+                // Filter players
+                let filteredPlayers = players.filter(player => {
+                    if (searchQuery && !player.player.toLowerCase().includes(searchQuery)) {
+                        return false;
+                    }
+
+                    switch (activeFilter) {
+                        case 'target':
+                            return calculateLeftToAchieve(player) <= 0;
+                        case 'close':
+                            return calculateLeftToAchieve(player) > 0 && calculateLeftToAchieve(player) < 200;
+                        case 'attention':
+                            return calculateLeftToAchieve(player) >= 500;
+                        case 'zero':
+                            return calculateWeekScore(player) === 0;
+                        default:
+                            return true;
+                    }
+                });
+
+                // Sort by rank
+                filteredPlayers.sort((a, b) => {
+                    const rankA = calculateRank(a);
+                    const rankB = calculateRank(b);
+                    return rankA - rankB;
+                });
+
+                // Clear table
+                if (elements.rankingBody) {
+                    elements.rankingBody.innerHTML = '';
+                }
+
+                // Render rows
+                filteredPlayers.forEach(player => {
+                    const row = document.createElement('tr');
+                    const weekScore = calculateWeekScore(player);
+                    const leftToAchieve = calculateLeftToAchieve(player);
+                    const statusClass = getStatusClass(player);
+                    const statusText = getStatusText(player);
+                    const isZeroScore = weekScore === 0;
+
+                    row.innerHTML = `
+                        <td class="rank">${calculateRank(player)}</td>
+                        <td class="player">${player.player}</td>
+                        <td class="total-scores">
+                            ${isAdmin ? 
+                                `<input type="number" class="editable" value="${player.totalScores}" 
+                                    onchange="updatePlayerScore('${player.player}', this.value)">` : 
+                                player.totalScores}
+                        </td>
+                        <td class="week-score ${isZeroScore ? 'zero-score' : ''}">${weekScore}</td>
+                        <td class="left-to-achieve ${statusClass}">${statusText}</td>
+                    `;
+                    
+                    if (elements.rankingBody) {
+                        elements.rankingBody.appendChild(row);
+                    }
+                });
+
+                debug.success(`Table rendered with ${filteredPlayers.length} rows`);
+            } catch (error) {
+                debug.error('Failed to render table', error);
+            }
+        }
+
+        function setActiveFilter(filter) {
+            try {
+                debug.log(`Setting active filter: ${filter}`);
+                activeFilter = filter;
+                
+                // Update active state
+                if (elements.statCards) {
+                    elements.statCards.forEach(card => {
+                        card.classList.remove('active');
+                        if (card.getAttribute('data-filter') === filter) {
+                            card.classList.add('active');
+                        }
+                    });
+                }
+                
+                renderTable();
+                debug.success(`Active filter set to: ${filter}`);
+            } catch (error) {
+                debug.error('Failed to set active filter', error);
+            }
+        }
+
+        function updatePlayerScore(playerName, newScore) {
+            try {
+                debug.log(`Updating score for ${playerName} to ${newScore}`);
+                const player = players.find(p => p.player === playerName);
+                if (player) {
+                    player.totalScores = parseInt(newScore) || 0;
+                    lastUpdateTime = new Date();
+                    updateDashboard();
+                    renderTable();
+                    updateLastUpdatedTime();
+                    saveData();
+                    debug.success(`Score updated for ${playerName}`);
+                } else {
+                    debug.warning(`Player not found: ${playerName}`);
+                }
+            } catch (error) {
+                debug.error('Failed to update player score', error);
+            }
+        }
+
+        function updateLastUpdatedTime() {
+            try {
+                if (!lastUpdateTime) {
+                    if (elements.updateTime) {
+                        elements.updateTime.textContent = translations[currentLang].never;
+                    }
+                    return;
+                }
+
+                const now = new Date();
+                const diff = now - lastUpdateTime;
+                const minutes = Math.floor(diff / 60000);
+                const hours = Math.floor(diff / 3600000);
+                const days = Math.floor(diff / 86400000);
+
+                let timeText;
+                if (days > 0) {
+                    timeText = `${days} ${translations[currentLang].days}`;
+                } else if (hours > 0) {
+                    timeText = `${hours} ${translations[currentLang].hours}`;
+                } else {
+                    timeText = `${minutes} ${translations[currentLang].minutes}`;
+                }
+
+                if (elements.updateTime) {
+                    elements.updateTime.textContent = timeText;
+                }
+            } catch (error) {
+                debug.error('Failed to update last updated time', error);
+            }
+        }
+
+        function showNotification(message, type) {
+            try {
+                debug.log(`Showing notification: ${message} (${type})`);
+                if (elements.notificationMessage) {
+                    elements.notificationMessage.textContent = message;
+                }
+                if (elements.notification) {
+                    elements.notification.className = `notification ${type}`;
+                    elements.notification.classList.add('show');
+                }
+
+                setTimeout(() => {
+                    if (elements.notification) {
+                        elements.notification.classList.remove('show');
+                    }
+                }, 3000);
+            } catch (error) {
+                debug.error('Failed to show notification', error);
+            }
+        }
+
+        // Global functions for inline event handlers
+        window.updatePlayerScore = updatePlayerScore;
+
+        // Global error handler
+        window.addEventListener('error', (e) => {
+            debug.error(`Global error: ${e.message} at ${e.filename}:${e.lineno}`, e.error);
+            showNotification(`Error: ${e.message}`, 'error');
+        });
+
+        // Initialize app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            debug.log('DOM content loaded');
+            initApp();
+        });
+    </script>
+</body>
+</html>
