@@ -560,6 +560,123 @@
         .sync-status.error i {
             color: var(--danger);
         }
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            color: var(--white);
+        }
+        .user-role {
+            font-size: 12px;
+            background: rgba(255, 255, 255, 0.3);
+            padding: 2px 6px;
+            border-radius: 10px;
+        }
+        .logout-btn {
+            background: none;
+            border: none;
+            color: var(--white);
+            cursor: pointer;
+            font-size: 14px;
+            padding: 5px;
+        }
+        .users-management {
+            margin-top: 20px;
+            padding: 15px;
+            background: var(--light);
+            border-radius: 8px;
+        }
+        .users-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        .users-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 10px;
+        }
+        .user-item {
+            background: var(--white);
+            padding: 10px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .user-details {
+            display: flex;
+            flex-direction: column;
+        }
+        .user-name {
+            font-weight: 500;
+            font-size: 14px;
+        }
+        .user-password {
+            font-size: 12px;
+            color: var(--gray);
+        }
+        .user-actions {
+            display: flex;
+            gap: 5px;
+        }
+        .edit-user-btn, .delete-user-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 5px;
+            border-radius: 4px;
+        }
+        .edit-user-btn {
+            color: var(--primary);
+        }
+        .edit-user-btn:hover {
+            background: rgba(79, 70, 229, 0.1);
+        }
+        .delete-user-btn {
+            color: var(--danger);
+        }
+        .delete-user-btn:hover {
+            background: rgba(239, 68, 68, 0.1);
+        }
+        .add-user-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .add-user-form input {
+            padding: 8px 12px;
+            border: 1px solid var(--light-gray);
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        .add-user-form select {
+            padding: 8px 12px;
+            border: 1px solid var(--light-gray);
+            border-radius: 6px;
+            font-size: 14px;
+            background: var(--white);
+        }
+        .add-user-btn {
+            background: var(--success);
+            color: var(--white);
+            border: none;
+            border-radius: 6px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .add-user-btn:hover {
+            background: #16a34a;
+        }
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -588,6 +705,9 @@
             th, td {
                 padding: 8px 10px;
                 font-size: 14px;
+            }
+            .add-user-form {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -630,6 +750,14 @@
                         </div>
                     </div>
                 </div>
+                <div class="user-info" id="userInfo" style="display: none;">
+                    <i class="fas fa-user"></i>
+                    <span id="userName"></span>
+                    <span class="user-role" id="userRole"></span>
+                    <button class="logout-btn" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
                 <button class="admin-btn" id="adminBtn">
                     <i class="fas fa-user-shield"></i>
                     <span data-i18n="adminPanel">Admin Panel</span>
@@ -659,6 +787,27 @@
                     <i class="fas fa-save"></i>
                     <span data-i18n="saveData">Save Data</span>
                 </button>
+            </div>
+            
+            <!-- User Management Section -->
+            <div class="users-management" id="usersManagement" style="display: none;">
+                <h3 class="users-title" data-i18n="userManagement">User Management</h3>
+                <div class="users-list" id="usersList">
+                    <!-- Users will be displayed here -->
+                </div>
+                <div class="add-user-form">
+                    <input type="text" id="newUserName" placeholder="Username" data-i18n-placeholder="username">
+                    <input type="password" id="newUserPassword" placeholder="Password" data-i18n-placeholder="password">
+                    <select id="newUserRole">
+                        <option value="viewer" data-i18n="viewer">Viewer</option>
+                        <option value="editor" data-i18n="editor">Editor</option>
+                        <option value="admin" data-i18n="admin">Admin</option>
+                    </select>
+                    <button class="add-user-btn" id="addUserBtn">
+                        <i class="fas fa-plus"></i>
+                        <span data-i18n="addUser">Add User</span>
+                    </button>
+                </div>
             </div>
         </div>
         <div class="dashboard">
@@ -735,7 +884,11 @@
     </div>
     <div class="login-modal" id="loginModal">
         <div class="login-form">
-            <h2 class="login-title" data-i18n="adminLogin">Admin Login</h2>
+            <h2 class="login-title" data-i18n="adminLogin">Login</h2>
+            <div class="form-group">
+                <label for="username" data-i18n="username">Username</label>
+                <input type="text" id="username" placeholder="Enter username...">
+            </div>
             <div class="form-group">
                 <label for="password" data-i18n="password">Password</label>
                 <input type="password" id="password" placeholder="Enter password...">
@@ -776,14 +929,15 @@
                 totalScores: "Punctaj Total",
                 weekScore: "Punctaj Săptămână",
                 leftToAchieve: "Până la Target",
-                adminLogin: "Autentificare Admin",
+                adminLogin: "Autentificare",
                 password: "Parolă",
+                username: "Utilizator",
                 login: "Autentificare",
                 cancel: "Anulează",
                 dataSaved: "Date salvate cu succes!",
                 dataLoaded: "Date încărcate cu succes!",
                 loginSuccess: "Autentificare reușită!",
-                loginError: "Parolă incorectă!",
+                loginError: "Utilizator sau parolă incorectă!",
                 exportSuccess: "Date exportate cu succes!",
                 importSuccess: "Date importate cu succes!",
                 noDataFound: "Nu s-au găsit date salvate. Se încarcă date de test.",
@@ -791,7 +945,17 @@
                 minutes: "minute",
                 hours: "ore",
                 days: "zile",
-                done: "Realizat"
+                done: "Realizat",
+                userManagement: "Management Utilizatori",
+                username: "Utilizator",
+                viewer: "Vizualizator",
+                editor: "Editor",
+                admin: "Admin",
+                addUser: "Adaugă Utilizator",
+                userAdded: "Utilizator adăugat cu succes!",
+                userDeleted: "Utilizator șters cu succes!",
+                userUpdated: "Utilizator actualizat cu succes!",
+                logoutSuccess: "Deconectare reușită!"
             },
             en: {
                 appTitle: "Scoring System",
@@ -814,14 +978,15 @@
                 totalScores: "Total Scores",
                 weekScore: "Week Score",
                 leftToAchieve: "Left to Achieve",
-                adminLogin: "Admin Login",
+                adminLogin: "Login",
                 password: "Password",
+                username: "Username",
                 login: "Login",
                 cancel: "Cancel",
                 dataSaved: "Data saved successfully!",
                 dataLoaded: "Data loaded successfully!",
                 loginSuccess: "Login successful!",
-                loginError: "Incorrect password!",
+                loginError: "Incorrect username or password!",
                 exportSuccess: "Data exported successfully!",
                 importSuccess: "Data imported successfully!",
                 noDataFound: "No saved data found. Loading test data.",
@@ -829,7 +994,17 @@
                 minutes: "minutes",
                 hours: "hours",
                 days: "days",
-                done: "Done"
+                done: "Done",
+                userManagement: "User Management",
+                username: "Username",
+                viewer: "Viewer",
+                editor: "Editor",
+                admin: "Admin",
+                addUser: "Add User",
+                userAdded: "User added successfully!",
+                userDeleted: "User deleted successfully!",
+                userUpdated: "User updated successfully!",
+                logoutSuccess: "Logout successful!"
             },
             es: {
                 appTitle: "Sistema de Puntuación",
@@ -852,14 +1027,15 @@
                 totalScores: "Puntuación Total",
                 weekScore: "Puntuación Semanal",
                 leftToAchieve: "Restante para Objetivo",
-                adminLogin: "Inicio de Sesión Admin",
+                adminLogin: "Inicio de Sesión",
                 password: "Contraseña",
+                username: "Usuario",
                 login: "Iniciar Sesión",
                 cancel: "Cancelar",
                 dataSaved: "¡Datos guardados con éxito!",
                 dataLoaded: "¡Datos cargados con éxito!",
                 loginSuccess: "¡Inicio de sesión exitoso!",
-                loginError: "¡Contraseña incorrecta!",
+                loginError: "¡Usuario o contraseña incorrectos!",
                 exportSuccess: "¡Datos exportados con éxito!",
                 importSuccess: "¡Datos importados con éxito!",
                 noDataFound: "No se encontraron datos guardados. Cargando datos de prueba.",
@@ -867,7 +1043,17 @@
                 minutes: "minutos",
                 hours: "horas",
                 days: "días",
-                done: "Hecho"
+                done: "Hecho",
+                userManagement: "Gestión de Usuarios",
+                username: "Usuario",
+                viewer: "Visualizador",
+                editor: "Editor",
+                admin: "Admin",
+                addUser: "Agregar Usuario",
+                userAdded: "¡Usuario agregado con éxito!",
+                userDeleted: "¡Usuario eliminado con éxito!",
+                userUpdated: "¡Usuario actualizado con éxito!",
+                logoutSuccess: "¡Cierre de sesión exitoso!"
             }
         };
         // Firebase Configuration
@@ -886,13 +1072,21 @@
         const database = firebase.database();
         // Application state
         let currentLang = 'ro';
-        let isAdmin = false;
+        let currentUser = null;
+        let userRole = null;
         let players = [];
         let lastUpdateTime = null;
         let activeFilter = 'all';
         let searchQuery = '';
         let isSyncing = false;
         let syncTimeout = null;
+        let users = [];
+        // Default users
+        const defaultUsers = [
+            { username: 'admin', password: 'diasporaromana123', role: 'admin' },
+            { username: 'editor', password: 'editor123', role: 'editor' },
+            { username: 'viewer', password: 'viewer123', role: 'viewer' }
+        ];
         // DOM elements
         const elements = {};
         // Cache DOM elements
@@ -904,7 +1098,10 @@
                 'notificationMessage', 'searchInput', 'rankingBody', 'updateTime',
                 'totalPlayers', 'targetAchieved', 'closeToTarget',
                 'attentionNeeded', 'zeroPoints', 'weeklyAverage',
-                'currentLang', 'loadingIndicator', 'syncStatus'
+                'currentLang', 'loadingIndicator', 'syncStatus', 'userInfo',
+                'userName', 'userRole', 'logoutBtn', 'username',
+                'usersManagement', 'usersList', 'newUserName', 'newUserPassword',
+                'newUserRole', 'addUserBtn'
             ];
             elementIds.forEach(id => {
                 const element = document.getElementById(id);
@@ -921,6 +1118,8 @@
             cacheElements();
             loadLanguage();
             setupEventListeners();
+            checkLoginStatus();
+            loadUsersFromFirebase();
             loadDataFromFirebase();
             
             // Set up periodic sync status check
@@ -931,6 +1130,51 @@
                     updateSyncStatus('synced');
                 }
             }, 5000);
+        }
+        // Check login status from localStorage
+        function checkLoginStatus() {
+            const savedUser = localStorage.getItem('currentUser');
+            const savedRole = localStorage.getItem('userRole');
+            
+            if (savedUser && savedRole) {
+                currentUser = savedUser;
+                userRole = savedRole;
+                updateUIForLoggedInUser();
+            }
+        }
+        // Load users from Firebase
+        function loadUsersFromFirebase() {
+            const usersRef = database.ref('users');
+            
+            usersRef.once('value').then((snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    users = Object.values(data);
+                } else {
+                    // If no users exist, create default users
+                    users = [...defaultUsers];
+                    saveUsersToFirebase();
+                }
+                
+                // Update users list if admin panel is open
+                if (elements.usersManagement && elements.usersManagement.style.display !== 'none') {
+                    renderUsersList();
+                }
+            }).catch((error) => {
+                console.error('Error loading users:', error);
+                users = [...defaultUsers];
+            });
+        }
+        // Save users to Firebase
+        function saveUsersToFirebase() {
+            const usersObj = {};
+            users.forEach((user, index) => {
+                usersObj[index] = user;
+            });
+            
+            database.ref('users').set(usersObj).catch((error) => {
+                console.error('Error saving users:', error);
+            });
         }
         // Setup event listeners
         function setupEventListeners() {
@@ -956,9 +1200,13 @@
             // Admin panel
             if (elements.adminBtn) {
                 elements.adminBtn.addEventListener('click', () => {
-                    if (isAdmin) {
+                    if (currentUser) {
                         if (elements.adminPanel) {
                             elements.adminPanel.classList.toggle('active');
+                            if (userRole === 'admin' && elements.usersManagement) {
+                                elements.usersManagement.style.display = 'block';
+                                renderUsersList();
+                            }
                         }
                     } else {
                         if (elements.loginModal) {
@@ -977,18 +1225,31 @@
             // Login
             if (elements.loginBtn) {
                 elements.loginBtn.addEventListener('click', () => {
+                    const username = elements.username ? elements.username.value : '';
                     const password = elements.password ? elements.password.value : '';
-                    if (password === 'diasporaromana123') {
-                        isAdmin = true;
+                    
+                    const user = users.find(u => u.username === username && u.password === password);
+                    
+                    if (user) {
+                        currentUser = user.username;
+                        userRole = user.role;
+                        
+                        // Save to localStorage
+                        localStorage.setItem('currentUser', currentUser);
+                        localStorage.setItem('userRole', userRole);
+                        
                         if (elements.loginModal) {
                             elements.loginModal.classList.remove('active');
                         }
-                        if (elements.adminPanel) {
-                            elements.adminPanel.classList.add('active');
-                        }
+                        
+                        updateUIForLoggedInUser();
                         showNotification(translations[currentLang].loginSuccess, 'success');
+                        
                         if (elements.password) {
                             elements.password.value = '';
+                        }
+                        if (elements.username) {
+                            elements.username.value = '';
                         }
                     } else {
                         showNotification(translations[currentLang].loginError, 'error');
@@ -1003,6 +1264,20 @@
                     if (elements.password) {
                         elements.password.value = '';
                     }
+                    if (elements.username) {
+                        elements.username.value = '';
+                    }
+                });
+            }
+            // Logout
+            if (elements.logoutBtn) {
+                elements.logoutBtn.addEventListener('click', () => {
+                    currentUser = null;
+                    userRole = null;
+                    localStorage.removeItem('currentUser');
+                    localStorage.removeItem('userRole');
+                    updateUIForLoggedOutUser();
+                    showNotification(translations[currentLang].logoutSuccess, 'success');
                 });
             }
             // File import
@@ -1033,12 +1308,163 @@
                     });
                 });
             }
+            // User management
+            if (elements.addUserBtn) {
+                elements.addUserBtn.addEventListener('click', addUser);
+            }
             // Close dropdowns when clicking outside
             document.addEventListener('click', (e) => {
                 if (!e.target.closest('.language-selector') && elements.languageDropdown) {
                     elements.languageDropdown.classList.remove('active');
                 }
             });
+        }
+        // Update UI for logged in user
+        function updateUIForLoggedInUser() {
+            if (elements.userInfo) {
+                elements.userInfo.style.display = 'flex';
+            }
+            if (elements.userName) {
+                elements.userName.textContent = currentUser;
+            }
+            if (elements.userRole) {
+                elements.userRole.textContent = userRole;
+            }
+            if (elements.adminBtn) {
+                elements.adminBtn.style.display = 'none';
+            }
+            
+            // Show/hide admin panel elements based on role
+            if (elements.adminPanel) {
+                if (userRole === 'admin') {
+                    // Admin can see everything
+                    if (elements.fileInput) elements.fileInput.parentElement.style.display = 'inline-block';
+                    if (elements.exportBtn) elements.exportBtn.style.display = 'flex';
+                    if (elements.saveBtn) elements.saveBtn.style.display = 'flex';
+                } else if (userRole === 'editor') {
+                    // Editor can see export and save
+                    if (elements.fileInput) elements.fileInput.parentElement.style.display = 'none';
+                    if (elements.exportBtn) elements.exportBtn.style.display = 'flex';
+                    if (elements.saveBtn) elements.saveBtn.style.display = 'flex';
+                } else {
+                    // Viewer can only see export
+                    if (elements.fileInput) elements.fileInput.parentElement.style.display = 'none';
+                    if (elements.exportBtn) elements.exportBtn.style.display = 'flex';
+                    if (elements.saveBtn) elements.saveBtn.style.display = 'none';
+                }
+            }
+            
+            renderTable();
+        }
+        // Update UI for logged out user
+        function updateUIForLoggedOutUser() {
+            if (elements.userInfo) {
+                elements.userInfo.style.display = 'none';
+            }
+            if (elements.adminBtn) {
+                elements.adminBtn.style.display = 'flex';
+            }
+            if (elements.adminPanel) {
+                elements.adminPanel.classList.remove('active');
+            }
+            
+            renderTable();
+        }
+        // Render users list
+        function renderUsersList() {
+            if (!elements.usersList) return;
+            
+            elements.usersList.innerHTML = '';
+            
+            users.forEach((user, index) => {
+                const userItem = document.createElement('div');
+                userItem.className = 'user-item';
+                userItem.innerHTML = `
+                    <div class="user-details">
+                        <div class="user-name">${user.username}</div>
+                        <div class="user-password">${user.password}</div>
+                    </div>
+                    <div class="user-actions">
+                        <button class="edit-user-btn" onclick="editUser(${index})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="delete-user-btn" onclick="deleteUser(${index})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                elements.usersList.appendChild(userItem);
+            });
+        }
+        // Add new user
+        function addUser() {
+            if (!elements.newUserName || !elements.newUserPassword || !elements.newUserRole) return;
+            
+            const username = elements.newUserName.value.trim();
+            const password = elements.newUserPassword.value.trim();
+            const role = elements.newUserRole.value;
+            
+            if (!username || !password) {
+                showNotification('Please enter both username and password', 'error');
+                return;
+            }
+            
+            // Check if user already exists
+            if (users.find(u => u.username === username)) {
+                showNotification('User already exists', 'error');
+                return;
+            }
+            
+            users.push({ username, password, role });
+            saveUsersToFirebase();
+            renderUsersList();
+            
+            // Clear form
+            elements.newUserName.value = '';
+            elements.newUserPassword.value = '';
+            elements.newUserRole.value = 'viewer';
+            
+            showNotification(translations[currentLang].userAdded, 'success');
+        }
+        // Edit user
+        function editUser(index) {
+            const user = users[index];
+            if (!user) return;
+            
+            const newUsername = prompt('Enter new username:', user.username);
+            if (newUsername === null) return;
+            
+            const newPassword = prompt('Enter new password:', user.password);
+            if (newPassword === null) return;
+            
+            const newRole = prompt('Enter new role (admin/editor/viewer):', user.role);
+            if (newRole === null) return;
+            
+            if (!newUsername.trim() || !newPassword.trim() || !['admin', 'editor', 'viewer'].includes(newRole)) {
+                showNotification('Invalid input', 'error');
+                return;
+            }
+            
+            users[index] = {
+                username: newUsername.trim(),
+                password: newPassword.trim(),
+                role: newRole
+            };
+            
+            saveUsersToFirebase();
+            renderUsersList();
+            showNotification(translations[currentLang].userUpdated, 'success');
+        }
+        // Delete user
+        function deleteUser(index) {
+            if (index < 0 || index >= users.length) return;
+            
+            if (confirm('Are you sure you want to delete this user?')) {
+                users.splice(index, 1);
+                saveUsersToFirebase();
+                renderUsersList();
+                showNotification(translations[currentLang].userDeleted, 'success');
+            }
         }
         // Language functions
         function changeLanguage(lang) {
@@ -1114,8 +1540,8 @@
             });
         }
         function saveDataToFirebase() {
-            if (!isAdmin) {
-                showNotification('Admin access required', 'error');
+            if (!currentUser || userRole === 'viewer') {
+                showNotification('Permission denied', 'error');
                 return;
             }
             
@@ -1177,7 +1603,10 @@
                 });
         }
         function updatePlayerScoreInFirebase(playerName, newScore) {
-            if (!isAdmin) return;
+            if (!currentUser || userRole !== 'editor' && userRole !== 'admin') {
+                showNotification('Permission denied', 'error');
+                return;
+            }
             
             const playerIndex = players.findIndex(p => p.player === playerName);
             if (playerIndex === -1) return;
@@ -1301,12 +1730,13 @@
                     const statusClass = getStatusClass(player);
                     const statusText = getStatusText(player);
                     const isZeroScore = weekScore === 0;
+                    const canEdit = currentUser && (userRole === 'editor' || userRole === 'admin');
                     
                     row.innerHTML = `
                         <td class="rank">${calculateRank(player)}</td>
                         <td class="player">${player.player}</td>
                         <td class="total-scores">
-                            ${isAdmin ? 
+                            ${canEdit ? 
                                 `<input type="number" class="editable" value="${player.totalScores}" 
                                     onchange="updatePlayerScore('${player.player}', this.value)">` : 
                                 player.totalScores}
@@ -1429,6 +1859,11 @@
         }
         // File handling functions
         function handleFileImport(event) {
+            if (!currentUser || userRole !== 'admin') {
+                showNotification('Permission denied', 'error');
+                return;
+            }
+            
             const file = event.target.files[0];
             if (!file) return;
             
@@ -1555,8 +1990,8 @@
         }
         // Global functions for inline event handlers
         window.updatePlayerScore = function(playerName, newScore) {
-            if (!isAdmin) {
-                showNotification('Admin access required', 'error');
+            if (!currentUser || (userRole !== 'editor' && userRole !== 'admin')) {
+                showNotification('Permission denied', 'error');
                 return;
             }
             
@@ -1566,6 +2001,10 @@
                 updatePlayerScoreInFirebase(playerName, newScore);
             }
         };
+        
+        window.editUser = editUser;
+        window.deleteUser = deleteUser;
+        
         // Initialize app when DOM is loaded
         document.addEventListener('DOMContentLoaded', initApp);
     </script>
