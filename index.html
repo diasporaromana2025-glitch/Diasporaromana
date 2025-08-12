@@ -701,52 +701,6 @@
             transform: scale(1.1);
         }
 
-        .instructions-panel {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 25px;
-            box-shadow: var(--shadow-lg);
-        }
-
-        .instructions-title {
-            font-size: 20px;
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .instructions-content {
-            padding: 15px;
-            background: var(--light);
-            border-radius: 8px;
-        }
-
-        .instructions-content h3 {
-            color: var(--primary);
-            margin-bottom: 10px;
-        }
-
-        .instructions-content ol {
-            margin-left: 20px;
-            margin-bottom: 15px;
-        }
-
-        .instructions-content li {
-            margin-bottom: 5px;
-        }
-
-        .note {
-            background: rgba(251, 191, 36, 0.1);
-            border-left: 4px solid var(--warning);
-            padding: 10px 15px;
-            margin-top: 15px;
-            border-radius: 4px;
-        }
-
         @media (max-width: 768px) {
             .container {
                 padding: 15px;
@@ -789,30 +743,6 @@
 </head>
 <body>
     <div class="container">
-        <div class="instructions-panel">
-            <div class="instructions-title">
-                <i class="fas fa-info-circle"></i>
-                <span>Instructions for GitHub Pages</span>
-            </div>
-            <div class="instructions-content">
-                <h3>🔸 To share data with others:</h3>
-                <ol>
-                    <li>Click "Export Data" to download the JSON file</li>
-                    <li>Share the JSON file with other users</li>
-                    <li>Other users can import it using "Import JSON"</li>
-                </ol>
-                <h3>🔸 To update the site permanently:</h3>
-                <ol>
-                    <li>Export the data as JSON</li>
-                    <li>Replace the data.json file in your GitHub repository</li>
-                    <li>Commit and push the changes</li>
-                </ol>
-                <div class="note">
-                    <strong>Note:</strong> Data is saved locally in your browser. Use export/import to share between users.
-                </div>
-            </div>
-        </div>
-
         <header>
             <div class="logo">
                 <i class="fas fa-trophy"></i>
@@ -864,13 +794,6 @@
                     <label for="fileInput" class="file-input-label">
                         <i class="fas fa-file-excel"></i>
                         <span data-i18n="importExcel">Import Excel</span>
-                    </label>
-                </div>
-                <div class="file-input-wrapper">
-                    <input type="file" id="jsonFileInput" accept=".json">
-                    <label for="jsonFileInput" class="file-input-label">
-                        <i class="fas fa-file-code"></i>
-                        <span>Import JSON</span>
                     </label>
                 </div>
                 <button class="export-btn" id="exportBtn">
@@ -966,7 +889,7 @@
                 <input type="password" id="password" placeholder="Enter password...">
             </div>
             <button class="login-btn" id="loginBtn" data-i18n="login">Login</button>
-            <button class="cancel-btn" id="cancelLogin" data-i18n="cancel">Export JSON</button>
+            <button class="cancel-btn" id="cancelLogin" data-i18n="cancel">Cancel</button>
         </div>
     </div>
 
@@ -1215,7 +1138,8 @@
         let lastUpdateTime = null;
         let activeFilter = 'all';
         let searchQuery = '';
-        let dataFileUrl = 'data.json';
+        let binId = null;
+        let binApiKey = '$2a$10$I60NBT4pk3BA7ArOeYJz3u.sWAjfQa/fnRTc14k5TMvCABDZo7Kiy';
 
         // DOM elements cache
         const elements = {};
@@ -1231,8 +1155,7 @@
                 'notificationMessage', 'searchInput', 'rankingBody', 'updateTime',
                 'totalPlayers', 'targetAchieved', 'closeToTarget',
                 'attentionNeeded', 'zeroPoints', 'weeklyAverage',
-                'currentLang', 'debugPanel', 'debugToggle', 'debugClose',
-                'jsonFileInput'
+                'currentLang', 'debugPanel', 'debugToggle', 'debugClose'
             ];
 
             elementIds.forEach(id => {
@@ -1416,25 +1339,13 @@
                     debug.success('Cancel login listener attached');
                 }
 
-                // File input (Excel)
+                // File input
                 if (elements.fileInput) {
                     elements.fileInput.addEventListener('change', (e) => {
                         debug.log('File input changed');
                         handleFileImport(e);
                     });
                     debug.success('File input listener attached');
-                }
-
-                // JSON file input
-                if (elements.jsonFileInput) {
-                    elements.jsonFileInput.addEventListener('change', (e) => {
-                        debug.log('JSON file input changed');
-                        const file = e.target.files[0];
-                        if (file) {
-                            importDataFromFile(file);
-                        }
-                    });
-                    debug.success('JSON file input listener attached');
                 }
 
                 // Export button
@@ -1535,23 +1446,9 @@
         }
 
         // Data functions
-        async function loadData() {
+        function loadData() {
             try {
                 debug.log('Loading data...');
-                
-                // Try to load from GitHub Pages data file
-                try {
-                    const response = await fetch(dataFileUrl);
-                    if (response.ok) {
-                        const data = await response.json();
-                        players = data.players || [];
-                        lastUpdateTime = data.lastUpdateTime ? new Date(data.lastUpdateTime) : null;
-                        debug.success(`Loaded ${players.length} players from GitHub`);
-                        return;
-                    }
-                } catch (error) {
-                    debug.warning('Could not load from GitHub, trying localStorage');
-                }
                 
                 // Try localStorage
                 const savedData = localStorage.getItem('scoringSystemData');
@@ -1559,7 +1456,7 @@
                     try {
                         const data = JSON.parse(savedData);
                         players = data.players || [];
-                        lastUpdateTime = data.lastUpdateTime ? new Date(data.lastUpdateTime) : null;
+                        lastUpdateTime = data.lastUpdateTime || null;
                         debug.success(`Loaded ${players.length} players from localStorage`);
                         return;
                     } catch (error) {
@@ -1602,16 +1499,64 @@
                 debug.log('Saving data...');
                 const data = {
                     players: players,
-                    lastUpdateTime: new Date().toISOString(),
-                    version: '1.0'
+                    lastUpdateTime: new Date()
                 };
 
                 // Save to localStorage
                 localStorage.setItem('scoringSystemData', JSON.stringify(data));
                 debug.success('Data saved to localStorage');
 
-                showNotification('Data saved locally. Use Export to share data.', 'success');
-                
+                // Try JSONBin
+                if (binId) {
+                    fetch(`https://api.jsonbin.io/v3/b/${binId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Master-Key': binApiKey
+                        },
+                        body: JSON.stringify(data)
+                    })
+                    .then(response => {
+                        if (!response.ok) throw new Error('Network response was not ok');
+                        return response.json();
+                    })
+                    .then(data => {
+                        lastUpdateTime = new Date();
+                        updateLastUpdatedTime();
+                        debug.success('Data saved to JSONBin');
+                        showNotification(translations[currentLang].dataSaved, 'success');
+                    })
+                    .catch(error => {
+                        debug.error('Failed to save to JSONBin', error);
+                        showNotification('Data saved locally only', 'success');
+                    });
+                } else {
+                    // Create new bin
+                    fetch('https://api.jsonbin.io/v3/b', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Master-Key': binApiKey,
+                            'X-Bin-Name': 'Scoring System Data'
+                        },
+                        body: JSON.stringify(data)
+                    })
+                    .then(response => {
+                        if (!response.ok) throw new Error('Network response was not ok');
+                        return response.json();
+                    })
+                    .then(data => {
+                        binId = data.metadata.id;
+                        lastUpdateTime = new Date();
+                        updateLastUpdatedTime();
+                        debug.success(`New JSONBin created: ${binId}`);
+                        showNotification(translations[currentLang].dataSaved, 'success');
+                    })
+                    .catch(error => {
+                        debug.error('Failed to create JSONBin', error);
+                        showNotification('Data saved locally only', 'success');
+                    });
+                }
             } catch (error) {
                 debug.error('Failed to save data', error);
                 showNotification('Failed to save data', 'error');
@@ -1621,23 +1566,6 @@
         function exportData() {
             try {
                 debug.log('Exporting data...');
-                
-                // Create JSON file for sharing
-                const dataStr = JSON.stringify({
-                    players: players,
-                    lastUpdateTime: new Date().toISOString(),
-                    version: '1.0'
-                }, null, 2);
-                
-                const dataBlob = new Blob([dataStr], {type: 'application/json'});
-                const url = URL.createObjectURL(dataBlob);
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = `scoring_data_${new Date().toISOString().split('T')[0]}.json`;
-                link.click();
-                URL.revokeObjectURL(url);
-                
-                // Also export Excel
                 const exportData = players.map(player => ({
                     Rank: calculateRank(player),
                     Player: player.player,
@@ -1654,43 +1582,10 @@
                 XLSX.writeFile(workbook, 'scoring_data.xlsx');
                 
                 debug.success('Data exported successfully');
-                showNotification('Data exported! Share the JSON file to update the site.', 'success');
+                showNotification(translations[currentLang].exportSuccess, 'success');
             } catch (error) {
                 debug.error('Failed to export data', error);
                 showNotification('Failed to export data', 'error');
-            }
-        }
-
-        function importDataFromFile(file) {
-            try {
-                debug.log('Importing data from file...');
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    try {
-                        const data = JSON.parse(e.target.result);
-                        if (data.players && Array.isArray(data.players)) {
-                            players = data.players;
-                            lastUpdateTime = data.lastUpdateTime ? new Date(data.lastUpdateTime) : new Date();
-                            
-                            updateDashboard();
-                            renderTable();
-                            updateLastUpdatedTime();
-                            saveData();
-                            
-                            debug.success(`Imported ${players.length} players`);
-                            showNotification('Data imported successfully!', 'success');
-                        } else {
-                            throw new Error('Invalid data format');
-                        }
-                    } catch (error) {
-                        debug.error('Error parsing imported data', error);
-                        showNotification('Invalid data file format', 'error');
-                    }
-                };
-                reader.readAsText(file);
-            } catch (error) {
-                debug.error('Failed to import data', error);
-                showNotification('Failed to import data', 'error');
             }
         }
 
