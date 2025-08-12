@@ -1,0 +1,600 @@
+{
+  "players": [
+    {
+      "player": "BriSo",
+      "startingPoints": 7955,
+      "targetPoints": 8955,
+      "totalScores": 9755
+    },
+    {
+      "player": "Luca1",
+      "startingPoints": 7955,
+      "targetPoints": 8955,
+      "totalScores": 9755
+    },
+    {
+      "player": "RoT.m23y",
+      "startingPoints": 7935,
+      "targetPoints": 8935,
+      "totalScores": 9735
+    },
+    {
+      "player": "Asgard",
+      "startingPoints": 7910,
+      "targetPoints": 8910,
+      "totalScores": 9710
+    },
+    {
+      "player": "Shadow_Alex",
+      "startingPoints": 7835,
+      "targetPoints": 8835,
+      "totalScores": 9635
+    },
+    {
+      "player": "STEAUA",
+      "startingPoints": 7935,
+      "targetPoints": 8935,
+      "totalScores": 9735
+    },
+    {
+      "player": "Patrick",
+      "startingPoints": 7955,
+      "targetPoints": 8955,
+      "totalScores": 9755
+    },
+    {
+      "player": "GeorgeBoss",
+      "startingPoints": 7500,
+      "targetPoints": 8500,
+      "totalScores": 9300
+    },
+    {
+      "player": "AllsGodfather ",
+      "startingPoints": 7575,
+      "targetPoints": 8575,
+      "totalScores": 9375
+    },
+    {
+      "player": "Ovidiu",
+      "startingPoints": 7825,
+      "targetPoints": 8825,
+      "totalScores": 9625
+    },
+    {
+      "player": "m23yan",
+      "startingPoints": 7325,
+      "targetPoints": 8325,
+      "totalScores": 9125
+    },
+    {
+      "player": "MKRK07",
+      "startingPoints": 7910,
+      "targetPoints": 8910,
+      "totalScores": 9710
+    },
+    {
+      "player": "FCDinamo",
+      "startingPoints": 7780,
+      "targetPoints": 8780,
+      "totalScores": 9580
+    },
+    {
+      "player": "Stateboss",
+      "startingPoints": 7745,
+      "targetPoints": 8745,
+      "totalScores": 9545
+    },
+    {
+      "player": "Patrick2",
+      "startingPoints": 7850,
+      "targetPoints": 8850,
+      "totalScores": 9650
+    },
+    {
+      "player": "abiro",
+      "startingPoints": 7395,
+      "targetPoints": 8395,
+      "totalScores": 9195
+    },
+    {
+      "player": "Sorin",
+      "startingPoints": 7895,
+      "targetPoints": 8895,
+      "totalScores": 9695
+    },
+    {
+      "player": "aR.",
+      "startingPoints": 7230,
+      "targetPoints": 8230,
+      "totalScores": 9030
+    },
+    {
+      "player": "king_andrei",
+      "startingPoints": 7060,
+      "targetPoints": 8060,
+      "totalScores": 8860
+    },
+    {
+      "player": "trux",
+      "startingPoints": 3520,
+      "targetPoints": 4520,
+      "totalScores": 5320
+    },
+    {
+      "player": "Abdullah",
+      "startingPoints": 1735,
+      "targetPoints": 2735,
+      "totalScores": 3535
+    },
+    {
+      "player": "BjOrN-LoThBrOk ",
+      "startingPoints": 0,
+      "targetPoints": 1000,
+      "totalScores": 1800
+    },
+    {
+      "player": "Sergiu78it",
+      "startingPoints": 6460,
+      "targetPoints": 7460,
+      "totalScores": 8215
+    },
+    {
+      "player": "IBRAHIMOVIC",
+      "startingPoints": 7265,
+      "targetPoints": 8265,
+      "totalScores": 8855
+    },
+    {
+      "player": "BriSo*",
+      "startingPoints": 2990,
+      "targetPoints": 3990,
+      "totalScores": 4570
+    },
+    {
+      "player": "kctoys",
+      "startingPoints": 5730,
+      "targetPoints": 6730,
+      "totalScores": 7235
+    },
+    {
+      "player": "Dinu",
+      "startingPoints": 4620,
+      "targetPoints": 5620,
+      "totalScores": 6120
+    },
+    {
+      "player": "DECEBAL1",
+      "startingPoints": 0,
+      "targetPoints": 1000,
+      "totalScores": 1495
+    },
+    {
+      "player": "Real.is.TRASH",
+      "startingPoints": 7765,
+      "targetPoints": 8765,
+      "totalScores": 9255
+    },
+    {
+      "player": "MARCUx",
+      "startingPoints": 5995,
+      "targetPoints": 6995,
+      "totalScores": 7475
+    },
+    {
+      "player": "NiCuBaRoS",
+      "startingPoints": 6600,
+      "targetPoints": 7600,
+      "totalScores": 8075
+    },
+    {
+      "player": "DECEBAL",
+      "startingPoints": 7230,
+      "targetPoints": 8230,
+      "totalScores": 8685
+    },
+    {
+      "player": "cosmin",
+      "startingPoints": 6080,
+      "targetPoints": 7080,
+      "totalScores": 7535
+    },
+    {
+      "player": "y90",
+      "startingPoints": 6235,
+      "targetPoints": 7235,
+      "totalScores": 7690
+    },
+    {
+      "player": "Bogdan86",
+      "startingPoints": 6835,
+      "targetPoints": 7835,
+      "totalScores": 8245
+    },
+    {
+      "player": "gabibadea",
+      "startingPoints": 7880,
+      "targetPoints": 8880,
+      "totalScores": 9270
+    },
+    {
+      "player": "vvb",
+      "startingPoints": 6630,
+      "targetPoints": 7630,
+      "totalScores": 8010
+    },
+    {
+      "player": "Iuliusiv",
+      "startingPoints": 6910,
+      "targetPoints": 7910,
+      "totalScores": 8265
+    },
+    {
+      "player": "Sp3edst3r",
+      "startingPoints": 7250,
+      "targetPoints": 8250,
+      "totalScores": 8600
+    },
+    {
+      "player": "AdrianO",
+      "startingPoints": 5475,
+      "targetPoints": 6475,
+      "totalScores": 6770
+    },
+    {
+      "player": "UCRAIOVA",
+      "startingPoints": 7235,
+      "targetPoints": 8235,
+      "totalScores": 8495
+    },
+    {
+      "player": "Timi12MM",
+      "startingPoints": 1615,
+      "targetPoints": 2615,
+      "totalScores": 2865
+    },
+    {
+      "player": "TheOracle",
+      "startingPoints": 5845,
+      "targetPoints": 6845,
+      "totalScores": 7070
+    },
+    {
+      "player": "SPORTING-VASLUI",
+      "startingPoints": 6010,
+      "targetPoints": 7010,
+      "totalScores": 7225
+    },
+    {
+      "player": "WildRosesFC",
+      "startingPoints": 6240,
+      "targetPoints": 7240,
+      "totalScores": 7450
+    },
+    {
+      "player": "Adin0601",
+      "startingPoints": 5680,
+      "targetPoints": 6680,
+      "totalScores": 6890
+    },
+    {
+      "player": "sergiu",
+      "startingPoints": 5550,
+      "targetPoints": 6550,
+      "totalScores": 6745
+    },
+    {
+      "player": "S8ULDavanash",
+      "startingPoints": 6440,
+      "targetPoints": 7440,
+      "totalScores": 7625
+    },
+    {
+      "player": "cknro",
+      "startingPoints": 6940,
+      "targetPoints": 7940,
+      "totalScores": 8120
+    },
+    {
+      "player": "Dobrin",
+      "startingPoints": 3545,
+      "targetPoints": 4545,
+      "totalScores": 4695
+    },
+    {
+      "player": "SAKIB_BOT",
+      "startingPoints": 6150,
+      "targetPoints": 7150,
+      "totalScores": 7295
+    },
+    {
+      "player": "roberti",
+      "startingPoints": 3415,
+      "targetPoints": 4415,
+      "totalScores": 4540
+    },
+    {
+      "player": "realmadrid",
+      "startingPoints": 1705,
+      "targetPoints": 2705,
+      "totalScores": 2820
+    },
+    {
+      "player": "Amadeus",
+      "startingPoints": 3535,
+      "targetPoints": 4535,
+      "totalScores": 4625
+    },
+    {
+      "player": "Ohis",
+      "startingPoints": 5800,
+      "targetPoints": 6800,
+      "totalScores": 6880
+    },
+    {
+      "player": "minhtu",
+      "startingPoints": 6415,
+      "targetPoints": 7415,
+      "totalScores": 7480
+    },
+    {
+      "player": "HIGHONLOVE",
+      "startingPoints": 1280,
+      "targetPoints": 2280,
+      "totalScores": 2325
+    },
+    {
+      "player": "KARTOLOV",
+      "startingPoints": 5580,
+      "targetPoints": 6580,
+      "totalScores": 6605
+    },
+    {
+      "player": "Marcelin",
+      "startingPoints": 3080,
+      "targetPoints": 4080,
+      "totalScores": 4100
+    },
+    {
+      "player": "AkElevra",
+      "startingPoints": 5520,
+      "targetPoints": 6520,
+      "totalScores": 6530
+    },
+    {
+      "player": "ZKY",
+      "startingPoints": 3235,
+      "targetPoints": 4235,
+      "totalScores": 4245
+    },
+    {
+      "player": "kOOlis",
+      "startingPoints": 5500,
+      "targetPoints": 6500,
+      "totalScores": 6500
+    },
+    {
+      "player": "Florin",
+      "startingPoints": 5030,
+      "targetPoints": 6030,
+      "totalScores": 6030
+    },
+    {
+      "player": ".TheGoat_7",
+      "startingPoints": 6360,
+      "targetPoints": 7360,
+      "totalScores": 7340
+    },
+    {
+      "player": "Borcea",
+      "startingPoints": 6280,
+      "targetPoints": 7280,
+      "totalScores": 7250
+    },
+    {
+      "player": "FlorianYo01",
+      "startingPoints": 5970,
+      "targetPoints": 6970,
+      "totalScores": 6940
+    },
+    {
+      "player": "Gabriel21",
+      "startingPoints": 0,
+      "targetPoints": 1000,
+      "totalScores": 950
+    },
+    {
+      "player": "Rare",
+      "startingPoints": 5050,
+      "targetPoints": 6050,
+      "totalScores": 5980
+    },
+    {
+      "player": "tecee",
+      "startingPoints": 7795,
+      "targetPoints": 8795,
+      "totalScores": 8695
+    },
+    {
+      "player": "McLovin",
+      "startingPoints": 4360,
+      "targetPoints": 5360,
+      "totalScores": 5255
+    },
+    {
+      "player": "AndreiPowerHP",
+      "startingPoints": 6235,
+      "targetPoints": 7235,
+      "totalScores": 7105
+    },
+    {
+      "player": "THEKENG",
+      "startingPoints": 5675,
+      "targetPoints": 6675,
+      "totalScores": 6535
+    },
+    {
+      "player": "FC_CRISTY_2024",
+      "startingPoints": 7290,
+      "targetPoints": 8290,
+      "totalScores": 8125
+    },
+    {
+      "player": "Richi07",
+      "startingPoints": 7215,
+      "targetPoints": 8215,
+      "totalScores": 8035
+    },
+    {
+      "player": "Alexandru159",
+      "startingPoints": 5675,
+      "targetPoints": 6675,
+      "totalScores": 6470
+    },
+    {
+      "player": "Mihai87",
+      "startingPoints": 0,
+      "targetPoints": 1000,
+      "totalScores": 765
+    },
+    {
+      "player": "carloscr503",
+      "startingPoints": 5705,
+      "targetPoints": 6705,
+      "totalScores": 6385
+    },
+    {
+      "player": "xDrs17.reg",
+      "startingPoints": 0,
+      "targetPoints": 1000,
+      "totalScores": 680
+    },
+    {
+      "player": "BorbelyMihai",
+      "startingPoints": 4960,
+      "targetPoints": 5960,
+      "totalScores": 5605
+    },
+    {
+      "player": "JUANyDARLING",
+      "startingPoints": 5870,
+      "targetPoints": 6870,
+      "totalScores": 6435
+    },
+    {
+      "player": "CRISTIANACCOUNTI",
+      "startingPoints": 3225,
+      "targetPoints": 4225,
+      "totalScores": 3775
+    },
+    {
+      "player": "Ars3nal",
+      "startingPoints": 5425,
+      "targetPoints": 6425,
+      "totalScores": 5970
+    },
+    {
+      "player": "ADAM_ES",
+      "startingPoints": 5045,
+      "targetPoints": 6045,
+      "totalScores": 5580
+    },
+    {
+      "player": "Catalin07",
+      "startingPoints": 5795,
+      "targetPoints": 6795,
+      "totalScores": 6325
+    },
+    {
+      "player": "Mafic",
+      "startingPoints": 5160,
+      "targetPoints": 6160,
+      "totalScores": 5690
+    },
+    {
+      "player": "Andreyutz888",
+      "startingPoints": 6405,
+      "targetPoints": 7405,
+      "totalScores": 6910
+    },
+    {
+      "player": "LUCAS",
+      "startingPoints": 4615,
+      "targetPoints": 5615,
+      "totalScores": 5095
+    },
+    {
+      "player": "NutaGOD",
+      "startingPoints": 0,
+      "targetPoints": 1000,
+      "totalScores": 480
+    },
+    {
+      "player": "EL14plus1",
+      "startingPoints": 4725,
+      "targetPoints": 5725,
+      "totalScores": 5200
+    },
+    {
+      "player": "valsh90",
+      "startingPoints": 4655,
+      "targetPoints": 5655,
+      "totalScores": 5060
+    },
+    {
+      "player": "McDannice",
+      "startingPoints": 5195,
+      "targetPoints": 6195,
+      "totalScores": 5580
+    },
+    {
+      "player": "Waqtilomis97",
+      "startingPoints": 6325,
+      "targetPoints": 7325,
+      "totalScores": 6615
+    },
+    {
+      "player": "juve1988",
+      "startingPoints": 6110,
+      "targetPoints": 7110,
+      "totalScores": 6370
+    },
+    {
+      "player": "Maximus",
+      "startingPoints": 7880,
+      "targetPoints": 8880,
+      "totalScores": 8095
+    },
+    {
+      "player": "The_goat",
+      "startingPoints": 1000,
+      "targetPoints": 2000,
+      "totalScores": 1195
+    },
+    {
+      "player": "SebasCol",
+      "startingPoints": 5020,
+      "targetPoints": 6020,
+      "totalScores": 5210
+    },
+    {
+      "player": "Zeeshul",
+      "startingPoints": 5525,
+      "targetPoints": 6525,
+      "totalScores": 5615
+    },
+    {
+      "player": "Voś",
+      "startingPoints": 5295,
+      "targetPoints": 6295,
+      "totalScores": 5315
+    },
+    {
+      "player": "DumyRo",
+      "startingPoints": 0,
+      "targetPoints": 1000,
+      "totalScores": 0
+    }
+  ],
+  "lastUpdateTime": "2025-08-12T08:37:44.803Z",
+  "version": "1.0"
+}
