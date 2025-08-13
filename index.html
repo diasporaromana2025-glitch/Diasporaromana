@@ -423,6 +423,18 @@
             font-weight: 600;
             color: var(--dark);
         }
+        .player.status-done {
+            color: var(--success);
+        }
+        .player.status-gray {
+            color: var(--gray);
+        }
+        .player.status-yellow {
+            color: var(--warning);
+        }
+        .player.status-red {
+            color: var(--danger);
+        }
         .week-score {
             font-weight: 600;
             color: var(--dark);
@@ -706,6 +718,21 @@
             .dashboard-stats {
                 grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
                 gap: 15px;
+            }
+            /* Reduce dashboard button sizes for mobile */
+            .stat-card {
+                padding: 10px;
+            }
+            .stat-icon {
+                font-size: 20px;
+                margin-bottom: 8px;
+            }
+            .stat-value {
+                font-size: 20px;
+                margin-bottom: 5px;
+            }
+            .stat-label {
+                font-size: 12px;
             }
             .table-container {
                 padding: 15px;
@@ -1331,16 +1358,31 @@
             updateLastUpdatedTime();
         }
         function loadLanguage() {
+            // Update all elements with data-i18n attribute
             document.querySelectorAll('[data-i18n]').forEach(element => {
                 const key = element.getAttribute('data-i18n');
                 if (translations[currentLang] && translations[currentLang][key]) {
                     element.textContent = translations[currentLang][key];
+                } else if (translations['ro'] && translations['ro'][key]) {
+                    // Fallback to Romanian if translation is missing
+                    element.textContent = translations['ro'][key];
+                    console.warn(`Missing translation for key "${key}" in language "${currentLang}", using Romanian`);
+                } else {
+                    console.error(`Missing translation for key "${key}" in all languages`);
                 }
             });
+            
+            // Update all elements with data-i18n-placeholder attribute
             document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
                 const key = element.getAttribute('data-i18n-placeholder');
                 if (translations[currentLang] && translations[currentLang][key]) {
                     element.placeholder = translations[currentLang][key];
+                } else if (translations['ro'] && translations['ro'][key]) {
+                    // Fallback to Romanian if translation is missing
+                    element.placeholder = translations['ro'][key];
+                    console.warn(`Missing placeholder translation for key "${key}" in language "${currentLang}", using Romanian`);
+                } else {
+                    console.error(`Missing placeholder translation for key "${key}" in all languages`);
                 }
             });
         }
@@ -1587,7 +1629,7 @@
                     
                     row.innerHTML = `
                         <td class="rank">${calculateRank(player)}</td>
-                        <td class="player">${player.player}</td>
+                        <td class="player ${statusClass}">${player.player}</td>
                         <td class="total-scores">
                             ${canEdit ? 
                                 `<input type="number" class="editable" value="${player.totalScores}" 
