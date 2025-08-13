@@ -7,21 +7,21 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Stilurile CSS rămân neschimbate */
         :root {
-            --primary: #4f46e5;
-            --primary-dark: #4338ca;
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
             --secondary: #10b981;
             --success: #22c55e;
             --warning: #f59e0b;
             --danger: #ef4444;
-            --light: #f3f4f6;
-            --dark: #1f2937;
-            --gray: #6b7280;
-            --light-gray: #e5e7eb;
+            --light: #f8fafc;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light-gray: #e2e8f0;
             --white: #ffffff;
             --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
         * {
             margin: 0;
@@ -30,7 +30,7 @@
         }
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            background: var(--gradient);
             min-height: 100vh;
             color: var(--dark);
             line-height: 1.6;
@@ -42,7 +42,7 @@
         }
         header {
             background: rgba(255, 255, 255, 0.95);
-            border-radius: 12px;
+            border-radius: 16px;
             padding: 20px;
             margin-bottom: 25px;
             box-shadow: var(--shadow-lg);
@@ -51,20 +51,23 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 15px;
+            backdrop-filter: blur(10px);
         }
         .logo {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
         .logo i {
-            font-size: 28px;
+            font-size: 32px;
             color: var(--primary);
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
         }
         .logo h1 {
-            font-size: 24px;
+            font-size: 28px;
             font-weight: 700;
             color: var(--primary);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
         .header-actions {
             display: flex;
@@ -76,17 +79,18 @@
             position: relative;
         }
         .search-box input {
-            padding: 10px 15px 10px 40px;
-            border: 1px solid var(--light-gray);
-            border-radius: 8px;
-            font-size: 14px;
-            width: 200px;
+            padding: 12px 15px 12px 45px;
+            border: 2px solid var(--light-gray);
+            border-radius: 12px;
+            font-size: 15px;
+            width: 220px;
             transition: all 0.3s ease;
+            background: var(--white);
         }
         .search-box input:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
         }
         .search-box i {
             position: absolute;
@@ -94,42 +98,46 @@
             top: 50%;
             transform: translateY(-50%);
             color: var(--gray);
+            font-size: 16px;
         }
         .language-selector {
             position: relative;
         }
         .language-btn {
             background: var(--white);
-            border: 1px solid var(--light-gray);
-            border-radius: 8px;
-            padding: 10px 15px;
+            border: 2px solid var(--light-gray);
+            border-radius: 12px;
+            padding: 12px 15px;
             display: flex;
             align-items: center;
             gap: 8px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 15px;
             transition: all 0.3s ease;
+            box-shadow: var(--shadow);
         }
         .language-btn:hover {
             border-color: var(--primary);
+            transform: translateY(-2px);
         }
         .language-dropdown {
             position: absolute;
             top: 100%;
             right: 0;
             background: var(--white);
-            border-radius: 8px;
+            border-radius: 12px;
             box-shadow: var(--shadow-lg);
             z-index: 100;
             min-width: 150px;
             display: none;
             overflow: hidden;
+            margin-top: 8px;
         }
         .language-dropdown.active {
             display: block;
         }
         .language-option {
-            padding: 10px 15px;
+            padding: 12px 15px;
             cursor: pointer;
             transition: background 0.2s ease;
             display: flex;
@@ -143,26 +151,30 @@
             background: var(--primary);
             color: var(--white);
             border: none;
-            border-radius: 8px;
-            padding: 10px 15px;
+            border-radius: 12px;
+            padding: 12px 18px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
+            font-size: 15px;
+            font-weight: 600;
             transition: all 0.3s ease;
+            box-shadow: var(--shadow);
         }
         .admin-btn:hover {
             background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
         }
         .admin-panel {
             background: rgba(255, 255, 255, 0.95);
-            border-radius: 12px;
-            padding: 20px;
+            border-radius: 16px;
+            padding: 25px;
             margin-bottom: 25px;
             box-shadow: var(--shadow-lg);
             display: none;
+            backdrop-filter: blur(10px);
         }
         .admin-panel.active {
             display: block;
@@ -171,24 +183,42 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light-gray);
         }
         .admin-title {
-            font-size: 20px;
-            font-weight: 600;
+            font-size: 24px;
+            font-weight: 700;
             color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         .close-admin {
-            background: none;
+            background: var(--light);
             border: none;
             font-size: 20px;
             color: var(--gray);
             cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .close-admin:hover {
+            background: var(--danger);
+            color: var(--white);
+            transform: rotate(90deg);
         }
         .admin-actions {
             display: flex;
             gap: 15px;
             flex-wrap: wrap;
+            margin-bottom: 20px;
         }
         .file-input-wrapper {
             position: relative;
@@ -207,35 +237,41 @@
         .file-input-label {
             background: var(--secondary);
             color: var(--white);
-            border-radius: 8px;
-            padding: 10px 15px;
+            border-radius: 12px;
+            padding: 12px 18px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
+            font-size: 15px;
+            font-weight: 600;
             transition: all 0.3s ease;
+            box-shadow: var(--shadow);
         }
         .file-input-label:hover {
             background: #059669;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
         }
         .export-btn, .save-btn {
             background: var(--primary);
             color: var(--white);
             border: none;
-            border-radius: 8px;
-            padding: 10px 15px;
+            border-radius: 12px;
+            padding: 12px 18px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
+            font-size: 15px;
+            font-weight: 600;
             transition: all 0.3s ease;
+            box-shadow: var(--shadow);
         }
         .export-btn:hover, .save-btn:hover {
             background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
         }
         .save-btn {
             background: var(--success);
@@ -245,41 +281,47 @@
         }
         .dashboard {
             background: rgba(255, 255, 255, 0.95);
-            border-radius: 12px;
-            padding: 20px;
+            border-radius: 16px;
+            padding: 25px;
             margin-bottom: 25px;
             box-shadow: var(--shadow-lg);
+            backdrop-filter: blur(10px);
         }
         .dashboard-title {
-            font-size: 20px;
-            font-weight: 600;
+            font-size: 24px;
+            font-weight: 700;
             color: var(--primary);
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         .dashboard-stats {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
+            gap: 20px;
         }
         .stat-card {
             background: var(--white);
-            border-radius: 10px;
-            padding: 15px;
+            border-radius: 16px;
+            padding: 20px;
             box-shadow: var(--shadow);
             text-align: center;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.3s ease;
             cursor: pointer;
+            border: 2px solid transparent;
         }
         .stat-card:hover {
             transform: translateY(-5px);
             box-shadow: var(--shadow-lg);
         }
         .stat-card.active {
-            border: 2px solid var(--primary);
+            border-color: var(--primary);
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
         }
         .stat-icon {
-            font-size: 24px;
-            margin-bottom: 10px;
+            font-size: 32px;
+            margin-bottom: 15px;
         }
         .stat-card.total .stat-icon {
             color: var(--primary);
@@ -300,50 +342,71 @@
             color: var(--secondary);
         }
         .stat-value {
-            font-size: 28px;
+            font-size: 32px;
             font-weight: 700;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         .stat-label {
             font-size: 14px;
             color: var(--gray);
+            font-weight: 500;
         }
         .table-container {
             background: rgba(255, 255, 255, 0.95);
-            border-radius: 12px;
-            padding: 20px;
+            border-radius: 16px;
+            padding: 25px;
             box-shadow: var(--shadow-lg);
             overflow-x: auto;
+            backdrop-filter: blur(10px);
         }
         .table-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light-gray);
         }
         .table-title {
-            font-size: 20px;
-            font-weight: 600;
+            font-size: 24px;
+            font-weight: 700;
             color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         .last-updated {
             font-size: 14px;
             color: var(--gray);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         table {
             width: 100%;
             border-collapse: collapse;
+            background: var(--white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
         }
         th, td {
-            padding: 12px 15px;
+            padding: 15px 20px;
             text-align: left;
         }
         th {
-            background: var(--light);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--white);
             font-weight: 600;
-            color: var(--dark);
             position: sticky;
             top: 0;
+            z-index: 10;
+            text-transform: uppercase;
+            font-size: 14px;
+            letter-spacing: 0.5px;
         }
         tr:nth-child(even) {
             background: rgba(243, 244, 246, 0.5);
@@ -352,51 +415,59 @@
             background: rgba(229, 231, 235, 0.5);
         }
         .rank {
-            font-weight: 600;
+            font-weight: 700;
             color: var(--primary);
+            font-size: 18px;
         }
         .player {
-            font-weight: 500;
+            font-weight: 600;
+            color: var(--dark);
         }
         .week-score {
-            font-weight: 500;
+            font-weight: 600;
+            color: var(--dark);
         }
         .left-to-achieve {
-            font-weight: 500;
+            font-weight: 600;
         }
         .status-done {
             color: var(--success);
-            font-weight: 600;
+            font-weight: 700;
         }
         .status-gray {
             color: var(--gray);
+            font-weight: 600;
         }
         .status-yellow {
             color: var(--warning);
+            font-weight: 600;
         }
         .status-red {
             color: var(--danger);
+            font-weight: 600;
         }
         .zero-score {
             color: var(--danger);
-            font-weight: 600;
+            font-weight: 700;
         }
         .zero-score::after {
             content: " ⚠️";
             font-size: 16px;
         }
         .editable {
-            background: transparent;
-            border: 1px solid transparent;
-            padding: 5px;
-            border-radius: 4px;
+            background: var(--white);
+            border: 2px solid var(--light-gray);
+            padding: 8px 12px;
+            border-radius: 8px;
             width: 100%;
             transition: all 0.3s ease;
+            font-weight: 600;
+            color: var(--primary);
         }
         .editable:focus {
             outline: none;
             border-color: var(--primary);
-            background: rgba(79, 70, 229, 0.1);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
         }
         .login-modal {
             position: fixed;
@@ -410,104 +481,115 @@
             align-items: center;
             z-index: 1000;
             display: none;
+            backdrop-filter: blur(5px);
         }
         .login-modal.active {
             display: flex;
         }
         .login-form {
             background: var(--white);
-            border-radius: 12px;
-            padding: 30px;
+            border-radius: 20px;
+            padding: 40px;
             width: 90%;
-            max-width: 400px;
+            max-width: 450px;
             box-shadow: var(--shadow-lg);
         }
         .login-title {
-            font-size: 24px;
-            font-weight: 600;
+            font-size: 28px;
+            font-weight: 700;
             color: var(--primary);
-            margin-bottom: 20px;
+            margin-bottom: 30px;
             text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
         }
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
         .form-group label {
             display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
+            margin-bottom: 10px;
+            font-weight: 600;
             color: var(--dark);
         }
         .form-group input {
             width: 100%;
-            padding: 12px 15px;
-            border: 1px solid var(--light-gray);
-            border-radius: 8px;
+            padding: 15px 20px;
+            border: 2px solid var(--light-gray);
+            border-radius: 12px;
             font-size: 16px;
             transition: all 0.3s ease;
+            background: var(--white);
         }
         .form-group input:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
         }
         .login-btn {
             width: 100%;
             background: var(--primary);
             color: var(--white);
             border: none;
-            border-radius: 8px;
-            padding: 12px 15px;
+            border-radius: 12px;
+            padding: 15px 20px;
             font-size: 16px;
-            font-weight: 500;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            box-shadow: var(--shadow);
         }
         .login-btn:hover {
             background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
         }
         .cancel-btn {
             width: 100%;
             background: transparent;
             color: var(--gray);
-            border: 1px solid var(--light-gray);
-            border-radius: 8px;
-            padding: 12px 15px;
+            border: 2px solid var(--light-gray);
+            border-radius: 12px;
+            padding: 15px 20px;
             font-size: 16px;
-            font-weight: 500;
+            font-weight: 600;
             cursor: pointer;
-            margin-top: 10px;
+            margin-top: 15px;
             transition: all 0.3s ease;
         }
         .cancel-btn:hover {
             background: var(--light);
+            border-color: var(--gray);
         }
         .notification {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            bottom: 30px;
+            right: 30px;
             background: var(--white);
-            border-radius: 8px;
-            padding: 15px 20px;
+            border-radius: 12px;
+            padding: 20px 25px;
             box-shadow: var(--shadow-lg);
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
             transform: translateX(120%);
             transition: transform 0.3s ease;
             z-index: 1000;
+            max-width: 400px;
         }
         .notification.show {
             transform: translateX(0);
         }
         .notification.success {
-            border-left: 4px solid var(--success);
+            border-left: 5px solid var(--success);
         }
         .notification.error {
-            border-left: 4px solid var(--danger);
+            border-left: 5px solid var(--danger);
         }
         .notification i {
-            font-size: 20px;
+            font-size: 24px;
         }
         .notification.success i {
             color: var(--success);
@@ -516,14 +598,15 @@
             color: var(--danger);
         }
         .notification-message {
-            font-weight: 500;
+            font-weight: 600;
+            color: var(--dark);
         }
         .loading-indicator {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            height: 3px;
+            height: 4px;
             background: var(--primary);
             transform: scaleX(0);
             transform-origin: left;
@@ -535,20 +618,22 @@
         }
         .sync-status {
             position: fixed;
-            bottom: 20px;
-            left: 20px;
-            background: rgba(0, 0, 0, 0.7);
+            bottom: 30px;
+            left: 30px;
+            background: rgba(0, 0, 0, 0.8);
             color: white;
-            border-radius: 20px;
-            padding: 8px 15px;
-            font-size: 12px;
+            border-radius: 30px;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             z-index: 1000;
+            backdrop-filter: blur(10px);
         }
         .sync-status i {
-            font-size: 14px;
+            font-size: 16px;
         }
         .sync-status.synced i {
             color: var(--success);
@@ -563,119 +648,41 @@
         .user-info {
             display: flex;
             align-items: center;
-            gap: 10px;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 14px;
+            gap: 12px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 15px;
             color: var(--white);
+            font-weight: 600;
+            box-shadow: var(--shadow);
         }
         .user-role {
             font-size: 12px;
             background: rgba(255, 255, 255, 0.3);
-            padding: 2px 6px;
-            border-radius: 10px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         .logout-btn {
-            background: none;
+            background: rgba(255, 255, 255, 0.3);
             border: none;
             color: var(--white);
             cursor: pointer;
-            font-size: 14px;
-            padding: 5px;
-        }
-        .users-management {
-            margin-top: 20px;
-            padding: 15px;
-            background: var(--light);
-            border-radius: 8px;
-        }
-        .users-title {
             font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: var(--dark);
-        }
-        .users-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 10px;
-        }
-        .user-item {
-            background: var(--white);
-            padding: 10px;
-            border-radius: 6px;
+            padding: 8px;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
         }
-        .user-details {
-            display: flex;
-            flex-direction: column;
-        }
-        .user-name {
-            font-weight: 500;
-            font-size: 14px;
-        }
-        .user-password {
-            font-size: 12px;
-            color: var(--gray);
-        }
-        .user-actions {
-            display: flex;
-            gap: 5px;
-        }
-        .edit-user-btn, .delete-user-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
-            padding: 5px;
-            border-radius: 4px;
-        }
-        .edit-user-btn {
-            color: var(--primary);
-        }
-        .edit-user-btn:hover {
-            background: rgba(79, 70, 229, 0.1);
-        }
-        .delete-user-btn {
-            color: var(--danger);
-        }
-        .delete-user-btn:hover {
-            background: rgba(239, 68, 68, 0.1);
-        }
-        .add-user-form {
-            display: grid;
-            grid-template-columns: 1fr 1fr auto;
-            gap: 10px;
-            margin-top: 15px;
-        }
-        .add-user-form input {
-            padding: 8px 12px;
-            border: 1px solid var(--light-gray);
-            border-radius: 6px;
-            font-size: 14px;
-        }
-        .add-user-form select {
-            padding: 8px 12px;
-            border: 1px solid var(--light-gray);
-            border-radius: 6px;
-            font-size: 14px;
-            background: var(--white);
-        }
-        .add-user-btn {
-            background: var(--success);
-            color: var(--white);
-            border: none;
-            border-radius: 6px;
-            padding: 8px 12px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-        }
-        .add-user-btn:hover {
-            background: #16a34a;
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.5);
+            transform: rotate(90deg);
         }
         @keyframes spin {
             0% { transform: rotate(0deg); }
@@ -698,16 +705,24 @@
             }
             .dashboard-stats {
                 grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 15px;
             }
             .table-container {
                 padding: 15px;
             }
             th, td {
-                padding: 8px 10px;
+                padding: 12px 15px;
                 font-size: 14px;
             }
-            .add-user-form {
-                grid-template-columns: 1fr;
+            .notification {
+                bottom: 20px;
+                right: 20px;
+                left: 20px;
+                max-width: none;
+            }
+            .sync-status {
+                bottom: 20px;
+                left: 20px;
             }
         }
     </style>
@@ -766,13 +781,16 @@
         </header>
         <div class="admin-panel" id="adminPanel">
             <div class="admin-header">
-                <h2 class="admin-title" data-i18n="adminPanel">Admin Panel</h2>
+                <h2 class="admin-title">
+                    <i class="fas fa-cogs"></i>
+                    <span data-i18n="adminPanel">Admin Panel</span>
+                </h2>
                 <button class="close-admin" id="closeAdmin">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
             <div class="admin-actions">
-                <div class="file-input-wrapper">
+                <div class="file-input-wrapper" id="importWrapper">
                     <input type="file" id="fileInput" accept=".xlsx, .xls">
                     <label for="fileInput" class="file-input-label">
                         <i class="fas fa-file-excel"></i>
@@ -788,30 +806,12 @@
                     <span data-i18n="saveData">Save Data</span>
                 </button>
             </div>
-            
-            <!-- User Management Section -->
-            <div class="users-management" id="usersManagement" style="display: none;">
-                <h3 class="users-title" data-i18n="userManagement">User Management</h3>
-                <div class="users-list" id="usersList">
-                    <!-- Users will be displayed here -->
-                </div>
-                <div class="add-user-form">
-                    <input type="text" id="newUserName" placeholder="Username" data-i18n-placeholder="username">
-                    <input type="password" id="newUserPassword" placeholder="Password" data-i18n-placeholder="password">
-                    <select id="newUserRole">
-                        <option value="viewer" data-i18n="viewer">Viewer</option>
-                        <option value="editor" data-i18n="editor">Editor</option>
-                        <option value="admin" data-i18n="admin">Admin</option>
-                    </select>
-                    <button class="add-user-btn" id="addUserBtn">
-                        <i class="fas fa-plus"></i>
-                        <span data-i18n="addUser">Add User</span>
-                    </button>
-                </div>
-            </div>
         </div>
         <div class="dashboard">
-            <h2 class="dashboard-title" data-i18n="dashboard">Dashboard</h2>
+            <h2 class="dashboard-title">
+                <i class="fas fa-chart-line"></i>
+                <span data-i18n="dashboard">Dashboard</span>
+            </h2>
             <div class="dashboard-stats">
                 <div class="stat-card total" data-filter="all">
                     <div class="stat-icon">
@@ -850,7 +850,7 @@
                 </div>
                 <div class="stat-card average">
                     <div class="stat-icon">
-                        <i class="fas fa-chart-line"></i>
+                        <i class="fas fa-chart-bar"></i>
                     </div>
                     <div class="stat-value" id="weeklyAverage">0</div>
                     <div class="stat-label" data-i18n="weeklyAverage">Weekly Average</div>
@@ -859,7 +859,10 @@
         </div>
         <div class="table-container">
             <div class="table-header">
-                <h2 class="table-title" data-i18n="ranking">Ranking</h2>
+                <h2 class="table-title">
+                    <i class="fas fa-trophy"></i>
+                    <span data-i18n="ranking">Ranking</span>
+                </h2>
                 <div class="last-updated" id="lastUpdated">
                     <i class="fas fa-clock"></i>
                     <span data-i18n="lastUpdated">Last updated:</span>
@@ -884,7 +887,10 @@
     </div>
     <div class="login-modal" id="loginModal">
         <div class="login-form">
-            <h2 class="login-title" data-i18n="adminLogin">Login</h2>
+            <h2 class="login-title">
+                <i class="fas fa-user-shield"></i>
+                <span data-i18n="adminLogin">Login</span>
+            </h2>
             <div class="form-group">
                 <label for="username" data-i18n="username">Username</label>
                 <input type="text" id="username" placeholder="Enter username...">
@@ -946,15 +952,6 @@
                 hours: "ore",
                 days: "zile",
                 done: "Realizat",
-                userManagement: "Management Utilizatori",
-                username: "Utilizator",
-                viewer: "Vizualizator",
-                editor: "Editor",
-                admin: "Admin",
-                addUser: "Adaugă Utilizator",
-                userAdded: "Utilizator adăugat cu succes!",
-                userDeleted: "Utilizator șters cu succes!",
-                userUpdated: "Utilizator actualizat cu succes!",
                 logoutSuccess: "Deconectare reușită!"
             },
             en: {
@@ -995,15 +992,6 @@
                 hours: "hours",
                 days: "days",
                 done: "Done",
-                userManagement: "User Management",
-                username: "Username",
-                viewer: "Viewer",
-                editor: "Editor",
-                admin: "Admin",
-                addUser: "Add User",
-                userAdded: "User added successfully!",
-                userDeleted: "User deleted successfully!",
-                userUpdated: "User updated successfully!",
                 logoutSuccess: "Logout successful!"
             },
             es: {
@@ -1044,15 +1032,6 @@
                 hours: "horas",
                 days: "días",
                 done: "Hecho",
-                userManagement: "Gestión de Usuarios",
-                username: "Usuario",
-                viewer: "Visualizador",
-                editor: "Editor",
-                admin: "Admin",
-                addUser: "Agregar Usuario",
-                userAdded: "¡Usuario agregado con éxito!",
-                userDeleted: "¡Usuario eliminado con éxito!",
-                userUpdated: "¡Usuario actualizado con éxito!",
                 logoutSuccess: "¡Cierre de sesión exitoso!"
             }
         };
@@ -1080,12 +1059,10 @@
         let searchQuery = '';
         let isSyncing = false;
         let syncTimeout = null;
-        let users = [];
         // Default users
         const defaultUsers = [
             { username: 'admin', password: 'diasporaromana123', role: 'admin' },
-            { username: 'editor', password: 'editor123', role: 'editor' },
-            { username: 'viewer', password: 'viewer123', role: 'viewer' }
+            { username: 'editor', password: 'fcmobile', role: 'editor' }
         ];
         // DOM elements
         const elements = {};
@@ -1099,9 +1076,7 @@
                 'totalPlayers', 'targetAchieved', 'closeToTarget',
                 'attentionNeeded', 'zeroPoints', 'weeklyAverage',
                 'currentLang', 'loadingIndicator', 'syncStatus', 'userInfo',
-                'userName', 'userRole', 'logoutBtn', 'username',
-                'usersManagement', 'usersList', 'newUserName', 'newUserPassword',
-                'newUserRole', 'addUserBtn'
+                'userName', 'userRole', 'logoutBtn', 'username', 'importWrapper'
             ];
             elementIds.forEach(id => {
                 const element = document.getElementById(id);
@@ -1119,7 +1094,6 @@
             loadLanguage();
             setupEventListeners();
             checkLoginStatus();
-            loadUsersFromFirebase();
             loadDataFromFirebase();
             
             // Set up periodic sync status check
@@ -1142,39 +1116,27 @@
                 updateUIForLoggedInUser();
             }
         }
-        // Load users from Firebase
-        function loadUsersFromFirebase() {
-            const usersRef = database.ref('users');
+        // Update admin panel visibility based on user role
+        function updateAdminPanelVisibility() {
+            if (!currentUser) {
+                // Hide all buttons if not logged in
+                if (elements.importWrapper) elements.importWrapper.style.display = 'none';
+                if (elements.exportBtn) elements.exportBtn.style.display = 'none';
+                if (elements.saveBtn) elements.saveBtn.style.display = 'none';
+                return;
+            }
             
-            usersRef.once('value').then((snapshot) => {
-                const data = snapshot.val();
-                if (data) {
-                    users = Object.values(data);
-                } else {
-                    // If no users exist, create default users
-                    users = [...defaultUsers];
-                    saveUsersToFirebase();
-                }
-                
-                // Update users list if admin panel is open
-                if (elements.usersManagement && elements.usersManagement.style.display !== 'none') {
-                    renderUsersList();
-                }
-            }).catch((error) => {
-                console.error('Error loading users:', error);
-                users = [...defaultUsers];
-            });
-        }
-        // Save users to Firebase
-        function saveUsersToFirebase() {
-            const usersObj = {};
-            users.forEach((user, index) => {
-                usersObj[index] = user;
-            });
-            
-            database.ref('users').set(usersObj).catch((error) => {
-                console.error('Error saving users:', error);
-            });
+            if (userRole === 'admin') {
+                // Admin can see everything
+                if (elements.importWrapper) elements.importWrapper.style.display = 'inline-block';
+                if (elements.exportBtn) elements.exportBtn.style.display = 'flex';
+                if (elements.saveBtn) elements.saveBtn.style.display = 'flex';
+            } else if (userRole === 'editor') {
+                // Editor can see export and save
+                if (elements.importWrapper) elements.importWrapper.style.display = 'none';
+                if (elements.exportBtn) elements.exportBtn.style.display = 'flex';
+                if (elements.saveBtn) elements.saveBtn.style.display = 'flex';
+            }
         }
         // Setup event listeners
         function setupEventListeners() {
@@ -1203,10 +1165,8 @@
                     if (currentUser) {
                         if (elements.adminPanel) {
                             elements.adminPanel.classList.toggle('active');
-                            if (userRole === 'admin' && elements.usersManagement) {
-                                elements.usersManagement.style.display = 'block';
-                                renderUsersList();
-                            }
+                            // Update visibility when panel is opened
+                            updateAdminPanelVisibility();
                         }
                     } else {
                         if (elements.loginModal) {
@@ -1228,7 +1188,7 @@
                     const username = elements.username ? elements.username.value : '';
                     const password = elements.password ? elements.password.value : '';
                     
-                    const user = users.find(u => u.username === username && u.password === password);
+                    const user = defaultUsers.find(u => u.username === username && u.password === password);
                     
                     if (user) {
                         currentUser = user.username;
@@ -1308,10 +1268,6 @@
                     });
                 });
             }
-            // User management
-            if (elements.addUserBtn) {
-                elements.addUserBtn.addEventListener('click', addUser);
-            }
             // Close dropdowns when clicking outside
             document.addEventListener('click', (e) => {
                 if (!e.target.closest('.language-selector') && elements.languageDropdown) {
@@ -1334,25 +1290,15 @@
                 elements.adminBtn.style.display = 'none';
             }
             
-            // Show/hide admin panel elements based on role
-            if (elements.adminPanel) {
-                if (userRole === 'admin') {
-                    // Admin can see everything
-                    if (elements.fileInput) elements.fileInput.parentElement.style.display = 'inline-block';
-                    if (elements.exportBtn) elements.exportBtn.style.display = 'flex';
-                    if (elements.saveBtn) elements.saveBtn.style.display = 'flex';
-                } else if (userRole === 'editor') {
-                    // Editor can see export and save
-                    if (elements.fileInput) elements.fileInput.parentElement.style.display = 'none';
-                    if (elements.exportBtn) elements.exportBtn.style.display = 'flex';
-                    if (elements.saveBtn) elements.saveBtn.style.display = 'flex';
-                } else {
-                    // Viewer can only see export
-                    if (elements.fileInput) elements.fileInput.parentElement.style.display = 'none';
-                    if (elements.exportBtn) elements.exportBtn.style.display = 'flex';
-                    if (elements.saveBtn) elements.saveBtn.style.display = 'none';
+            // Show admin panel if user is admin or editor
+            if (userRole === 'admin' || userRole === 'editor') {
+                if (elements.adminPanel) {
+                    elements.adminPanel.classList.add('active');
                 }
             }
+            
+            // Update admin panel visibility
+            updateAdminPanelVisibility();
             
             renderTable();
         }
@@ -1368,103 +1314,10 @@
                 elements.adminPanel.classList.remove('active');
             }
             
+            // Update admin panel visibility
+            updateAdminPanelVisibility();
+            
             renderTable();
-        }
-        // Render users list
-        function renderUsersList() {
-            if (!elements.usersList) return;
-            
-            elements.usersList.innerHTML = '';
-            
-            users.forEach((user, index) => {
-                const userItem = document.createElement('div');
-                userItem.className = 'user-item';
-                userItem.innerHTML = `
-                    <div class="user-details">
-                        <div class="user-name">${user.username}</div>
-                        <div class="user-password">${user.password}</div>
-                    </div>
-                    <div class="user-actions">
-                        <button class="edit-user-btn" onclick="editUser(${index})">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="delete-user-btn" onclick="deleteUser(${index})">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                `;
-                elements.usersList.appendChild(userItem);
-            });
-        }
-        // Add new user
-        function addUser() {
-            if (!elements.newUserName || !elements.newUserPassword || !elements.newUserRole) return;
-            
-            const username = elements.newUserName.value.trim();
-            const password = elements.newUserPassword.value.trim();
-            const role = elements.newUserRole.value;
-            
-            if (!username || !password) {
-                showNotification('Please enter both username and password', 'error');
-                return;
-            }
-            
-            // Check if user already exists
-            if (users.find(u => u.username === username)) {
-                showNotification('User already exists', 'error');
-                return;
-            }
-            
-            users.push({ username, password, role });
-            saveUsersToFirebase();
-            renderUsersList();
-            
-            // Clear form
-            elements.newUserName.value = '';
-            elements.newUserPassword.value = '';
-            elements.newUserRole.value = 'viewer';
-            
-            showNotification(translations[currentLang].userAdded, 'success');
-        }
-        // Edit user
-        function editUser(index) {
-            const user = users[index];
-            if (!user) return;
-            
-            const newUsername = prompt('Enter new username:', user.username);
-            if (newUsername === null) return;
-            
-            const newPassword = prompt('Enter new password:', user.password);
-            if (newPassword === null) return;
-            
-            const newRole = prompt('Enter new role (admin/editor/viewer):', user.role);
-            if (newRole === null) return;
-            
-            if (!newUsername.trim() || !newPassword.trim() || !['admin', 'editor', 'viewer'].includes(newRole)) {
-                showNotification('Invalid input', 'error');
-                return;
-            }
-            
-            users[index] = {
-                username: newUsername.trim(),
-                password: newPassword.trim(),
-                role: newRole
-            };
-            
-            saveUsersToFirebase();
-            renderUsersList();
-            showNotification(translations[currentLang].userUpdated, 'success');
-        }
-        // Delete user
-        function deleteUser(index) {
-            if (index < 0 || index >= users.length) return;
-            
-            if (confirm('Are you sure you want to delete this user?')) {
-                users.splice(index, 1);
-                saveUsersToFirebase();
-                renderUsersList();
-                showNotification(translations[currentLang].userDeleted, 'success');
-            }
         }
         // Language functions
         function changeLanguage(lang) {
@@ -1540,7 +1393,7 @@
             });
         }
         function saveDataToFirebase() {
-            if (!currentUser || userRole === 'viewer') {
+            if (!currentUser) {
                 showNotification('Permission denied', 'error');
                 return;
             }
@@ -1603,7 +1456,7 @@
                 });
         }
         function updatePlayerScoreInFirebase(playerName, newScore) {
-            if (!currentUser || userRole !== 'editor' && userRole !== 'admin') {
+            if (!currentUser) {
                 showNotification('Permission denied', 'error');
                 return;
             }
@@ -1673,7 +1526,7 @@
             try {
                 const totalPlayers = players.length;
                 const targetAchieved = players.filter(p => calculateLeftToAchieve(p) <= 0).length;
-                const closeToTarget = players.filter(p => calculateLeftToAchieve(p) > 0 && calculateLeftToAchieve(p) < 200).length;
+                const closeToTarget = players.filter(p => calculateLeftToAchieve(p) > 0 && calculateLeftToAchieve(p) < 500).length;
                 const attentionNeeded = players.filter(p => calculateLeftToAchieve(p) >= 500).length;
                 const zeroPoints = players.filter(p => calculateWeekScore(p) === 0).length;
                 const weeklyAverage = totalPlayers > 0 ? 
@@ -1700,7 +1553,7 @@
                         case 'target':
                             return calculateLeftToAchieve(player) <= 0;
                         case 'close':
-                            return calculateLeftToAchieve(player) > 0 && calculateLeftToAchieve(player) < 200;
+                            return calculateLeftToAchieve(player) > 0 && calculateLeftToAchieve(player) < 500;
                         case 'attention':
                             return calculateLeftToAchieve(player) >= 500;
                         case 'zero':
@@ -1730,7 +1583,7 @@
                     const statusClass = getStatusClass(player);
                     const statusText = getStatusText(player);
                     const isZeroScore = weekScore === 0;
-                    const canEdit = currentUser && (userRole === 'editor' || userRole === 'admin');
+                    const canEdit = currentUser;
                     
                     row.innerHTML = `
                         <td class="rank">${calculateRank(player)}</td>
@@ -1990,7 +1843,7 @@
         }
         // Global functions for inline event handlers
         window.updatePlayerScore = function(playerName, newScore) {
-            if (!currentUser || (userRole !== 'editor' && userRole !== 'admin')) {
+            if (!currentUser) {
                 showNotification('Permission denied', 'error');
                 return;
             }
@@ -2001,9 +1854,6 @@
                 updatePlayerScoreInFirebase(playerName, newScore);
             }
         };
-        
-        window.editUser = editUser;
-        window.deleteUser = deleteUser;
         
         // Initialize app when DOM is loaded
         document.addEventListener('DOMContentLoaded', initApp);
