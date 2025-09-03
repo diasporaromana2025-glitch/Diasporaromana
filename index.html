@@ -2275,6 +2275,7 @@
                     updateDailyLastUpdatedTime();
                     updateDailySyncStatus('synced');
                     updateDailyDashboard();
+                    renderDailyTable(); // Re-render table to update calculations
                 })
                 .catch((error) => {
                     console.error('Error updating player day score:', error);
@@ -2780,8 +2781,11 @@
             let count = 0;
             
             Object.values(dailyData[playerName]).forEach(score => {
-                total += score;
-                count++;
+                // Only count non-empty scores
+                if (score !== undefined && score !== '') {
+                    total += score;
+                    count++;
+                }
             });
             
             return count > 0 ? total / count : 0;
@@ -2792,7 +2796,15 @@
                 return 0;
             }
             
-            return Object.keys(dailyData[playerName]).length;
+            let count = 0;
+            Object.keys(dailyData[playerName]).forEach(date => {
+                // Only count non-empty scores
+                if (dailyData[playerName][date] !== undefined && dailyData[playerName][date] !== '') {
+                    count++;
+                }
+            });
+            
+            return count;
         }
         
         function calculateDailyRank(playerName) {
