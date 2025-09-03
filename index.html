@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Toate stilurile CSS rămân neschimbate */
         :root {
             --primary: #2563eb;
             --primary-dark: #1d4ed8;
@@ -47,13 +46,17 @@
             padding: 20px;
             margin-bottom: 25px;
             box-shadow: var(--shadow-lg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
             backdrop-filter: blur(10px);
         }
         .logo {
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-bottom: 20px;
         }
         .logo i {
             font-size: 32px;
@@ -65,33 +68,6 @@
             font-weight: 700;
             color: var(--primary);
             text-shadow: 0 1px 2px rgba(0,0,0,0.1);
-        }
-        .nav-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .nav-tab {
-            background: var(--light);
-            border: 2px solid var(--light-gray);
-            border-radius: 12px;
-            padding: 12px 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-        .nav-tab:hover {
-            border-color: var(--primary);
-            background: rgba(37, 99, 235, 0.05);
-        }
-        .nav-tab.active {
-            background: var(--primary);
-            color: var(--white);
-            border-color: var(--primary);
         }
         .header-actions {
             display: flex;
@@ -191,51 +167,6 @@
             transform: translateY(-2px);
             box-shadow: var(--shadow-lg);
         }
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            padding: 10px 20px;
-            border-radius: 30px;
-            font-size: 15px;
-            color: var(--white);
-            font-weight: 600;
-            box-shadow: var(--shadow);
-        }
-        .user-role {
-            font-size: 12px;
-            background: rgba(255, 255, 255, 0.3);
-            padding: 4px 10px;
-            border-radius: 20px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .logout-btn {
-            background: rgba(255, 255, 255, 0.3);
-            border: none;
-            color: var(--white);
-            cursor: pointer;
-            font-size: 16px;
-            padding: 8px;
-            border-radius: 50%;
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-        .logout-btn:hover {
-            background: rgba(255, 255, 255, 0.5);
-            transform: rotate(90deg);
-        }
-        .tab-content {
-            display: none;
-        }
-        .tab-content.active {
-            display: block;
-        }
         .admin-panel {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 16px;
@@ -322,7 +253,7 @@
             transform: translateY(-2px);
             box-shadow: var(--shadow-lg);
         }
-        .export-btn, .save-btn, .refresh-btn {
+        .export-btn, .save-btn {
             background: var(--primary);
             color: var(--white);
             border: none;
@@ -337,7 +268,7 @@
             transition: all 0.3s ease;
             box-shadow: var(--shadow);
         }
-        .export-btn:hover, .save-btn:hover, .refresh-btn:hover {
+        .export-btn:hover, .save-btn:hover {
             background: var(--primary-dark);
             transform: translateY(-2px);
             box-shadow: var(--shadow-lg);
@@ -347,12 +278,6 @@
         }
         .save-btn:hover {
             background: #16a34a;
-        }
-        .refresh-btn {
-            background: var(--warning);
-        }
-        .refresh-btn:hover {
-            background: #d97706;
         }
         .dashboard {
             background: rgba(255, 255, 255, 0.95);
@@ -415,18 +340,6 @@
         }
         .stat-card.average .stat-icon {
             color: var(--secondary);
-        }
-        .stat-card.top10 .stat-icon {
-            color: var(--success);
-        }
-        .stat-card.top32 .stat-icon {
-            color: var(--warning);
-        }
-        .stat-card.missed .stat-icon {
-            color: var(--danger);
-        }
-        .stat-card.min2 .stat-icon {
-            color: var(--danger);
         }
         .stat-value {
             font-size: 32px;
@@ -522,19 +435,7 @@
         .player.status-red {
             color: var(--danger);
         }
-        .average {
-            font-weight: 600;
-            color: var(--dark);
-        }
-        .tournaments {
-            font-weight: 600;
-            color: var(--dark);
-        }
         .week-score {
-            font-weight: 600;
-            color: var(--dark);
-        }
-        .day-score {
             font-weight: 600;
             color: var(--dark);
         }
@@ -560,7 +461,6 @@
         .zero-score {
             color: var(--danger);
             font-weight: 700;
-            background-color: rgba(239, 68, 68, 0.1);
         }
         .zero-score::after {
             content: " ⚠️";
@@ -700,9 +600,6 @@
         .notification.error {
             border-left: 5px solid var(--danger);
         }
-        .notification.warning {
-            border-left: 5px solid var(--warning);
-        }
         .notification i {
             font-size: 24px;
         }
@@ -711,9 +608,6 @@
         }
         .notification.error i {
             color: var(--danger);
-        }
-        .notification.warning i {
-            color: var(--warning);
         }
         .notification-message {
             font-weight: 600;
@@ -763,35 +657,44 @@
         .sync-status.error i {
             color: var(--danger);
         }
-        .sync-status.offline i {
-            color: var(--warning);
-        }
-        .sort-options {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .sort-btn {
-            background: var(--light);
-            border: 2px solid var(--light-gray);
-            border-radius: 12px;
-            padding: 10px 15px;
+        .user-info {
             display: flex;
             align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            font-size: 14px;
+            gap: 12px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 15px;
+            color: var(--white);
             font-weight: 600;
+            box-shadow: var(--shadow);
+        }
+        .user-role {
+            font-size: 12px;
+            background: rgba(255, 255, 255, 0.3);
+            padding: 4px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.3);
+            border: none;
+            color: var(--white);
+            cursor: pointer;
+            font-size: 16px;
+            padding: 8px;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             transition: all 0.3s ease;
         }
-        .sort-btn:hover {
-            border-color: var(--primary);
-            background: rgba(37, 99, 235, 0.05);
-        }
-        .sort-btn.active {
-            background: var(--primary);
-            color: var(--white);
-            border-color: var(--primary);
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.5);
+            transform: rotate(90deg);
         }
         @keyframes spin {
             0% { transform: rotate(0deg); }
@@ -801,8 +704,9 @@
             .container {
                 padding: 15px;
             }
-            .nav-tabs {
-                flex-wrap: wrap;
+            header {
+                flex-direction: column;
+                align-items: flex-start;
             }
             .header-actions {
                 width: 100%;
@@ -815,6 +719,7 @@
                 grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
                 gap: 15px;
             }
+            /* Reduce dashboard button sizes for mobile */
             .stat-card {
                 padding: 10px;
             }
@@ -842,9 +747,6 @@
                 left: 20px;
                 max-width: none;
             }
-            .sort-options {
-                flex-wrap: wrap;
-            }
         }
     </style>
 </head>
@@ -860,20 +762,10 @@
                 <i class="fas fa-trophy"></i>
                 <h1 data-i18n="appTitle">Scoring System</h1>
             </div>
-            <div class="nav-tabs">
-                <div class="nav-tab active" id="mainTab" data-tab="main">
-                    <i class="fas fa-chart-line"></i>
-                    <span data-i18n="mainPage">Pagina Principală</span>
-                </div>
-                <div class="nav-tab" id="dailyTab" data-tab="daily">
-                    <i class="fas fa-calendar-day"></i>
-                    <span data-i18n="dailyPage">Pagina Zilnică</span>
-                </div>
-            </div>
             <div class="header-actions">
                 <div class="search-box">
                     <i class="fas fa-search"></i>
-                    <input type="text" id="searchInput" placeholder="Caută jucători..." data-i18n-placeholder="searchPlaceholder">
+                    <input type="text" id="searchInput" placeholder="Search players..." data-i18n-placeholder="searchPlaceholder">
                 </div>
                 <div class="language-selector">
                     <div class="language-btn" id="languageBtn">
@@ -910,7 +802,6 @@
                 </button>
             </div>
         </header>
-        
         <div class="admin-panel" id="adminPanel">
             <div class="admin-header">
                 <h2 class="admin-title">
@@ -931,209 +822,114 @@
                 </div>
                 <button class="export-btn" id="exportBtn">
                     <i class="fas fa-download"></i>
-                    <span data-i18n="exportData">Export Date</span>
+                    <span data-i18n="exportData">Export Data</span>
                 </button>
                 <button class="save-btn" id="saveBtn">
                     <i class="fas fa-save"></i>
-                    <span data-i18n="saveData">Salvează Date</span>
-                </button>
-                <button class="refresh-btn" id="refreshBtn">
-                    <i class="fas fa-sync-alt"></i>
-                    <span>Refresh</span>
+                    <span data-i18n="saveData">Save Data</span>
                 </button>
             </div>
         </div>
-        
-        <!-- Main Page Content -->
-        <div id="mainContent" class="tab-content active">
-            <div class="dashboard">
-                <h2 class="dashboard-title">
-                    <i class="fas fa-chart-line"></i>
-                    <span data-i18n="dashboard">Dashboard</span>
-                </h2>
-                <div class="dashboard-stats">
-                    <div class="stat-card total" data-filter="all">
-                        <div class="stat-icon">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <div class="stat-value" id="totalPlayers">0</div>
-                        <div class="stat-label" data-i18n="totalPlayers">Total Jucători</div>
+        <div class="dashboard">
+            <h2 class="dashboard-title">
+                <i class="fas fa-chart-line"></i>
+                <span data-i18n="dashboard">Dashboard</span>
+            </h2>
+            <div class="dashboard-stats">
+                <div class="stat-card total" data-filter="all">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
                     </div>
-                    <div class="stat-card target" data-filter="target">
-                        <div class="stat-icon">
-                            <i class="fas fa-check-circle"></i>
-                        </div>
-                        <div class="stat-value" id="targetAchieved">0</div>
-                        <div class="stat-label" data-i18n="targetAchieved">Target Atins</div>
-                    </div>
-                    <div class="stat-card close" data-filter="close">
-                        <div class="stat-icon">
-                            <i class="fas fa-hourglass-half"></i>
-                        </div>
-                        <div class="stat-value" id="closeToTarget">0</div>
-                        <div class="stat-label" data-i18n="closeToTarget">Aproape de Target</div>
-                    </div>
-                    <div class="stat-card attention" data-filter="attention">
-                        <div class="stat-icon">
-                            <i class="fas fa-exclamation-triangle"></i>
-                        </div>
-                        <div class="stat-value" id="attentionNeeded">0</div>
-                        <div class="stat-label" data-i18n="attentionNeeded">Atenție</div>
-                    </div>
-                    <div class="stat-card zero" data-filter="zero">
-                        <div class="stat-icon">
-                            <i class="fas fa-times-circle"></i>
-                        </div>
-                        <div class="stat-value" id="zeroPoints">0</div>
-                        <div class="stat-label" data-i18n="zeroPoints">0 Puncte</div>
-                    </div>
-                    <div class="stat-card average">
-                        <div class="stat-icon">
-                            <i class="fas fa-chart-bar"></i>
-                        </div>
-                        <div class="stat-value" id="weeklyAverage">0</div>
-                        <div class="stat-label" data-i18n="weeklyAverage">Media Săptămânii</div>
-                    </div>
+                    <div class="stat-value" id="totalPlayers">0</div>
+                    <div class="stat-label" data-i18n="totalPlayers">Total Players</div>
                 </div>
-            </div>
-            <div class="table-container">
-                <div class="table-header">
-                    <h2 class="table-title">
-                        <i class="fas fa-trophy"></i>
-                        <span data-i18n="ranking">Clasament</span>
-                    </h2>
-                    <div class="last-updated" id="lastUpdated">
-                        <i class="fas fa-clock"></i>
-                        <span data-i18n="lastUpdated">Ultima actualizare:</span>
-                        <span id="updateTime">Niciodată</span>
+                <div class="stat-card target" data-filter="target">
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle"></i>
                     </div>
+                    <div class="stat-value" id="targetAchieved">0</div>
+                    <div class="stat-label" data-i18n="targetAchieved">Target Achieved</div>
                 </div>
-                <table id="rankingTable">
-                    <thead>
-                        <tr>
-                            <th data-i18n="rank">Poziție</th>
-                            <th data-i18n="player">Jucător</th>
-                            <th data-i18n="totalScores">Punctaj Total</th>
-                            <th data-i18n="weekScore">Punctaj Săptămână</th>
-                            <th data-i18n="leftToAchieve">Până la Target</th>
-                        </tr>
-                    </thead>
-                    <tbody id="rankingBody">
-                        <!-- Table rows will be generated here -->
-                    </tbody>
-                </table>
+                <div class="stat-card close" data-filter="close">
+                    <div class="stat-icon">
+                        <i class="fas fa-hourglass-half"></i>
+                    </div>
+                    <div class="stat-value" id="closeToTarget">0</div>
+                    <div class="stat-label" data-i18n="closeToTarget">Close to Target</div>
+                </div>
+                <div class="stat-card attention" data-filter="attention">
+                    <div class="stat-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="stat-value" id="attentionNeeded">0</div>
+                    <div class="stat-label" data-i18n="attentionNeeded">Attention Needed</div>
+                </div>
+                <div class="stat-card zero" data-filter="zero">
+                    <div class="stat-icon">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                    <div class="stat-value" id="zeroPoints">0</div>
+                    <div class="stat-label" data-i18n="zeroPoints">Zero Points</div>
+                </div>
+                <div class="stat-card average">
+                    <div class="stat-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <div class="stat-value" id="weeklyAverage">0</div>
+                    <div class="stat-label" data-i18n="weeklyAverage">Weekly Average</div>
+                </div>
             </div>
         </div>
-        
-        <!-- Daily Page Content -->
-        <div id="dailyContent" class="tab-content">
-            <div class="dashboard">
-                <h2 class="dashboard-title">
-                    <i class="fas fa-chart-line"></i>
-                    <span data-i18n="dashboard">Dashboard Zilnic</span>
+        <div class="table-container">
+            <div class="table-header">
+                <h2 class="table-title">
+                    <i class="fas fa-trophy"></i>
+                    <span data-i18n="ranking">Ranking</span>
                 </h2>
-                <div class="dashboard-stats">
-                    <div class="stat-card total" data-filter="all">
-                        <div class="stat-icon">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <div class="stat-value" id="dailyTotalPlayers">0</div>
-                        <div class="stat-label" data-i18n="totalPlayers">Total Jucători</div>
-                    </div>
-                    <div class="stat-card top10" data-filter="top10">
-                        <div class="stat-icon">
-                            <i class="fas fa-trophy"></i>
-                        </div>
-                        <div class="stat-value" id="top10">0</div>
-                        <div class="stat-label" data-i18n="top10">Top 10</div>
-                    </div>
-                    <div class="stat-card top32" data-filter="top32">
-                        <div class="stat-icon">
-                            <i class="fas fa-medal"></i>
-                        </div>
-                        <div class="stat-value" id="top32">0</div>
-                        <div class="stat-label" data-i18n="top32">Top 32</div>
-                    </div>
-                    <div class="stat-card missed" data-filter="missed">
-                        <div class="stat-icon">
-                            <i class="fas fa-times-circle"></i>
-                        </div>
-                        <div class="stat-value" id="missedTournaments">0</div>
-                        <div class="stat-label" data-i18n="missedTournaments">Turnee Ratate</div>
-                    </div>
-                    <div class="stat-card min2" data-filter="min2">
-                        <div class="stat-icon">
-                            <i class="fas fa-exclamation-triangle"></i>
-                        </div>
-                        <div class="stat-value" id="min2Missed">0</div>
-                        <div class="stat-label" data-i18n="min2Missed">Minim 2 Ratate</div>
-                    </div>
+                <div class="last-updated" id="lastUpdated">
+                    <i class="fas fa-clock"></i>
+                    <span data-i18n="lastUpdated">Last updated:</span>
+                    <span id="updateTime">Never</span>
                 </div>
             </div>
-            <div class="table-container">
-                <div class="table-header">
-                    <h2 class="table-title">
-                        <i class="fas fa-trophy"></i>
-                        <span data-i18n="ranking">Clasament Zilnic</span>
-                    </h2>
-                    <div class="last-updated" id="dailyLastUpdated">
-                        <i class="fas fa-clock"></i>
-                        <span data-i18n="lastUpdated">Ultima actualizare:</span>
-                        <span id="dailyUpdateTime">Niciodată</span>
-                    </div>
-                </div>
-                <div class="sort-options">
-                    <button class="sort-btn active" id="sortByRank">
-                        <i class="fas fa-sort-numeric-down"></i>
-                        <span data-i18n="sortByRank">Sortează după Rank</span>
-                    </button>
-                    <button class="sort-btn" id="sortByName">
-                        <i class="fas fa-sort-alpha-down"></i>
-                        <span data-i18n="sortByName">Sortează după Nume</span>
-                    </button>
-                </div>
-                <table id="dailyTable">
-                    <thead>
-                        <tr>
-                            <th data-i18n="rank">Poziție</th>
-                            <th data-i18n="player">Jucător</th>
-                            <th data-i18n="average">Medie</th>
-                            <th data-i18n="tournaments">Nr. Turnee</th>
-                            <!-- Day columns will be dynamically added here -->
-                        </tr>
-                    </thead>
-                    <tbody id="dailyTableBody">
-                        <!-- Table rows will be generated here -->
-                    </tbody>
-                </table>
-            </div>
+            <table id="rankingTable">
+                <thead>
+                    <tr>
+                        <th data-i18n="rank">Rank</th>
+                        <th data-i18n="player">Player</th>
+                        <th data-i18n="totalScores">Total Scores</th>
+                        <th data-i18n="weekScore">Week Score</th>
+                        <th data-i18n="leftToAchieve">Left to Achieve</th>
+                    </tr>
+                </thead>
+                <tbody id="rankingBody">
+                    <!-- Table rows will be generated here -->
+                </tbody>
+            </table>
         </div>
     </div>
-    
     <div class="login-modal" id="loginModal">
         <div class="login-form">
             <h2 class="login-title">
                 <i class="fas fa-user-shield"></i>
-                <span data-i18n="adminLogin">Autentificare</span>
+                <span data-i18n="adminLogin">Login</span>
             </h2>
             <div class="form-group">
-                <label for="username" data-i18n="username">Utilizator</label>
-                <input type="text" id="username" placeholder="Introduceți utilizator...">
+                <label for="username" data-i18n="username">Username</label>
+                <input type="text" id="username" placeholder="Enter username...">
             </div>
             <div class="form-group">
-                <label for="password" data-i18n="password">Parolă</label>
-                <input type="password" id="password" placeholder="Introduceți parola...">
+                <label for="password" data-i18n="password">Password</label>
+                <input type="password" id="password" placeholder="Enter password...">
             </div>
-            <button class="login-btn" id="loginBtn" data-i18n="login">Autentificare</button>
-            <button class="cancel-btn" id="cancelLogin" data-i18n="cancel">Anulează</button>
+            <button class="login-btn" id="loginBtn" data-i18n="login">Login</button>
+            <button class="cancel-btn" id="cancelLogin" data-i18n="cancel">Cancel</button>
         </div>
     </div>
-    
     <div class="notification" id="notification">
         <i class="fas fa-check-circle"></i>
         <div class="notification-message" id="notificationMessage"></div>
     </div>
-    
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
@@ -1179,22 +975,7 @@
                 hours: "ore",
                 days: "zile",
                 done: "Realizat",
-                logoutSuccess: "Deconectare reușită!",
-                mainPage: "Pagina Principală",
-                dailyPage: "Pagina Zilnică",
-                top10: "Top 10",
-                top32: "Top 32",
-                missedTournaments: "Turnee Ratate",
-                min2Missed: "Minim 2 Ratate",
-                average: "Medie",
-                tournaments: "Nr. Turnee",
-                sortByRank: "Sortează după Rank",
-                sortByName: "Sortează după Nume",
-                dashboardZilnic: "Dashboard Zilnic",
-                offlineMode: "Mod Offline",
-                connectionRestored: "Conexiune restabilită!",
-                syncError: "Eroare sincronizare. Datele salvate local.",
-                dataSynced: "Date sincronizate cu succes!"
+                logoutSuccess: "Deconectare reușită!"
             },
             en: {
                 appTitle: "Scoring System",
@@ -1234,22 +1015,7 @@
                 hours: "hours",
                 days: "days",
                 done: "Done",
-                logoutSuccess: "Logout successful!",
-                mainPage: "Main Page",
-                dailyPage: "Daily Page",
-                top10: "Top 10",
-                top32: "Top 32",
-                missedTournaments: "Missed Tournaments",
-                min2Missed: "Min 2 Missed",
-                average: "Average",
-                tournaments: "Tournaments",
-                sortByRank: "Sort by Rank",
-                sortByName: "Sort by Name",
-                dashboardZilnic: "Daily Dashboard",
-                offlineMode: "Offline Mode",
-                connectionRestored: "Connection restored!",
-                syncError: "Sync error. Data saved locally.",
-                dataSynced: "Data synced successfully!"
+                logoutSuccess: "Logout successful!"
             },
             es: {
                 appTitle: "Sistema de Puntuación",
@@ -1289,25 +1055,9 @@
                 hours: "horas",
                 days: "días",
                 done: "Hecho",
-                logoutSuccess: "¡Cierre de sesión exitoso!",
-                mainPage: "Página Principal",
-                dailyPage: "Página Diaria",
-                top10: "Top 10",
-                top32: "Top 32",
-                missedTournaments: "Torneos Perdidos",
-                min2Missed: "Mín 2 Perdidos",
-                average: "Promedio",
-                tournaments: "Torneos",
-                sortByRank: "Ordenar por Rango",
-                sortByName: "Ordenar por Nombre",
-                dashboardZilnic: "Panel Diaria",
-                offlineMode: "Modo Offline",
-                connectionRestored: "¡Conexión restaurada!",
-                syncError: "Error de sincronización. Datos guardados localmente.",
-                dataSynced: "¡Datos sincronizados con éxito!"
+                logoutSuccess: "¡Cierre de sesión exitoso!"
             }
         };
-        
         // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyAg-8kByVcC4gh1FEuZJvnhs525nQShixA",
@@ -1319,39 +1069,26 @@
             appId: "1:983580221213:web:d9f4b82f8acb7ec47f8bf4",
             measurementId: "G-HHCTDB7CFS"
         };
-        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
         // Application state
         let currentLang = 'ro';
         let currentUser = null;
         let userRole = null;
         let players = [];
-        let dailyData = {};
         let lastUpdateTime = null;
-        let dailyLastUpdateTime = null;
         let activeFilter = 'all';
-        let dailyActiveFilter = 'all';
         let searchQuery = '';
-        let dailySearchQuery = '';
         let isSyncing = false;
-        let dailyIsSyncing = false;
-        let sortBy = 'rank';
-        let dailyColumns = [];
-        let dayColumnCheckInterval = null;
-        let syncRetryCount = 0;
-        const MAX_SYNC_RETRIES = 3;
-        let isOnline = true;
-        let database = null;
-        let pendingSyncs = [];
-        
+        let syncTimeout = null;
         // Default users
         const defaultUsers = [
             { username: 'admin', password: 'diasporaromana123', role: 'admin' },
             { username: 'editor', password: 'fcmobile', role: 'editor' }
         ];
-        
         // DOM elements
         const elements = {};
-        
         // Cache DOM elements
         function cacheElements() {
             const elementIds = [
@@ -1362,257 +1099,35 @@
                 'totalPlayers', 'targetAchieved', 'closeToTarget',
                 'attentionNeeded', 'zeroPoints', 'weeklyAverage',
                 'currentLang', 'loadingIndicator', 'syncStatus', 'userInfo',
-                'userName', 'userRole', 'logoutBtn', 'username', 'importWrapper',
-                'mainTab', 'dailyTab', 'dailyTableBody', 'dailyUpdateTime', 'dailyTotalPlayers', 
-                'top10', 'top32', 'missedTournaments', 'min2Missed', 'sortByRank', 'sortByName',
-                'refreshBtn'
+                'userName', 'userRole', 'logoutBtn', 'username', 'importWrapper'
             ];
-            
             elementIds.forEach(id => {
                 const element = document.getElementById(id);
                 if (element) {
                     elements[id] = element;
                 }
             });
-            
             // Cache elements by class
             elements.languageOptions = document.querySelectorAll('.language-option');
             elements.statCards = document.querySelectorAll('.stat-card');
-            elements.navTabs = document.querySelectorAll('.nav-tab');
-            elements.tabContents = document.querySelectorAll('.tab-content');
         }
-        
-        // Initialize Firebase with error handling
-        function initializeFirebase() {
-            try {
-                firebase.initializeApp(firebaseConfig);
-                database = firebase.database();
-                
-                // Check connection status
-                const connectedRef = database.ref('.info/connected');
-                connectedRef.on('value', (snap) => {
-                    if (snap.val() === true) {
-                        if (!isOnline) {
-                            isOnline = true;
-                            showNotification(translations[currentLang].connectionRestored, 'success');
-                            processPendingSyncs();
-                        }
-                        updateSyncStatus('synced');
-                    } else {
-                        isOnline = false;
-                        updateSyncStatus('offline');
-                        showNotification(translations[currentLang].offlineMode, 'warning');
-                    }
-                });
-                
-                return true;
-            } catch (error) {
-                console.error('Firebase initialization error:', error);
-                isOnline = false;
-                updateSyncStatus('offline');
-                showNotification('Working in offline mode', 'warning');
-                return false;
-            }
-        }
-        
         // Initialize app
         function initApp() {
             cacheElements();
             loadLanguage();
             setupEventListeners();
             checkLoginStatus();
-            
-            // Try to initialize Firebase
-            const firebaseInitialized = initializeFirebase();
-            
-            if (firebaseInitialized) {
-                loadDataFromLocalStorage();
-                loadDataFromFirebase();
-                loadDailyDataFromFirebase();
-            } else {
-                // Work entirely from localStorage
-                loadDataFromLocalStorage();
-                showNotification('Working in offline mode. Data will sync when connection is restored.', 'warning');
-            }
-            
-            generateDailyColumns();
-            updateMainDashboard();
-            updateDailyDashboard();
-            renderMainTable();
-            renderDailyTable();
-            
-            // Set up daily column generation check
-            setupDayColumnGeneration();
+            loadDataFromFirebase();
             
             // Set up periodic sync status check
             setInterval(() => {
-                if (isOnline) {
-                    if (isSyncing) {
-                        updateSyncStatus('syncing');
-                    } else {
-                        updateSyncStatus('synced');
-                    }
-                    
-                    if (dailyIsSyncing) {
-                        updateDailySyncStatus('syncing');
-                    } else {
-                        updateDailySyncStatus('synced');
-                    }
+                if (isSyncing) {
+                    updateSyncStatus('syncing');
+                } else {
+                    updateSyncStatus('synced');
                 }
             }, 5000);
         }
-        
-        // Load data from localStorage
-        function loadDataFromLocalStorage() {
-            try {
-                // Load players
-                const savedPlayers = localStorage.getItem('players');
-                if (savedPlayers) {
-                    players = JSON.parse(savedPlayers);
-                } else {
-                    // Initialize with empty array
-                    players = [];
-                }
-                
-                // Load daily data
-                const savedDailyData = localStorage.getItem('dailyData');
-                if (savedDailyData) {
-                    dailyData = JSON.parse(savedDailyData);
-                } else {
-                    dailyData = {};
-                }
-                
-                // Load timestamps
-                const savedLastUpdate = localStorage.getItem('lastUpdateTime');
-                if (savedLastUpdate) {
-                    lastUpdateTime = new Date(savedLastUpdate);
-                }
-                
-                const savedDailyLastUpdate = localStorage.getItem('dailyLastUpdateTime');
-                if (savedDailyLastUpdate) {
-                    dailyLastUpdateTime = new Date(savedDailyLastUpdate);
-                }
-                
-                // Load pending syncs
-                const savedPendingSyncs = localStorage.getItem('pendingSyncs');
-                if (savedPendingSyncs) {
-                    pendingSyncs = JSON.parse(savedPendingSyncs);
-                }
-                
-                updateLastUpdatedTime();
-                updateDailyLastUpdatedTime();
-            } catch (error) {
-                console.error('Error loading data from localStorage:', error);
-                players = [];
-                dailyData = {};
-            }
-        }
-        
-        // Save data to localStorage
-        function saveDataToLocalStorage() {
-            try {
-                localStorage.setItem('players', JSON.stringify(players));
-                localStorage.setItem('dailyData', JSON.stringify(dailyData));
-                localStorage.setItem('lastUpdateTime', lastUpdateTime ? lastUpdateTime.toISOString() : '');
-                localStorage.setItem('dailyLastUpdateTime', dailyLastUpdateTime ? dailyLastUpdateTime.toISOString() : '');
-                localStorage.setItem('pendingSyncs', JSON.stringify(pendingSyncs));
-            } catch (error) {
-                console.error('Error saving data to localStorage:', error);
-            }
-        }
-        
-        // Setup day column generation
-        function setupDayColumnGeneration() {
-            // Check every minute if we need to add a new day column
-            dayColumnCheckInterval = setInterval(() => {
-                checkAndAddDayColumn();
-            }, 60000);
-            
-            // Also check immediately
-            checkAndAddDayColumn();
-        }
-        
-        // Check if we need to add a new day column
-        function checkAndAddDayColumn() {
-            const now = new Date();
-            const today = formatDate(now);
-            
-            // Check if today's column already exists
-            const todayColumnExists = dailyColumns.some(col => col.date === today);
-            
-            if (!todayColumnExists) {
-                // Add today's column
-                dailyColumns.unshift({
-                    date: today,
-                    dateObj: new Date(now)
-                });
-                
-                // Update table header
-                updateDailyTableHeader();
-                
-                // Re-render the table
-                renderDailyTable();
-                
-                console.log(`Added new day column for ${today}`);
-            }
-        }
-        
-        // Generate daily columns
-        function generateDailyColumns() {
-            // Start date: September 1, 2025
-            const startDate = new Date('2025-09-01');
-            // End date: today
-            const endDate = new Date();
-            
-            // Reset time to avoid issues with day boundaries
-            startDate.setHours(0, 0, 0, 0);
-            endDate.setHours(0, 0, 0, 0);
-            
-            // Generate columns from startDate to endDate in descending order
-            dailyColumns = [];
-            const currentDate = new Date(endDate);
-            
-            while (currentDate >= startDate) {
-                const dateStr = formatDate(currentDate);
-                dailyColumns.push({
-                    date: dateStr,
-                    dateObj: new Date(currentDate)
-                });
-                
-                // Move to previous day
-                currentDate.setDate(currentDate.getDate() - 1);
-            }
-            
-            // Update table header with day columns
-            updateDailyTableHeader();
-        }
-        
-        // Format date as DD.MM.YYYY
-        function formatDate(date) {
-            const day = String(date.getDate()).padStart(2, '0');
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const year = date.getFullYear();
-            return `${day}.${month}.${year}`;
-        }
-        
-        // Update table header with day columns
-        function updateDailyTableHeader() {
-            const headerRow = document.querySelector('#dailyTable thead tr');
-            if (!headerRow) return;
-            
-            // Clear existing day columns (keep first 4 columns)
-            while (headerRow.children.length > 4) {
-                headerRow.removeChild(headerRow.lastChild);
-            }
-            
-            // Add day columns
-            dailyColumns.forEach(column => {
-                const th = document.createElement('th');
-                th.textContent = column.date;
-                headerRow.appendChild(th);
-            });
-        }
-        
         // Check login status from localStorage
         function checkLoginStatus() {
             const savedUser = localStorage.getItem('currentUser');
@@ -1624,7 +1139,6 @@
                 updateUIForLoggedInUser();
             }
         }
-        
         // Update admin panel visibility based on user role
         function updateAdminPanelVisibility() {
             if (!currentUser) {
@@ -1632,7 +1146,6 @@
                 if (elements.importWrapper) elements.importWrapper.style.display = 'none';
                 if (elements.exportBtn) elements.exportBtn.style.display = 'none';
                 if (elements.saveBtn) elements.saveBtn.style.display = 'none';
-                if (elements.refreshBtn) elements.refreshBtn.style.display = 'none';
                 return;
             }
             
@@ -1641,28 +1154,15 @@
                 if (elements.importWrapper) elements.importWrapper.style.display = 'inline-block';
                 if (elements.exportBtn) elements.exportBtn.style.display = 'flex';
                 if (elements.saveBtn) elements.saveBtn.style.display = 'flex';
-                if (elements.refreshBtn) elements.refreshBtn.style.display = 'flex';
             } else if (userRole === 'editor') {
                 // Editor can see export and save
                 if (elements.importWrapper) elements.importWrapper.style.display = 'none';
                 if (elements.exportBtn) elements.exportBtn.style.display = 'flex';
                 if (elements.saveBtn) elements.saveBtn.style.display = 'flex';
-                if (elements.refreshBtn) elements.refreshBtn.style.display = 'flex';
             }
         }
-        
         // Setup event listeners
         function setupEventListeners() {
-            // Tab navigation
-            if (elements.navTabs) {
-                elements.navTabs.forEach(tab => {
-                    tab.addEventListener('click', () => {
-                        const tabName = tab.getAttribute('data-tab');
-                        switchTab(tabName);
-                    });
-                });
-            }
-            
             // Language selector
             if (elements.languageBtn) {
                 elements.languageBtn.addEventListener('click', () => {
@@ -1671,7 +1171,6 @@
                     }
                 });
             }
-            
             if (elements.languageOptions) {
                 elements.languageOptions.forEach(option => {
                     option.addEventListener('click', () => {
@@ -1683,7 +1182,6 @@
                     });
                 });
             }
-            
             // Admin panel
             if (elements.adminBtn) {
                 elements.adminBtn.addEventListener('click', () => {
@@ -1700,7 +1198,6 @@
                     }
                 });
             }
-            
             if (elements.closeAdmin) {
                 elements.closeAdmin.addEventListener('click', () => {
                     if (elements.adminPanel) {
@@ -1708,29 +1205,6 @@
                     }
                 });
             }
-            
-            // Refresh button
-            if (elements.refreshBtn) {
-                elements.refreshBtn.addEventListener('click', forceRefreshData);
-            }
-            
-            // Sort buttons
-            if (elements.sortByRank) {
-                elements.sortByRank.addEventListener('click', () => {
-                    sortBy = 'rank';
-                    updateSortButtons();
-                    renderDailyTable();
-                });
-            }
-            
-            if (elements.sortByName) {
-                elements.sortByName.addEventListener('click', () => {
-                    sortBy = 'name';
-                    updateSortButtons();
-                    renderDailyTable();
-                });
-            }
-            
             // Login
             if (elements.loginBtn) {
                 elements.loginBtn.addEventListener('click', () => {
@@ -1765,7 +1239,6 @@
                     }
                 });
             }
-            
             if (elements.cancelLogin) {
                 elements.cancelLogin.addEventListener('click', () => {
                     if (elements.loginModal) {
@@ -1779,7 +1252,6 @@
                     }
                 });
             }
-            
             // Logout
             if (elements.logoutBtn) {
                 elements.logoutBtn.addEventListener('click', () => {
@@ -1791,83 +1263,34 @@
                     showNotification(translations[currentLang].logoutSuccess, 'success');
                 });
             }
-            
             // File import
             if (elements.fileInput) {
                 elements.fileInput.addEventListener('change', handleFileImport);
             }
-            
             // Export
             if (elements.exportBtn) {
-                elements.exportBtn.addEventListener('click', () => {
-                    // Check which tab is active and export accordingly
-                    const activeTab = document.querySelector('.nav-tab.active').getAttribute('data-tab');
-                    if (activeTab === 'main') {
-                        exportMainData();
-                    } else {
-                        exportDailyData();
-                    }
-                });
+                elements.exportBtn.addEventListener('click', exportData);
             }
-            
             // Save
             if (elements.saveBtn) {
-                elements.saveBtn.addEventListener('click', () => {
-                    // Check which tab is active and save accordingly
-                    const activeTab = document.querySelector('.nav-tab.active').getAttribute('data-tab');
-                    if (activeTab === 'main') {
-                        saveMainData();
-                    } else {
-                        saveDailyData();
-                    }
-                });
+                elements.saveBtn.addEventListener('click', saveDataToFirebase);
             }
-            
             // Search
             if (elements.searchInput) {
                 elements.searchInput.addEventListener('input', (e) => {
-                    const activeTab = document.querySelector('.nav-tab.active').getAttribute('data-tab');
-                    if (activeTab === 'main') {
-                        searchQuery = e.target.value.toLowerCase();
-                        renderMainTable();
-                    } else {
-                        dailySearchQuery = e.target.value.toLowerCase();
-                        renderDailyTable();
-                    }
+                    searchQuery = e.target.value.toLowerCase();
+                    renderTable();
                 });
             }
-            
             // Dashboard filters
             if (elements.statCards) {
                 elements.statCards.forEach(card => {
-                    // Asigurăm că pointer-ul este vizibil
-                    card.style.cursor = 'pointer';
-                    
-                    // Eliminăm event listener-ele existente pentru a evita duplicate
-                    card.replaceWith(card.cloneNode(true));
-                });
-                
-                // Adăugăm event listener-ele din nou
-                document.querySelectorAll('.stat-card').forEach(card => {
                     card.addEventListener('click', () => {
                         const filter = card.getAttribute('data-filter');
-                        const activeTab = document.querySelector('.nav-tab.active').getAttribute('data-tab');
-                        
-                        // Actualizăm starea activă a cardurilor
-                        document.querySelectorAll('.stat-card').forEach(c => c.classList.remove('active'));
-                        card.classList.add('active');
-                        
-                        if (activeTab === 'main') {
-                            activeFilter = filter;
-                            renderMainTable();
-                        } else {
-                            dailyActiveFilter = filter;
-                            renderDailyTable();
-                        }
+                        setActiveFilter(filter);
                     });
                 });
             }
-            
             // Close dropdowns when clicking outside
             document.addEventListener('click', (e) => {
                 if (!e.target.closest('.language-selector') && elements.languageDropdown) {
@@ -1875,43 +1298,6 @@
                 }
             });
         }
-        
-        // Switch tab
-        function switchTab(tabName) {
-            // Update nav tabs
-            if (elements.navTabs) {
-                elements.navTabs.forEach(tab => {
-                    tab.classList.remove('active');
-                    if (tab.getAttribute('data-tab') === tabName) {
-                        tab.classList.add('active');
-                    }
-                });
-            }
-            
-            // Update tab contents
-            if (elements.tabContents) {
-                elements.tabContents.forEach(content => {
-                    content.classList.remove('active');
-                    if (content.id === tabName + 'Content') {
-                        content.classList.add('active');
-                    }
-                });
-            }
-            
-            // Update admin panel visibility
-            updateAdminPanelVisibility();
-        }
-        
-        // Update sort buttons
-        function updateSortButtons() {
-            if (elements.sortByRank) {
-                elements.sortByRank.classList.toggle('active', sortBy === 'rank');
-            }
-            if (elements.sortByName) {
-                elements.sortByName.classList.toggle('active', sortBy === 'name');
-            }
-        }
-        
         // Update UI for logged in user
         function updateUIForLoggedInUser() {
             if (elements.userInfo) {
@@ -1937,10 +1323,8 @@
             // Update admin panel visibility
             updateAdminPanelVisibility();
             
-            renderMainTable();
-            renderDailyTable();
+            renderTable();
         }
-        
         // Update UI for logged out user
         function updateUIForLoggedOutUser() {
             if (elements.userInfo) {
@@ -1956,10 +1340,8 @@
             // Update admin panel visibility
             updateAdminPanelVisibility();
             
-            renderMainTable();
-            renderDailyTable();
+            renderTable();
         }
-        
         // Language functions
         function changeLanguage(lang) {
             currentLang = lang;
@@ -1967,14 +1349,10 @@
                 elements.currentLang.textContent = lang.toUpperCase();
             }
             loadLanguage();
-            updateMainDashboard();
-            updateDailyDashboard();
-            renderMainTable();
-            renderDailyTable();
+            updateDashboard();
+            renderTable();
             updateLastUpdatedTime();
-            updateDailyLastUpdatedTime();
         }
-        
         function loadLanguage() {
             // Update all elements with data-i18n attribute
             document.querySelectorAll('[data-i18n]').forEach(element => {
@@ -2004,11 +1382,8 @@
                 }
             });
         }
-        
-        // Firebase functions for main data
+        // Firebase functions
         function loadDataFromFirebase() {
-            if (!isOnline || !database) return;
-            
             showLoadingIndicator(true);
             updateSyncStatus('syncing');
             
@@ -2021,27 +1396,25 @@
                     const data = snapshot.val();
                     if (data) {
                         players = Object.values(data);
-                        saveDataToLocalStorage();
                     } else {
                         players = [];
                     }
                     
-                    updateMainDashboard();
-                    renderMainTable();
+                    updateDashboard();
+                    renderTable();
                     showLoadingIndicator(false);
                     updateSyncStatus('synced');
                 } catch (error) {
-                    console.error('Error loading main data:', error);
+                    console.error('Error loading data:', error);
                     showLoadingIndicator(false);
                     updateSyncStatus('error');
-                    showNotification('Error loading main data', 'error');
+                    showNotification('Error loading data', 'error');
                 }
             }, (error) => {
-                console.error('Main database error:', error);
+                console.error('Database error:', error);
                 showLoadingIndicator(false);
                 updateSyncStatus('error');
-                showNotification('Main database connection error', 'error');
-                isOnline = false;
+                showNotification('Database connection error', 'error');
             });
             
             // Get metadata
@@ -2049,17 +1422,15 @@
                 const metadata = snapshot.val();
                 if (metadata && metadata.lastUpdateTime) {
                     lastUpdateTime = new Date(metadata.lastUpdateTime);
-                    saveDataToLocalStorage();
                 }
                 updateLastUpdatedTime();
             }).catch((error) => {
-                console.error('Error loading main metadata:', error);
+                console.error('Error loading metadata:', error);
                 lastUpdateTime = new Date();
                 updateLastUpdatedTime();
             });
         }
-        
-        function saveMainData() {
+        function saveDataToFirebase() {
             if (!currentUser) {
                 showNotification('Permission denied', 'error');
                 return;
@@ -2070,21 +1441,13 @@
                 elements.saveBtn.disabled = true;
             }
             
-            // Save to localStorage first
-            saveDataToLocalStorage();
-            
-            if (!isOnline || !database) {
-                showNotification('Data saved locally. Will sync when online.', 'warning');
-                if (elements.saveBtn) {
-                    setTimeout(() => {
-                        elements.saveBtn.disabled = false;
-                    }, 2000);
-                }
-                return;
-            }
-            
             showLoadingIndicator(true);
             updateSyncStatus('syncing');
+            
+            // Clear any existing timeout
+            if (syncTimeout) {
+                clearTimeout(syncTimeout);
+            }
             
             const playersObj = {};
             players.forEach((player, index) => {
@@ -2104,7 +1467,6 @@
                 })
                 .then(() => {
                     lastUpdateTime = new Date();
-                    saveDataToLocalStorage();
                     updateLastUpdatedTime();
                     showLoadingIndicator(false);
                     updateSyncStatus('synced');
@@ -2118,10 +1480,10 @@
                     }
                 })
                 .catch((error) => {
-                    console.error('Error saving main data:', error);
+                    console.error('Error saving data:', error);
                     showLoadingIndicator(false);
                     updateSyncStatus('error');
-                    showNotification(translations[currentLang].syncError, 'error');
+                    showNotification('Error saving data: ' + error.message, 'error');
                     
                     // Re-enable save button after a delay
                     if (elements.saveBtn) {
@@ -2131,272 +1493,39 @@
                     }
                 });
         }
-        
-        function updatePlayerScore(playerName, newScore) {
+        function updatePlayerScoreInFirebase(playerName, newScore) {
             if (!currentUser) {
                 showNotification('Permission denied', 'error');
                 return;
             }
             
-            const player = players.find(p => p.player === playerName);
-            if (player) {
-                player.totalScores = parseInt(newScore) || 0;
-                
-                // Save to localStorage first
-                saveDataToLocalStorage();
-                
-                // Update UI immediately
-                updateMainDashboard();
-                renderMainTable();
-                
-                if (!isOnline || !database) {
-                    showNotification('Score saved locally. Will sync when online.', 'warning');
-                    return;
-                }
-                
-                updateSyncStatus('syncing');
-                
-                // Find player index
-                const playerIndex = players.findIndex(p => p.player === playerName);
-                if (playerIndex === -1) return;
-                
-                // Update the player's score in Firebase
-                database.ref(`players/${playerIndex}/totalScores`).set(parseInt(newScore) || 0)
-                    .then(() => {
-                        // Update metadata
-                        return database.ref('metadata/lastUpdateTime').set(new Date().toISOString());
-                    })
-                    .then(() => {
-                        lastUpdateTime = new Date();
-                        saveDataToLocalStorage();
-                        updateLastUpdatedTime();
-                        updateSyncStatus('synced');
-                    })
-                    .catch((error) => {
-                        console.error('Error updating player score:', error);
-                        updateSyncStatus('error');
-                        showNotification(translations[currentLang].syncError, 'error');
-                    });
-            }
-        }
-        
-        // Firebase functions for daily data
-        function loadDailyDataFromFirebase() {
-            if (!isOnline || !database) return;
+            const playerIndex = players.findIndex(p => p.player === playerName);
+            if (playerIndex === -1) return;
             
-            showLoadingIndicator(true);
-            updateDailySyncStatus('syncing');
+            updateSyncStatus('syncing');
             
-            const dailyDataRef = database.ref('dailyData');
-            const metadataRef = database.ref('dailyMetadata');
-            
-            // Listen for real-time updates
-            dailyDataRef.on('value', (snapshot) => {
-                try {
-                    const data = snapshot.val();
-                    if (data) {
-                        dailyData = data;
-                        saveDataToLocalStorage();
-                    } else {
-                        dailyData = {};
-                    }
-                    
-                    updateDailyDashboard();
-                    renderDailyTable();
-                    showLoadingIndicator(false);
-                    updateDailySyncStatus('synced');
-                } catch (error) {
-                    console.error('Error loading daily data:', error);
-                    showLoadingIndicator(false);
-                    updateDailySyncStatus('error');
-                    showNotification('Error loading daily data', 'error');
-                }
-            }, (error) => {
-                console.error('Daily database error:', error);
-                showLoadingIndicator(false);
-                updateDailySyncStatus('error');
-                showNotification('Daily database connection error', 'error');
-                isOnline = false;
-            });
-            
-            // Get metadata
-            metadataRef.once('value').then((snapshot) => {
-                const metadata = snapshot.val();
-                if (metadata && metadata.lastUpdateTime) {
-                    dailyLastUpdateTime = new Date(metadata.lastUpdateTime);
-                    saveDataToLocalStorage();
-                }
-                updateDailyLastUpdatedTime();
-            }).catch((error) => {
-                console.error('Error loading daily metadata:', error);
-                dailyLastUpdateTime = new Date();
-                updateDailyLastUpdatedTime();
-            });
-        }
-        
-        function saveDailyData() {
-            if (!currentUser) {
-                showNotification('Permission denied', 'error');
-                return;
+            // Clear any existing timeout
+            if (syncTimeout) {
+                clearTimeout(syncTimeout);
             }
             
-            // Disable save button to prevent multiple clicks
-            if (elements.saveBtn) {
-                elements.saveBtn.disabled = true;
-            }
-            
-            // Save to localStorage first
-            saveDataToLocalStorage();
-            
-            if (!isOnline || !database) {
-                showNotification('Data saved locally. Will sync when online.', 'warning');
-                if (elements.saveBtn) {
-                    setTimeout(() => {
-                        elements.saveBtn.disabled = false;
-                    }, 2000);
-                }
-                return;
-            }
-            
-            showLoadingIndicator(true);
-            updateDailySyncStatus('syncing');
-            
-            const metadata = {
-                lastUpdateTime: new Date().toISOString(),
-                version: '1.0'
-            };
-            
-            // Save daily data with immediate confirmation
-            const updates = {};
-            updates['/dailyData'] = dailyData;
-            updates['/dailyMetadata'] = metadata;
-            
-            // Use update instead of set for atomic operation
-            database.ref().update(updates)
-                .then(() => {
-                    dailyLastUpdateTime = new Date();
-                    saveDataToLocalStorage();
-                    updateDailyLastUpdatedTime();
-                    showLoadingIndicator(false);
-                    updateDailySyncStatus('synced');
-                    showNotification(translations[currentLang].dataSaved, 'success');
-                    
-                    // Re-enable save button after a delay
-                    if (elements.saveBtn) {
-                        setTimeout(() => {
-                            elements.saveBtn.disabled = false;
-                        }, 2000);
-                    }
-                })
-                .catch((error) => {
-                    console.error('Error saving daily data:', error);
-                    showLoadingIndicator(false);
-                    updateDailySyncStatus('error');
-                    showNotification(translations[currentLang].syncError, 'error');
-                    
-                    // Re-enable save button after a delay
-                    if (elements.saveBtn) {
-                        setTimeout(() => {
-                            elements.saveBtn.disabled = false;
-                        }, 2000);
-                    }
-                });
-        }
-        
-        function updatePlayerDayScore(playerName, day, newScore) {
-            if (!currentUser) {
-                showNotification('Permission denied', 'error');
-                return;
-            }
-            
-            // Initialize player data if not exists
-            if (!dailyData[playerName]) {
-                dailyData[playerName] = {};
-            }
-            
-            // Update the player's score for the day
-            dailyData[playerName][day] = parseInt(newScore) || 0;
-            
-            // Save to localStorage first
-            saveDataToLocalStorage();
-            
-            // Update UI immediately
-            updateDailyDashboard();
-            renderDailyTable();
-            
-            if (!isOnline || !database) {
-                showNotification('Score saved locally. Will sync when online.', 'warning');
-                return;
-            }
-            
-            // Show immediate syncing status
-            updateDailySyncStatus('syncing');
-            
-            // Reset retry count
-            syncRetryCount = 0;
-            
-            // Attempt to sync with retries
-            attemptSyncWithRetry(playerName, day, newScore);
-        }
-        
-        function attemptSyncWithRetry(playerName, day, newScore) {
-            if (syncRetryCount >= MAX_SYNC_RETRIES) {
-                updateDailySyncStatus('error');
-                showNotification('Failed to sync after multiple attempts. Data saved locally.', 'error');
-                return;
-            }
-            
-            // Update in Firebase immediately
-            database.ref(`dailyData/${playerName}/${day}`).set(parseInt(newScore) || 0)
+            // Update the player's score in Firebase
+            database.ref(`players/${playerIndex}/totalScores`).set(parseInt(newScore) || 0)
                 .then(() => {
                     // Update metadata
-                    return database.ref('dailyMetadata/lastUpdateTime').set(new Date().toISOString());
+                    return database.ref('metadata/lastUpdateTime').set(new Date().toISOString());
                 })
                 .then(() => {
-                    dailyLastUpdateTime = new Date();
-                    saveDataToLocalStorage();
-                    updateDailyLastUpdatedTime();
-                    updateDailySyncStatus('synced');
+                    lastUpdateTime = new Date();
+                    updateLastUpdatedTime();
+                    updateSyncStatus('synced');
                 })
                 .catch((error) => {
-                    console.error('Error updating player day score (attempt ' + (syncRetryCount + 1) + '):', error);
-                    syncRetryCount++;
-                    
-                    // Retry after a delay
-                    setTimeout(() => {
-                        attemptSyncWithRetry(playerName, day, newScore);
-                    }, 1000 * syncRetryCount); // Exponential backoff
+                    console.error('Error updating player score:', error);
+                    updateSyncStatus('error');
+                    showNotification('Error updating score: ' + error.message, 'error');
                 });
         }
-        
-        // Process pending syncs when connection is restored
-        function processPendingSyncs() {
-            if (pendingSyncs.length === 0) return;
-            
-            showNotification(`Processing ${pendingSyncs.length} pending syncs...`, 'info');
-            
-            // Process each pending sync
-            const syncPromises = pendingSyncs.map(sync => {
-                return new Promise((resolve) => {
-                    if (sync.type === 'playerScore') {
-                        database.ref(`players/${sync.playerIndex}/totalScores`).set(sync.value)
-                            .then(() => resolve())
-                            .catch(() => resolve());
-                    } else if (sync.type === 'dailyScore') {
-                        database.ref(`dailyData/${sync.playerName}/${sync.day}`).set(sync.value)
-                            .then(() => resolve())
-                            .catch(() => resolve());
-                    }
-                });
-            });
-            
-            Promise.all(syncPromises).then(() => {
-                pendingSyncs = [];
-                saveDataToLocalStorage();
-                showNotification(translations[currentLang].dataSynced, 'success');
-            });
-        }
-        
         // UI functions
         function showLoadingIndicator(show) {
             if (elements.loadingIndicator) {
@@ -2407,7 +1536,6 @@
                 }
             }
         }
-        
         function updateSyncStatus(status) {
             isSyncing = (status === 'syncing');
             
@@ -2420,75 +1548,31 @@
                     case 'syncing':
                         icon.className = 'fas fa-sync-alt';
                         text.textContent = 'Syncing...';
+                        // Show sync status only when syncing
                         elements.syncStatus.classList.add('show');
                         break;
                     case 'synced':
                         icon.className = 'fas fa-check-circle';
                         text.textContent = 'Synced';
+                        // Hide sync status when synced
                         elements.syncStatus.classList.remove('show');
                         break;
                     case 'error':
                         icon.className = 'fas fa-exclamation-circle';
                         text.textContent = 'Sync Error';
+                        // Show sync status when there's an error
                         elements.syncStatus.classList.add('show');
+                        // Auto-hide after 5 seconds
                         setTimeout(() => {
                             if (elements.syncStatus && elements.syncStatus.classList.contains('error')) {
                                 elements.syncStatus.classList.remove('show');
                             }
                         }, 5000);
                         break;
-                    case 'offline':
-                        icon.className = 'fas fa-wifi-slash';
-                        text.textContent = 'Offline';
-                        elements.syncStatus.classList.add('show');
-                        break;
                 }
             }
         }
-        
-        function updateDailySyncStatus(status) {
-            dailyIsSyncing = (status === 'syncing');
-            
-            // We'll use the same sync status element for both
-            if (elements.syncStatus) {
-                // Only update if not already syncing from main data
-                if (!isSyncing) {
-                    elements.syncStatus.className = 'sync-status ' + status;
-                    const icon = elements.syncStatus.querySelector('i');
-                    const text = elements.syncStatus.querySelector('span');
-                    
-                    switch (status) {
-                        case 'syncing':
-                            icon.className = 'fas fa-sync-alt';
-                            text.textContent = 'Syncing...';
-                            elements.syncStatus.classList.add('show');
-                            break;
-                        case 'synced':
-                            icon.className = 'fas fa-check-circle';
-                            text.textContent = 'Synced';
-                            elements.syncStatus.classList.remove('show');
-                            break;
-                        case 'error':
-                            icon.className = 'fas fa-exclamation-circle';
-                            text.textContent = 'Sync Error';
-                            elements.syncStatus.classList.add('show');
-                            setTimeout(() => {
-                                if (elements.syncStatus && elements.syncStatus.classList.contains('error')) {
-                                    elements.syncStatus.classList.remove('show');
-                                }
-                            }, 5000);
-                            break;
-                        case 'offline':
-                            icon.className = 'fas fa-wifi-slash';
-                            text.textContent = 'Offline';
-                            elements.syncStatus.classList.add('show');
-                            break;
-                    }
-                }
-            }
-        }
-        
-        function updateMainDashboard() {
+        function updateDashboard() {
             try {
                 const totalPlayers = players.length;
                 const targetAchieved = players.filter(p => calculateLeftToAchieve(p) <= 0).length;
@@ -2505,53 +1589,10 @@
                 if (elements.zeroPoints) elements.zeroPoints.textContent = zeroPoints;
                 if (elements.weeklyAverage) elements.weeklyAverage.textContent = weeklyAverage;
             } catch (error) {
-                console.error('Error updating main dashboard:', error);
+                console.error('Error updating dashboard:', error);
             }
         }
-        
-        function updateDailyDashboard() {
-            try {
-                // Use players from main page
-                const totalPlayers = players.length;
-                const top10Count = Math.min(10, totalPlayers);
-                const top32Count = Math.min(32, totalPlayers);
-                
-                // Count players with at least one missed tournament (0 score)
-                let missedTournamentsCount = 0;
-                let min2MissedCount = 0;
-                
-                players.forEach(player => {
-                    let missedCount = 0;
-                    const playerName = player.player;
-                    
-                    if (dailyData[playerName]) {
-                        Object.values(dailyData[playerName]).forEach(score => {
-                            if (score === 0) {
-                                missedCount++;
-                            }
-                        });
-                    }
-                    
-                    if (missedCount > 0) {
-                        missedTournamentsCount++;
-                    }
-                    
-                    if (missedCount >= 2) {
-                        min2MissedCount++;
-                    }
-                });
-                
-                if (elements.dailyTotalPlayers) elements.dailyTotalPlayers.textContent = totalPlayers;
-                if (elements.top10) elements.top10.textContent = top10Count;
-                if (elements.top32) elements.top32.textContent = top32Count;
-                if (elements.missedTournaments) elements.missedTournaments.textContent = missedTournamentsCount;
-                if (elements.min2Missed) elements.min2Missed.textContent = min2MissedCount;
-            } catch (error) {
-                console.error('Error updating daily dashboard:', error);
-            }
-        }
-        
-        function renderMainTable() {
+        function renderTable() {
             try {
                 // Filter players
                 let filteredPlayers = players.filter(player => {
@@ -2612,140 +1653,24 @@
                     }
                 });
             } catch (error) {
-                console.error('Error rendering main table:', error);
+                console.error('Error rendering table:', error);
             }
         }
-        
-        function renderDailyTable() {
-            try {
-                // Use players from main page
-                let filteredPlayers = players.filter(player => {
-                    if (dailySearchQuery && !player.player.toLowerCase().includes(dailySearchQuery)) {
-                        return false;
-                    }
-                    
-                    // Apply dashboard filters
-                    switch (dailyActiveFilter) {
-                        case 'top10':
-                            // Only show top 10 players
-                            const sortedByAvg = [...players].sort((a, b) => {
-                                const avgA = calculateDailyAverage(a.player);
-                                const avgB = calculateDailyAverage(b.player);
-                                return avgB - avgA;
-                            });
-                            return sortedByAvg.slice(0, 10).includes(player);
-                            
-                        case 'top32':
-                            // Only show top 32 players
-                            const sortedByAvg32 = [...players].sort((a, b) => {
-                                const avgA = calculateDailyAverage(a.player);
-                                const avgB = calculateDailyAverage(b.player);
-                                return avgB - avgA;
-                            });
-                            return sortedByAvg32.slice(0, 32).includes(player);
-                            
-                        case 'missed':
-                            // Only show players with at least one missed tournament (0 score)
-                            let hasMissed = false;
-                            const playerName = player.player;
-                            
-                            if (dailyData[playerName]) {
-                                Object.values(dailyData[playerName]).forEach(score => {
-                                    if (score === 0) {
-                                        hasMissed = true;
-                                    }
-                                });
-                            }
-                            return hasMissed;
-                            
-                        case 'min2':
-                            // Only show players with at least 2 missed tournaments (0 scores)
-                            let missedCount = 0;
-                            const playerName2 = player.player;
-                            
-                            if (dailyData[playerName2]) {
-                                Object.values(dailyData[playerName2]).forEach(score => {
-                                    if (score === 0) {
-                                        missedCount++;
-                                    }
-                                });
-                            }
-                            return missedCount >= 2;
-                            
-                        default:
-                            return true;
+        function setActiveFilter(filter) {
+            activeFilter = filter;
+            
+            // Update active state
+            if (elements.statCards) {
+                elements.statCards.forEach(card => {
+                    card.classList.remove('active');
+                    if (card.getAttribute('data-filter') === filter) {
+                        card.classList.add('active');
                     }
                 });
-                
-                // Sort players
-                if (sortBy === 'rank') {
-                    filteredPlayers.sort((a, b) => {
-                        const avgA = calculateDailyAverage(a.player);
-                        const avgB = calculateDailyAverage(b.player);
-                        return avgB - avgA; // Higher average first
-                    });
-                } else if (sortBy === 'name') {
-                    filteredPlayers.sort((a, b) => {
-                        return a.player.localeCompare(b.player);
-                    });
-                }
-                
-                // Clear table
-                if (elements.dailyTableBody) {
-                    elements.dailyTableBody.innerHTML = '';
-                }
-                
-                // Render rows
-                filteredPlayers.forEach(player => {
-                    const row = document.createElement('tr');
-                    const playerName = player.player;
-                    
-                    // Calculate rank, average, and tournament count
-                    const average = calculateDailyAverage(playerName);
-                    const tournamentCount = calculateTournamentCount(playerName);
-                    
-                    // Create fixed columns
-                    row.innerHTML = `
-                        <td class="rank">${calculateDailyRank(playerName)}</td>
-                        <td class="player">${playerName}</td>
-                        <td class="average">${average.toFixed(2)}</td>
-                        <td class="tournaments">${tournamentCount}</td>
-                    `;
-                    
-                    // Add day columns
-                    dailyColumns.forEach(column => {
-                        const cell = document.createElement('td');
-                        cell.className = 'day-score';
-                        
-                        // Get score for this day, default to empty string if not set
-                        const score = dailyData[playerName] && dailyData[playerName][column.date] !== undefined 
-                            ? dailyData[playerName][column.date] 
-                            : '';
-                        
-                        if (score === 0) {
-                            cell.classList.add('zero-score');
-                        }
-                        
-                        // Make cell editable if user is logged in
-                        if (currentUser) {
-                            cell.innerHTML = `<input type="number" class="editable" value="${score}" 
-                                onchange="updatePlayerDayScore('${playerName}', '${column.date}', this.value)">`;
-                        } else {
-                            cell.textContent = score !== '' ? score : '-';
-                        }
-                        
-                        row.appendChild(cell);
-                    });
-                    
-                    if (elements.dailyTableBody) {
-                        elements.dailyTableBody.appendChild(row);
-                    }
-                });
-            } catch (error) {
-                console.error('Error rendering daily table:', error);
             }
+            
+            renderTable();
         }
-        
         function updateLastUpdatedTime() {
             if (!lastUpdateTime) {
                 if (elements.updateTime) {
@@ -2773,35 +1698,6 @@
                 elements.updateTime.textContent = timeText;
             }
         }
-        
-        function updateDailyLastUpdatedTime() {
-            if (!dailyLastUpdateTime) {
-                if (elements.dailyUpdateTime) {
-                    elements.dailyUpdateTime.textContent = translations[currentLang].never;
-                }
-                return;
-            }
-            
-            const now = new Date();
-            const diff = now - dailyLastUpdateTime;
-            const minutes = Math.floor(diff / 60000);
-            const hours = Math.floor(diff / 3600000);
-            const days = Math.floor(diff / 86400000);
-            let timeText;
-            
-            if (days > 0) {
-                timeText = `${days} ${translations[currentLang].days}`;
-            } else if (hours > 0) {
-                timeText = `${hours} ${translations[currentLang].hours}`;
-            } else {
-                timeText = `${minutes} ${translations[currentLang].minutes}`;
-            }
-            
-            if (elements.dailyUpdateTime) {
-                elements.dailyUpdateTime.textContent = timeText;
-            }
-        }
-        
         function showNotification(message, type) {
             if (elements.notificationMessage) {
                 elements.notificationMessage.textContent = message;
@@ -2825,22 +1721,19 @@
                 }
             }, 3000);
         }
-        
-        // Calculation functions for main data
+        // Calculation functions
         function calculateWeekScore(player) {
             if (!player || typeof player.totalScores === 'undefined' || typeof player.startingPoints === 'undefined') {
                 return 0;
             }
             return player.totalScores - player.startingPoints;
         }
-        
         function calculateLeftToAchieve(player) {
             if (!player || typeof player.targetPoints === 'undefined' || typeof player.totalScores === 'undefined') {
                 return 0;
             }
             return player.targetPoints - player.totalScores;
         }
-        
         function calculateRank(player) {
             if (!player) return 0;
             
@@ -2855,7 +1748,6 @@
             
             return sortedPlayers.findIndex(p => p.player === player.player) + 1;
         }
-        
         function getStatusClass(player) {
             const leftToAchieve = calculateLeftToAchieve(player);
             if (leftToAchieve <= 0) return 'status-done';
@@ -2863,61 +1755,11 @@
             if (leftToAchieve < 500) return 'status-yellow';
             return 'status-red';
         }
-        
         function getStatusText(player) {
             const leftToAchieve = calculateLeftToAchieve(player);
             if (leftToAchieve <= 0) return translations[currentLang].done;
             return leftToAchieve;
         }
-        
-        // Calculation functions for daily data
-        function calculateDailyAverage(playerName) {
-            if (!dailyData[playerName] || Object.keys(dailyData[playerName]).length === 0) {
-                return 0;
-            }
-            
-            let total = 0;
-            let count = 0;
-            
-            Object.values(dailyData[playerName]).forEach(score => {
-                // Only count non-empty scores
-                if (score !== undefined && score !== '') {
-                    total += score;
-                    count++;
-                }
-            });
-            
-            return count > 0 ? total / count : 0;
-        }
-        
-        function calculateTournamentCount(playerName) {
-            if (!dailyData[playerName]) {
-                return 0;
-            }
-            
-            let count = 0;
-            Object.keys(dailyData[playerName]).forEach(date => {
-                // Only count non-empty scores
-                if (dailyData[playerName][date] !== undefined && dailyData[playerName][date] !== '') {
-                    count++;
-                }
-            });
-            
-            return count;
-        }
-        
-        function calculateDailyRank(playerName) {
-            if (!playerName) return 0;
-            
-            const sortedPlayers = [...players].sort((a, b) => {
-                const avgA = calculateDailyAverage(a.player);
-                const avgB = calculateDailyAverage(b.player);
-                return avgB - avgA; // Higher average first
-            });
-            
-            return sortedPlayers.findIndex(p => p.player === playerName) + 1;
-        }
-        
         // File handling functions
         function handleFileImport(event) {
             if (!currentUser || userRole !== 'admin') {
@@ -2955,129 +1797,52 @@
                         throw new Error('No data found in the Excel file');
                     }
                     
-                    // Check which tab is active and import accordingly
-                    const activeTab = document.querySelector('.nav-tab.active').getAttribute('data-tab');
+                    // Process imported data
+                    const newPlayers = [];
+                    for (let i = 1; i < jsonData.length; i++) {
+                        const row = jsonData[i];
+                        if (row && row[1]) { // Check if player name exists
+                            newPlayers.push({
+                                player: String(row[1]),
+                                startingPoints: parseInt(row[2]) || 0,
+                                targetPoints: parseInt(row[3]) || 0,
+                                totalScores: parseInt(row[4]) || 0
+                            });
+                        }
+                    }
                     
-                    if (activeTab === 'main') {
-                        // Process main data
-                        const newPlayers = [];
-                        for (let i = 1; i < jsonData.length; i++) {
-                            const row = jsonData[i];
-                            if (row && row[1]) { // Check if player name exists
-                                newPlayers.push({
-                                    player: String(row[1]),
-                                    startingPoints: parseInt(row[2]) || 0,
-                                    targetPoints: parseInt(row[3]) || 0,
-                                    totalScores: parseInt(row[4]) || 0
-                                });
-                            }
-                        }
-                        
-                        if (newPlayers.length === 0) {
-                            throw new Error('No valid player data found');
-                        }
-                        
-                        // Update local data first
-                        players = newPlayers;
-                        saveDataToLocalStorage();
-                        
-                        if (!isOnline || !database) {
-                            showNotification('Data imported locally. Will sync when online.', 'warning');
+                    if (newPlayers.length === 0) {
+                        throw new Error('No valid player data found');
+                    }
+                    
+                    // Save to Firebase
+                    const playersObj = {};
+                    newPlayers.forEach((player, index) => {
+                        playersObj[index] = player;
+                    });
+                    
+                    const metadata = {
+                        lastUpdateTime: new Date().toISOString(),
+                        version: '1.0'
+                    };
+                    
+                    database.ref('players').set(playersObj)
+                        .then(() => {
+                            return database.ref('metadata').set(metadata);
+                        })
+                        .then(() => {
+                            lastUpdateTime = new Date();
+                            updateLastUpdatedTime();
                             showLoadingIndicator(false);
                             updateSyncStatus('synced');
-                            updateMainDashboard();
-                            renderMainTable();
-                            return;
-                        }
-                        
-                        // Save to Firebase
-                        const playersObj = {};
-                        newPlayers.forEach((player, index) => {
-                            playersObj[index] = player;
-                        });
-                        
-                        const metadata = {
-                            lastUpdateTime: new Date().toISOString(),
-                            version: '1.0'
-                        };
-                        
-                        database.ref('players').set(playersObj)
-                            .then(() => {
-                                return database.ref('metadata').set(metadata);
-                            })
-                            .then(() => {
-                                lastUpdateTime = new Date();
-                                saveDataToLocalStorage();
-                                updateLastUpdatedTime();
-                                showLoadingIndicator(false);
-                                updateSyncStatus('synced');
-                                showNotification(translations[currentLang].importSuccess, 'success');
-                            })
-                            .catch((error) => {
-                                console.error('Error importing main data:', error);
-                                showLoadingIndicator(false);
-                                updateSyncStatus('error');
-                                showNotification('Error importing main data: ' + error.message, 'error');
-                            });
-                    } else {
-                        // Process daily data - only update scores, don't add/remove players
-                        for (let i = 1; i < jsonData.length; i++) {
-                            const row = jsonData[i];
-                            if (row && row[1]) { // Check if player name exists
-                                const playerName = String(row[1]);
-                                
-                                // Initialize player data if not exists
-                                if (!dailyData[playerName]) {
-                                    dailyData[playerName] = {};
-                                }
-                                
-                                // Process day columns if they exist
-                                for (let j = 4; j < row.length && j <= 4 + dailyColumns.length; j++) {
-                                    const dayIndex = j - 4;
-                                    if (dayIndex < dailyColumns.length && row[j] !== undefined) {
-                                        dailyData[playerName][dailyColumns[dayIndex].date] = parseInt(row[j]) || 0;
-                                    }
-                                }
-                            }
-                        }
-                        
-                        // Save to localStorage first
-                        saveDataToLocalStorage();
-                        
-                        if (!isOnline || !database) {
-                            showNotification('Data imported locally. Will sync when online.', 'warning');
+                            showNotification(translations[currentLang].importSuccess, 'success');
+                        })
+                        .catch((error) => {
+                            console.error('Error importing data:', error);
                             showLoadingIndicator(false);
-                            updateDailySyncStatus('synced');
-                            updateDailyDashboard();
-                            renderDailyTable();
-                            return;
-                        }
-                        
-                        // Save to Firebase
-                        const metadata = {
-                            lastUpdateTime: new Date().toISOString(),
-                            version: '1.0'
-                        };
-                        
-                        database.ref('dailyData').set(dailyData)
-                            .then(() => {
-                                return database.ref('dailyMetadata').set(metadata);
-                            })
-                            .then(() => {
-                                dailyLastUpdateTime = new Date();
-                                saveDataToLocalStorage();
-                                updateDailyLastUpdatedTime();
-                                showLoadingIndicator(false);
-                                updateDailySyncStatus('synced');
-                                showNotification(translations[currentLang].importSuccess, 'success');
-                            })
-                            .catch((error) => {
-                                console.error('Error importing daily data:', error);
-                                showLoadingIndicator(false);
-                                updateDailySyncStatus('error');
-                                showNotification('Error importing daily data: ' + error.message, 'error');
-                            });
-                    }
+                            updateSyncStatus('error');
+                            showNotification('Error importing data: ' + error.message, 'error');
+                        });
                     
                 } catch (error) {
                     console.error('Error processing file:', error);
@@ -3097,8 +1862,7 @@
             reader.readAsArrayBuffer(file);
             event.target.value = '';
         }
-        
-        function exportMainData() {
+        function exportData() {
             try {
                 // Create Excel file
                 const exportData = players.map(player => ({
@@ -3112,133 +1876,34 @@
                 }));
                 
                 if (exportData.length === 0) {
-                    showNotification('No main data to export', 'error');
+                    showNotification('No data to export', 'error');
                     return;
                 }
                 
                 const worksheet = XLSX.utils.json_to_sheet(exportData);
                 const workbook = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(workbook, worksheet, 'Main Scoring Data');
-                XLSX.writeFile(workbook, 'main_scoring_data.xlsx');
+                XLSX.utils.book_append_sheet(workbook, worksheet, 'Scoring Data');
+                XLSX.writeFile(workbook, 'scoring_data.xlsx');
                 
                 showNotification(translations[currentLang].exportSuccess, 'success');
             } catch (error) {
-                console.error('Error exporting main data:', error);
-                showNotification('Error exporting main data: ' + error.message, 'error');
+                console.error('Error exporting data:', error);
+                showNotification('Error exporting data: ' + error.message, 'error');
             }
         }
-        
-        function exportDailyData() {
-            try {
-                // Prepare data for export
-                const exportData = players.map(player => {
-                    const playerName = player.player;
-                    const row = {
-                        Rank: calculateDailyRank(playerName),
-                        Player: playerName,
-                        Average: calculateDailyAverage(playerName).toFixed(2),
-                        "Nr. Turnee": calculateTournamentCount(playerName)
-                    };
-                    
-                    // Add day columns
-                    dailyColumns.forEach(column => {
-                        const score = dailyData[playerName] && dailyData[playerName][column.date] !== undefined 
-                            ? dailyData[playerName][column.date] 
-                            : '';
-                        row[column.date] = score;
-                    });
-                    
-                    return row;
-                });
-                
-                if (exportData.length === 0) {
-                    showNotification('No daily data to export', 'error');
-                    return;
-                }
-                
-                const worksheet = XLSX.utils.json_to_sheet(exportData);
-                const workbook = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(workbook, worksheet, 'Daily Scoring Data');
-                XLSX.writeFile(workbook, 'daily_scoring_data.xlsx');
-                
-                showNotification(translations[currentLang].exportSuccess, 'success');
-            } catch (error) {
-                console.error('Error exporting daily data:', error);
-                showNotification('Error exporting daily data: ' + error.message, 'error');
-            }
-        }
-        
         // Global functions for inline event handlers
         window.updatePlayerScore = function(playerName, newScore) {
-            updatePlayerScore(playerName, newScore);
-        };
-        
-        window.updatePlayerDayScore = function(playerName, day, newScore) {
-            updatePlayerDayScore(playerName, day, newScore);
-        };
-        
-        // Funcție pentru a forța reîncărcarea datelor
-        function forceRefreshData() {
-            showLoadingIndicator(true);
-            updateSyncStatus('syncing');
-            updateDailySyncStatus('syncing');
-            
-            if (isOnline && database) {
-                // Forțăm reîncărcarea datelor principale
-                database.ref('players').once('value')
-                    .then((snapshot) => {
-                        const data = snapshot.val();
-                        if (data) {
-                            players = Object.values(data);
-                            saveDataToLocalStorage();
-                        } else {
-                            players = [];
-                        }
-                        
-                        updateMainDashboard();
-                        renderMainTable();
-                        
-                        // Forțăm reîncărcarea datelor zilnice
-                        return database.ref('dailyData').once('value');
-                    })
-                    .then((snapshot) => {
-                        const data = snapshot.val();
-                        if (data) {
-                            dailyData = data;
-                            saveDataToLocalStorage();
-                        } else {
-                            dailyData = {};
-                        }
-                        
-                        updateDailyDashboard();
-                        renderDailyTable();
-                        
-                        showLoadingIndicator(false);
-                        updateSyncStatus('synced');
-                        updateDailySyncStatus('synced');
-                        showNotification('Data refreshed successfully', 'success');
-                    })
-                    .catch((error) => {
-                        console.error('Error refreshing data:', error);
-                        showLoadingIndicator(false);
-                        updateSyncStatus('error');
-                        updateDailySyncStatus('error');
-                        showNotification('Error refreshing data: ' + error.message, 'error');
-                    });
-            } else {
-                // Reload from localStorage
-                loadDataFromLocalStorage();
-                updateMainDashboard();
-                updateDailyDashboard();
-                renderMainTable();
-                renderDailyTable();
-                
-                showLoadingIndicator(false);
-                updateSyncStatus('offline');
-                updateDailySyncStatus('offline');
-                showNotification('Working offline. Data loaded from local storage.', 'warning');
+            if (!currentUser) {
+                showNotification('Permission denied', 'error');
+                return;
             }
-        }
+            
+            const player = players.find(p => p.player === playerName);
+            if (player) {
+                player.totalScores = parseInt(newScore) || 0;
+                updatePlayerScoreInFirebase(playerName, newScore);
+            }
+        };
         
         // Initialize app when DOM is loaded
         document.addEventListener('DOMContentLoaded', initApp);
