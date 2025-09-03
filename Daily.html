@@ -167,8 +167,8 @@
             transform: translateY(-2px);
             box-shadow: var(--shadow-lg);
         }
-        .daily-btn {
-            background: var(--secondary);
+        .main-btn {
+            background: var(--warning);
             color: var(--white);
             border: none;
             border-radius: 12px;
@@ -182,8 +182,8 @@
             transition: all 0.3s ease;
             box-shadow: var(--shadow);
         }
-        .daily-btn:hover {
-            background: #059669;
+        .main-btn:hover {
+            background: #d97706;
             transform: translateY(-2px);
             box-shadow: var(--shadow-lg);
         }
@@ -854,8 +854,8 @@
                     <i class="fas fa-user-shield"></i>
                     <span data-i18n="adminPanel">Admin Panel</span>
                 </button>
-                <button class="daily-btn" id="dailyBtn">
-                    <i class="fas fa-chart-line"></i>
+                <button class="main-btn" id="mainBtn">
+                    <i class="fas fa-home"></i>
                     <span data-i18n="mainPage">Pagina Principală</span>
                 </button>
             </div>
@@ -1192,7 +1192,7 @@
                 'totalPlayers', 'top10', 'top32', 'missedTournaments', 'min2Missed',
                 'currentLang', 'loadingIndicator', 'syncStatus', 'userInfo',
                 'userName', 'userRole', 'logoutBtn', 'username', 'importWrapper',
-                'dailyBtn', 'addPlayerBtn', 'removePlayerBtn', 'sortByRank', 'sortByName'
+                'mainBtn', 'addPlayerBtn', 'removePlayerBtn', 'sortByRank', 'sortByName'
             ];
             elementIds.forEach(id => {
                 const element = document.getElementById(id);
@@ -1358,9 +1358,9 @@
                     }
                 });
             }
-            // Daily page button
-            if (elements.dailyBtn) {
-                elements.dailyBtn.addEventListener('click', () => {
+            // Main page button
+            if (elements.mainBtn) {
+                elements.mainBtn.addEventListener('click', () => {
                     window.location.href = 'index.html';
                 });
             }
