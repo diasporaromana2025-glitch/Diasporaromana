@@ -1373,6 +1373,7 @@
         let dailyIsSyncing = false;
         let sortBy = 'rank'; // 'rank' or 'name'
         let dailyColumns = [];
+        let dayColumnCheckInterval = null;
         
         // Default users
         const defaultUsers = [
@@ -1437,6 +1438,45 @@
                     updateDailySyncStatus('synced');
                 }
             }, 5000);
+            
+            // Set up daily column generation check
+            setupDayColumnGeneration();
+        }
+        
+        // Setup day column generation
+        function setupDayColumnGeneration() {
+            // Check every minute if we need to add a new day column
+            dayColumnCheckInterval = setInterval(() => {
+                checkAndAddDayColumn();
+            }, 60000); // Check every minute
+            
+            // Also check immediately
+            checkAndAddDayColumn();
+        }
+        
+        // Check if we need to add a new day column
+        function checkAndAddDayColumn() {
+            const now = new Date();
+            const today = formatDate(now);
+            
+            // Check if today's column already exists
+            const todayColumnExists = dailyColumns.some(col => col.date === today);
+            
+            if (!todayColumnExists) {
+                // Add today's column
+                dailyColumns.unshift({
+                    date: today,
+                    dateObj: new Date(now)
+                });
+                
+                // Update table header
+                updateDailyTableHeader();
+                
+                // Re-render the table
+                renderDailyTable();
+                
+                console.log(`Added new day column for ${today}`);
+            }
         }
         
         // Generate daily columns
