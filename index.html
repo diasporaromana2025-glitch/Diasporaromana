@@ -75,35 +75,6 @@
             gap: 15px;
             flex-wrap: wrap;
         }
-        .nav-buttons {
-            display: flex;
-            gap: 10px;
-        }
-        .nav-btn {
-            background: var(--white);
-            border: 2px solid var(--light-gray);
-            border-radius: 12px;
-            padding: 12px 18px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            font-size: 15px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: var(--shadow);
-            text-decoration: none;
-            color: var(--dark);
-        }
-        .nav-btn.active {
-            background: var(--primary);
-            color: var(--white);
-            border-color: var(--primary);
-        }
-        .nav-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-        }
         .search-box {
             position: relative;
         }
@@ -129,6 +100,53 @@
             color: var(--gray);
             font-size: 16px;
         }
+        .language-selector {
+            position: relative;
+        }
+        .language-btn {
+            background: var(--white);
+            border: 2px solid var(--light-gray);
+            border-radius: 12px;
+            padding: 12px 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+        }
+        .language-btn:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+        .language-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            z-index: 100;
+            min-width: 150px;
+            display: none;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+        .language-dropdown.active {
+            display: block;
+        }
+        .language-option {
+            padding: 12px 15px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .language-option:hover {
+            background: var(--light);
+        }
         .admin-btn {
             background: var(--primary);
             color: var(--white);
@@ -149,44 +167,117 @@
             transform: translateY(-2px);
             box-shadow: var(--shadow-lg);
         }
-        .user-info {
+        .admin-panel {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow-lg);
+            display: none;
+            backdrop-filter: blur(10px);
+        }
+        .admin-panel.active {
+            display: block;
+        }
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light-gray);
+        }
+        .admin-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
             display: flex;
             align-items: center;
-            gap: 12px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            padding: 10px 20px;
-            border-radius: 30px;
-            font-size: 15px;
-            color: var(--white);
-            font-weight: 600;
-            box-shadow: var(--shadow);
+            gap: 10px;
         }
-        .user-role {
-            font-size: 12px;
-            background: rgba(255, 255, 255, 0.3);
-            padding: 4px 10px;
-            border-radius: 20px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .logout-btn {
-            background: rgba(255, 255, 255, 0.3);
+        .close-admin {
+            background: var(--light);
             border: none;
-            color: var(--white);
+            font-size: 20px;
+            color: var(--gray);
             cursor: pointer;
-            font-size: 16px;
-            padding: 8px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            width: 32px;
-            height: 32px;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.3s ease;
         }
-        .logout-btn:hover {
-            background: rgba(255, 255, 255, 0.5);
+        .close-admin:hover {
+            background: var(--danger);
+            color: var(--white);
             transform: rotate(90deg);
+        }
+        .admin-actions {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+        }
+        .file-input-label {
+            background: var(--secondary);
+            color: var(--white);
+            border-radius: 12px;
+            padding: 12px 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+        }
+        .file-input-label:hover {
+            background: #059669;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        .export-btn, .save-btn {
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 12px;
+            padding: 12px 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+        }
+        .export-btn:hover, .save-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        .save-btn {
+            background: var(--success);
+        }
+        .save-btn:hover {
+            background: #16a34a;
         }
         .dashboard {
             background: rgba(255, 255, 255, 0.95);
@@ -566,6 +657,45 @@
         .sync-status.error i {
             color: var(--danger);
         }
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 15px;
+            color: var(--white);
+            font-weight: 600;
+            box-shadow: var(--shadow);
+        }
+        .user-role {
+            font-size: 12px;
+            background: rgba(255, 255, 255, 0.3);
+            padding: 4px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.3);
+            border: none;
+            color: var(--white);
+            cursor: pointer;
+            font-size: 16px;
+            padding: 8px;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.5);
+            transform: rotate(90deg);
+        }
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -582,10 +712,6 @@
                 width: 100%;
                 justify-content: space-between;
             }
-            .nav-buttons {
-                width: 100%;
-                justify-content: space-between;
-            }
             .search-box input {
                 width: 150px;
             }
@@ -593,6 +719,7 @@
                 grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
                 gap: 15px;
             }
+            /* Reduce dashboard button sizes for mobile */
             .stat-card {
                 padding: 10px;
             }
@@ -633,22 +760,33 @@
         <header>
             <div class="logo">
                 <i class="fas fa-trophy"></i>
-                <h1>Scoring System</h1>
+                <h1 data-i18n="appTitle">Scoring System</h1>
             </div>
             <div class="header-actions">
-                <div class="nav-buttons">
-                    <a href="index.html" class="nav-btn active">
-                        <i class="fas fa-home"></i>
-                        <span>Principal</span>
-                    </a>
-                    <a href="daily.html" class="nav-btn">
-                        <i class="fas fa-calendar-day"></i>
-                        <span>Zilnic</span>
-                    </a>
-                </div>
                 <div class="search-box">
                     <i class="fas fa-search"></i>
-                    <input type="text" id="searchInput" placeholder="Search players...">
+                    <input type="text" id="searchInput" placeholder="Search players..." data-i18n-placeholder="searchPlaceholder">
+                </div>
+                <div class="language-selector">
+                    <div class="language-btn" id="languageBtn">
+                        <i class="fas fa-globe"></i>
+                        <span id="currentLang">RO</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="language-dropdown" id="languageDropdown">
+                        <div class="language-option" data-lang="ro">
+                            <i class="fas fa-flag"></i>
+                            <span>Română</span>
+                        </div>
+                        <div class="language-option" data-lang="en">
+                            <i class="fas fa-flag"></i>
+                            <span>English</span>
+                        </div>
+                        <div class="language-option" data-lang="es">
+                            <i class="fas fa-flag"></i>
+                            <span>Español</span>
+                        </div>
+                    </div>
                 </div>
                 <div class="user-info" id="userInfo" style="display: none;">
                     <i class="fas fa-user"></i>
@@ -660,15 +798,42 @@
                 </div>
                 <button class="admin-btn" id="adminBtn">
                     <i class="fas fa-user-shield"></i>
-                    <span>Admin Panel</span>
+                    <span data-i18n="adminPanel">Admin Panel</span>
                 </button>
             </div>
         </header>
-        
+        <div class="admin-panel" id="adminPanel">
+            <div class="admin-header">
+                <h2 class="admin-title">
+                    <i class="fas fa-cogs"></i>
+                    <span data-i18n="adminPanel">Admin Panel</span>
+                </h2>
+                <button class="close-admin" id="closeAdmin">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="admin-actions">
+                <div class="file-input-wrapper" id="importWrapper">
+                    <input type="file" id="fileInput" accept=".xlsx, .xls">
+                    <label for="fileInput" class="file-input-label">
+                        <i class="fas fa-file-excel"></i>
+                        <span data-i18n="importExcel">Import Excel</span>
+                    </label>
+                </div>
+                <button class="export-btn" id="exportBtn">
+                    <i class="fas fa-download"></i>
+                    <span data-i18n="exportData">Export Data</span>
+                </button>
+                <button class="save-btn" id="saveBtn">
+                    <i class="fas fa-save"></i>
+                    <span data-i18n="saveData">Save Data</span>
+                </button>
+            </div>
+        </div>
         <div class="dashboard">
             <h2 class="dashboard-title">
                 <i class="fas fa-chart-line"></i>
-                Dashboard
+                <span data-i18n="dashboard">Dashboard</span>
             </h2>
             <div class="dashboard-stats">
                 <div class="stat-card total" data-filter="all">
@@ -676,66 +841,65 @@
                         <i class="fas fa-users"></i>
                     </div>
                     <div class="stat-value" id="totalPlayers">0</div>
-                    <div class="stat-label">Total Players</div>
+                    <div class="stat-label" data-i18n="totalPlayers">Total Players</div>
                 </div>
                 <div class="stat-card target" data-filter="target">
                     <div class="stat-icon">
                         <i class="fas fa-check-circle"></i>
                     </div>
                     <div class="stat-value" id="targetAchieved">0</div>
-                    <div class="stat-label">Target Achieved</div>
+                    <div class="stat-label" data-i18n="targetAchieved">Target Achieved</div>
                 </div>
                 <div class="stat-card close" data-filter="close">
                     <div class="stat-icon">
                         <i class="fas fa-hourglass-half"></i>
                     </div>
                     <div class="stat-value" id="closeToTarget">0</div>
-                    <div class="stat-label">Close to Target</div>
+                    <div class="stat-label" data-i18n="closeToTarget">Close to Target</div>
                 </div>
                 <div class="stat-card attention" data-filter="attention">
                     <div class="stat-icon">
                         <i class="fas fa-exclamation-triangle"></i>
                     </div>
                     <div class="stat-value" id="attentionNeeded">0</div>
-                    <div class="stat-label">Attention Needed</div>
+                    <div class="stat-label" data-i18n="attentionNeeded">Attention Needed</div>
                 </div>
                 <div class="stat-card zero" data-filter="zero">
                     <div class="stat-icon">
                         <i class="fas fa-times-circle"></i>
                     </div>
                     <div class="stat-value" id="zeroPoints">0</div>
-                    <div class="stat-label">Zero Points</div>
+                    <div class="stat-label" data-i18n="zeroPoints">Zero Points</div>
                 </div>
                 <div class="stat-card average">
                     <div class="stat-icon">
                         <i class="fas fa-chart-bar"></i>
                     </div>
                     <div class="stat-value" id="weeklyAverage">0</div>
-                    <div class="stat-label">Weekly Average</div>
+                    <div class="stat-label" data-i18n="weeklyAverage">Weekly Average</div>
                 </div>
             </div>
         </div>
-        
         <div class="table-container">
             <div class="table-header">
                 <h2 class="table-title">
                     <i class="fas fa-trophy"></i>
-                    Ranking
+                    <span data-i18n="ranking">Ranking</span>
                 </h2>
                 <div class="last-updated" id="lastUpdated">
                     <i class="fas fa-clock"></i>
-                    <span>Last updated:</span>
+                    <span data-i18n="lastUpdated">Last updated:</span>
                     <span id="updateTime">Never</span>
                 </div>
             </div>
             <table id="rankingTable">
                 <thead>
                     <tr>
-                        <th>Rank</th>
-                        <th>Player</th>
-                        <th>Total Scores</th>
-                        <th>Week Score</th>
-                        <th>Left to Achieve</th>
+                        <th data-i18n="rank">Rank</th>
+                        <th data-i18n="player">Player</th>
+                        <th data-i18n="totalScores">Total Scores</th>
+                        <th data-i18n="weekScore">Week Score</th>
+                        <th data-i18n="leftToAchieve">Left to Achieve</th>
                     </tr>
                 </thead>
                 <tbody id="rankingBody">
@@ -744,36 +908,156 @@
             </table>
         </div>
     </div>
-    
     <div class="login-modal" id="loginModal">
         <div class="login-form">
             <h2 class="login-title">
                 <i class="fas fa-user-shield"></i>
-                Login
+                <span data-i18n="adminLogin">Login</span>
             </h2>
             <div class="form-group">
-                <label for="username">Username</label>
+                <label for="username" data-i18n="username">Username</label>
                 <input type="text" id="username" placeholder="Enter username...">
             </div>
             <div class="form-group">
-                <label for="password">Password</label>
+                <label for="password" data-i18n="password">Password</label>
                 <input type="password" id="password" placeholder="Enter password...">
             </div>
-            <button class="login-btn" id="loginBtn">Login</button>
-            <button class="cancel-btn" id="cancelLogin">Cancel</button>
+            <button class="login-btn" id="loginBtn" data-i18n="login">Login</button>
+            <button class="cancel-btn" id="cancelLogin" data-i18n="cancel">Cancel</button>
         </div>
     </div>
-    
     <div class="notification" id="notification">
         <i class="fas fa-check-circle"></i>
         <div class="notification-message" id="notificationMessage"></div>
     </div>
-    
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script>
+        // Translation data
+        const translations = {
+            ro: {
+                appTitle: "Sistem de Punctaj",
+                searchPlaceholder: "Caută jucători...",
+                adminPanel: "Panou Admin",
+                importExcel: "Import Excel",
+                exportData: "Export Date",
+                saveData: "Salvează Date",
+                dashboard: "Panou",
+                totalPlayers: "Total Jucători",
+                targetAchieved: "Target Atins",
+                closeToTarget: "Aproape de Target",
+                attentionNeeded: "Atenție",
+                zeroPoints: "0 Puncte",
+                weeklyAverage: "Media Săptămânii",
+                ranking: "Clasament",
+                lastUpdated: "Ultima actualizare:",
+                rank: "Poziție",
+                player: "Jucător",
+                totalScores: "Punctaj Total",
+                weekScore: "Punctaj Săptămână",
+                leftToAchieve: "Până la Target",
+                adminLogin: "Autentificare",
+                password: "Parolă",
+                username: "Utilizator",
+                login: "Autentificare",
+                cancel: "Anulează",
+                dataSaved: "Date salvate cu succes!",
+                dataLoaded: "Date încărcate cu succes!",
+                loginSuccess: "Autentificare reușită!",
+                loginError: "Utilizator sau parolă incorectă!",
+                exportSuccess: "Date exportate cu succes!",
+                importSuccess: "Date importate cu succes!",
+                noDataFound: "Nu s-au găsit date salvate. Se încarcă date de test.",
+                never: "Niciodată",
+                minutes: "minute",
+                hours: "ore",
+                days: "zile",
+                done: "Realizat",
+                logoutSuccess: "Deconectare reușită!"
+            },
+            en: {
+                appTitle: "Scoring System",
+                searchPlaceholder: "Search players...",
+                adminPanel: "Admin Panel",
+                importExcel: "Import Excel",
+                exportData: "Export Data",
+                saveData: "Save Data",
+                dashboard: "Dashboard",
+                totalPlayers: "Total Players",
+                targetAchieved: "Target Achieved",
+                closeToTarget: "Close to Target",
+                attentionNeeded: "Attention Needed",
+                zeroPoints: "Zero Points",
+                weeklyAverage: "Weekly Average",
+                ranking: "Ranking",
+                lastUpdated: "Last updated:",
+                rank: "Rank",
+                player: "Player",
+                totalScores: "Total Scores",
+                weekScore: "Week Score",
+                leftToAchieve: "Left to Achieve",
+                adminLogin: "Login",
+                password: "Password",
+                username: "Username",
+                login: "Login",
+                cancel: "Cancel",
+                dataSaved: "Data saved successfully!",
+                dataLoaded: "Data loaded successfully!",
+                loginSuccess: "Login successful!",
+                loginError: "Incorrect username or password!",
+                exportSuccess: "Data exported successfully!",
+                importSuccess: "Data imported successfully!",
+                noDataFound: "No saved data found. Loading test data.",
+                never: "Never",
+                minutes: "minutes",
+                hours: "hours",
+                days: "days",
+                done: "Done",
+                logoutSuccess: "Logout successful!"
+            },
+            es: {
+                appTitle: "Sistema de Puntuación",
+                searchPlaceholder: "Buscar jugadores...",
+                adminPanel: "Panel de Admin",
+                importExcel: "Importar Excel",
+                exportData: "Exportar Datos",
+                saveData: "Guardar Datos",
+                dashboard: "Panel de Control",
+                totalPlayers: "Total Jugadores",
+                targetAchieved: "Objetivo Alcanzado",
+                closeToTarget: "Cerca del Objetivo",
+                attentionNeeded: "Atención Requerida",
+                zeroPoints: "Cero Puntos",
+                weeklyAverage: "Promedio Semanal",
+                ranking: "Clasificación",
+                lastUpdated: "Última actualización:",
+                rank: "Rango",
+                player: "Jugador",
+                totalScores: "Puntuación Total",
+                weekScore: "Puntuación Semanal",
+                leftToAchieve: "Restante para Objetivo",
+                adminLogin: "Inicio de Sesión",
+                password: "Contraseña",
+                username: "Usuario",
+                login: "Iniciar Sesión",
+                cancel: "Cancelar",
+                dataSaved: "¡Datos guardados con éxito!",
+                dataLoaded: "¡Datos cargados con éxito!",
+                loginSuccess: "¡Inicio de sesión exitoso!",
+                loginError: "¡Usuario o contraseña incorrectos!",
+                exportSuccess: "¡Datos exportados con éxito!",
+                importSuccess: "¡Datos importados con éxito!",
+                noDataFound: "No se encontraron datos guardados. Cargando datos de prueba.",
+                never: "Nunca",
+                minutes: "minutos",
+                hours: "horas",
+                days: "días",
+                done: "Hecho",
+                logoutSuccess: "¡Cierre de sesión exitoso!"
+            }
+        };
         // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyAg-8kByVcC4gh1FEuZJvnhs525nQShixA",
@@ -785,56 +1069,52 @@
             appId: "1:983580221213:web:d9f4b82f8acb7ec47f8bf4",
             measurementId: "G-HHCTDB7CFS"
         };
-        
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
-        
         // Application state
+        let currentLang = 'ro';
         let currentUser = null;
         let userRole = null;
         let players = [];
-        let dailyScores = {};
         let lastUpdateTime = null;
         let activeFilter = 'all';
         let searchQuery = '';
         let isSyncing = false;
         let syncTimeout = null;
-        
         // Default users
         const defaultUsers = [
             { username: 'admin', password: 'diasporaromana123', role: 'admin' },
             { username: 'editor', password: 'fcmobile', role: 'editor' }
         ];
-        
         // DOM elements
         const elements = {};
-        
         // Cache DOM elements
         function cacheElements() {
             const elementIds = [
-                'adminBtn', 'loginModal', 'loginBtn', 'cancelLogin', 
-                'password', 'notification', 'notificationMessage', 'searchInput', 
-                'rankingBody', 'updateTime', 'totalPlayers', 'targetAchieved', 
-                'closeToTarget', 'attentionNeeded', 'zeroPoints', 'weeklyAverage',
-                'loadingIndicator', 'syncStatus', 'userInfo', 'userName', 
-                'userRole', 'logoutBtn', 'username'
+                'languageBtn', 'languageDropdown', 'adminBtn', 'adminPanel', 
+                'closeAdmin', 'fileInput', 'exportBtn', 'saveBtn', 'loginModal', 
+                'loginBtn', 'cancelLogin', 'password', 'notification', 
+                'notificationMessage', 'searchInput', 'rankingBody', 'updateTime',
+                'totalPlayers', 'targetAchieved', 'closeToTarget',
+                'attentionNeeded', 'zeroPoints', 'weeklyAverage',
+                'currentLang', 'loadingIndicator', 'syncStatus', 'userInfo',
+                'userName', 'userRole', 'logoutBtn', 'username', 'importWrapper'
             ];
-            
             elementIds.forEach(id => {
                 const element = document.getElementById(id);
                 if (element) {
                     elements[id] = element;
                 }
             });
-            
             // Cache elements by class
+            elements.languageOptions = document.querySelectorAll('.language-option');
             elements.statCards = document.querySelectorAll('.stat-card');
         }
-        
         // Initialize app
         function initApp() {
             cacheElements();
+            loadLanguage();
             setupEventListeners();
             checkLoginStatus();
             loadDataFromFirebase();
@@ -848,7 +1128,6 @@
                 }
             }, 5000);
         }
-        
         // Check login status from localStorage
         function checkLoginStatus() {
             const savedUser = localStorage.getItem('currentUser');
@@ -860,15 +1139,58 @@
                 updateUIForLoggedInUser();
             }
         }
-        
+        // Update admin panel visibility based on user role
+        function updateAdminPanelVisibility() {
+            if (!currentUser) {
+                // Hide all buttons if not logged in
+                if (elements.importWrapper) elements.importWrapper.style.display = 'none';
+                if (elements.exportBtn) elements.exportBtn.style.display = 'none';
+                if (elements.saveBtn) elements.saveBtn.style.display = 'none';
+                return;
+            }
+            
+            if (userRole === 'admin') {
+                // Admin can see everything
+                if (elements.importWrapper) elements.importWrapper.style.display = 'inline-block';
+                if (elements.exportBtn) elements.exportBtn.style.display = 'flex';
+                if (elements.saveBtn) elements.saveBtn.style.display = 'flex';
+            } else if (userRole === 'editor') {
+                // Editor can see export and save
+                if (elements.importWrapper) elements.importWrapper.style.display = 'none';
+                if (elements.exportBtn) elements.exportBtn.style.display = 'flex';
+                if (elements.saveBtn) elements.saveBtn.style.display = 'flex';
+            }
+        }
         // Setup event listeners
         function setupEventListeners() {
+            // Language selector
+            if (elements.languageBtn) {
+                elements.languageBtn.addEventListener('click', () => {
+                    if (elements.languageDropdown) {
+                        elements.languageDropdown.classList.toggle('active');
+                    }
+                });
+            }
+            if (elements.languageOptions) {
+                elements.languageOptions.forEach(option => {
+                    option.addEventListener('click', () => {
+                        const lang = option.getAttribute('data-lang');
+                        changeLanguage(lang);
+                        if (elements.languageDropdown) {
+                            elements.languageDropdown.classList.remove('active');
+                        }
+                    });
+                });
+            }
             // Admin panel
             if (elements.adminBtn) {
                 elements.adminBtn.addEventListener('click', () => {
                     if (currentUser) {
-                        // Admin panel functionality here
-                        showNotification('Admin panel opened', 'success');
+                        if (elements.adminPanel) {
+                            elements.adminPanel.classList.toggle('active');
+                            // Update visibility when panel is opened
+                            updateAdminPanelVisibility();
+                        }
                     } else {
                         if (elements.loginModal) {
                             elements.loginModal.classList.add('active');
@@ -876,7 +1198,13 @@
                     }
                 });
             }
-            
+            if (elements.closeAdmin) {
+                elements.closeAdmin.addEventListener('click', () => {
+                    if (elements.adminPanel) {
+                        elements.adminPanel.classList.remove('active');
+                    }
+                });
+            }
             // Login
             if (elements.loginBtn) {
                 elements.loginBtn.addEventListener('click', () => {
@@ -898,7 +1226,7 @@
                         }
                         
                         updateUIForLoggedInUser();
-                        showNotification('Login successful!', 'success');
+                        showNotification(translations[currentLang].loginSuccess, 'success');
                         
                         if (elements.password) {
                             elements.password.value = '';
@@ -907,11 +1235,10 @@
                             elements.username.value = '';
                         }
                     } else {
-                        showNotification('Incorrect username or password!', 'error');
+                        showNotification(translations[currentLang].loginError, 'error');
                     }
                 });
             }
-            
             if (elements.cancelLogin) {
                 elements.cancelLogin.addEventListener('click', () => {
                     if (elements.loginModal) {
@@ -925,7 +1252,6 @@
                     }
                 });
             }
-            
             // Logout
             if (elements.logoutBtn) {
                 elements.logoutBtn.addEventListener('click', () => {
@@ -934,10 +1260,21 @@
                     localStorage.removeItem('currentUser');
                     localStorage.removeItem('userRole');
                     updateUIForLoggedOutUser();
-                    showNotification('Logout successful!', 'success');
+                    showNotification(translations[currentLang].logoutSuccess, 'success');
                 });
             }
-            
+            // File import
+            if (elements.fileInput) {
+                elements.fileInput.addEventListener('change', handleFileImport);
+            }
+            // Export
+            if (elements.exportBtn) {
+                elements.exportBtn.addEventListener('click', exportData);
+            }
+            // Save
+            if (elements.saveBtn) {
+                elements.saveBtn.addEventListener('click', saveDataToFirebase);
+            }
             // Search
             if (elements.searchInput) {
                 elements.searchInput.addEventListener('input', (e) => {
@@ -945,7 +1282,6 @@
                     renderTable();
                 });
             }
-            
             // Dashboard filters
             if (elements.statCards) {
                 elements.statCards.forEach(card => {
@@ -955,8 +1291,13 @@
                     });
                 });
             }
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.language-selector') && elements.languageDropdown) {
+                    elements.languageDropdown.classList.remove('active');
+                }
+            });
         }
-        
         // Update UI for logged in user
         function updateUIForLoggedInUser() {
             if (elements.userInfo) {
@@ -972,9 +1313,18 @@
                 elements.adminBtn.style.display = 'none';
             }
             
+            // Show admin panel if user is admin or editor
+            if (userRole === 'admin' || userRole === 'editor') {
+                if (elements.adminPanel) {
+                    elements.adminPanel.classList.add('active');
+                }
+            }
+            
+            // Update admin panel visibility
+            updateAdminPanelVisibility();
+            
             renderTable();
         }
-        
         // Update UI for logged out user
         function updateUIForLoggedOutUser() {
             if (elements.userInfo) {
@@ -983,20 +1333,64 @@
             if (elements.adminBtn) {
                 elements.adminBtn.style.display = 'flex';
             }
+            if (elements.adminPanel) {
+                elements.adminPanel.classList.remove('active');
+            }
+            
+            // Update admin panel visibility
+            updateAdminPanelVisibility();
             
             renderTable();
         }
-        
+        // Language functions
+        function changeLanguage(lang) {
+            currentLang = lang;
+            if (elements.currentLang) {
+                elements.currentLang.textContent = lang.toUpperCase();
+            }
+            loadLanguage();
+            updateDashboard();
+            renderTable();
+            updateLastUpdatedTime();
+        }
+        function loadLanguage() {
+            // Update all elements with data-i18n attribute
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[currentLang] && translations[currentLang][key]) {
+                    element.textContent = translations[currentLang][key];
+                } else if (translations['ro'] && translations['ro'][key]) {
+                    // Fallback to Romanian if translation is missing
+                    element.textContent = translations['ro'][key];
+                    console.warn(`Missing translation for key "${key}" in language "${currentLang}", using Romanian`);
+                } else {
+                    console.error(`Missing translation for key "${key}" in all languages`);
+                }
+            });
+            
+            // Update all elements with data-i18n-placeholder attribute
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+                const key = element.getAttribute('data-i18n-placeholder');
+                if (translations[currentLang] && translations[currentLang][key]) {
+                    element.placeholder = translations[currentLang][key];
+                } else if (translations['ro'] && translations['ro'][key]) {
+                    // Fallback to Romanian if translation is missing
+                    element.placeholder = translations['ro'][key];
+                    console.warn(`Missing placeholder translation for key "${key}" in language "${currentLang}", using Romanian`);
+                } else {
+                    console.error(`Missing placeholder translation for key "${key}" in all languages`);
+                }
+            });
+        }
         // Firebase functions
         function loadDataFromFirebase() {
             showLoadingIndicator(true);
             updateSyncStatus('syncing');
             
             const playersRef = database.ref('players');
-            const dailyScoresRef = database.ref('dailyScores');
             const metadataRef = database.ref('metadata');
             
-            // Listen for real-time updates for players
+            // Listen for real-time updates
             playersRef.on('value', (snapshot) => {
                 try {
                     const data = snapshot.val();
@@ -1011,36 +1405,15 @@
                     showLoadingIndicator(false);
                     updateSyncStatus('synced');
                 } catch (error) {
-                    console.error('Error loading players data:', error);
+                    console.error('Error loading data:', error);
                     showLoadingIndicator(false);
                     updateSyncStatus('error');
-                    showNotification('Error loading players data', 'error');
+                    showNotification('Error loading data', 'error');
                 }
             }, (error) => {
                 console.error('Database error:', error);
                 showLoadingIndicator(false);
                 updateSyncStatus('error');
-                showNotification('Database connection error', 'error');
-            });
-            
-            // Listen for real-time updates for daily scores
-            dailyScoresRef.on('value', (snapshot) => {
-                try {
-                    const data = snapshot.val();
-                    if (data) {
-                        dailyScores = data;
-                    } else {
-                        dailyScores = {};
-                    }
-                    
-                    updateDashboard();
-                    renderTable();
-                } catch (error) {
-                    console.error('Error loading daily scores:', error);
-                    showNotification('Error loading daily scores', 'error');
-                }
-            }, (error) => {
-                console.error('Database error:', error);
                 showNotification('Database connection error', 'error');
             });
             
@@ -1057,7 +1430,69 @@
                 updateLastUpdatedTime();
             });
         }
-        
+        function saveDataToFirebase() {
+            if (!currentUser) {
+                showNotification('Permission denied', 'error');
+                return;
+            }
+            
+            // Disable save button to prevent multiple clicks
+            if (elements.saveBtn) {
+                elements.saveBtn.disabled = true;
+            }
+            
+            showLoadingIndicator(true);
+            updateSyncStatus('syncing');
+            
+            // Clear any existing timeout
+            if (syncTimeout) {
+                clearTimeout(syncTimeout);
+            }
+            
+            const playersObj = {};
+            players.forEach((player, index) => {
+                playersObj[index] = player;
+            });
+            
+            const metadata = {
+                lastUpdateTime: new Date().toISOString(),
+                version: '1.0'
+            };
+            
+            // Save players data
+            database.ref('players').set(playersObj)
+                .then(() => {
+                    // Save metadata
+                    return database.ref('metadata').set(metadata);
+                })
+                .then(() => {
+                    lastUpdateTime = new Date();
+                    updateLastUpdatedTime();
+                    showLoadingIndicator(false);
+                    updateSyncStatus('synced');
+                    showNotification(translations[currentLang].dataSaved, 'success');
+                    
+                    // Re-enable save button after a delay
+                    if (elements.saveBtn) {
+                        setTimeout(() => {
+                            elements.saveBtn.disabled = false;
+                        }, 2000);
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error saving data:', error);
+                    showLoadingIndicator(false);
+                    updateSyncStatus('error');
+                    showNotification('Error saving data: ' + error.message, 'error');
+                    
+                    // Re-enable save button after a delay
+                    if (elements.saveBtn) {
+                        setTimeout(() => {
+                            elements.saveBtn.disabled = false;
+                        }, 2000);
+                    }
+                });
+        }
         function updatePlayerScoreInFirebase(playerName, newScore) {
             if (!currentUser) {
                 showNotification('Permission denied', 'error');
@@ -1091,7 +1526,6 @@
                     showNotification('Error updating score: ' + error.message, 'error');
                 });
         }
-        
         // UI functions
         function showLoadingIndicator(show) {
             if (elements.loadingIndicator) {
@@ -1102,7 +1536,6 @@
                 }
             }
         }
-        
         function updateSyncStatus(status) {
             isSyncing = (status === 'syncing');
             
@@ -1115,17 +1548,21 @@
                     case 'syncing':
                         icon.className = 'fas fa-sync-alt';
                         text.textContent = 'Syncing...';
+                        // Show sync status only when syncing
                         elements.syncStatus.classList.add('show');
                         break;
                     case 'synced':
                         icon.className = 'fas fa-check-circle';
                         text.textContent = 'Synced';
+                        // Hide sync status when synced
                         elements.syncStatus.classList.remove('show');
                         break;
                     case 'error':
                         icon.className = 'fas fa-exclamation-circle';
                         text.textContent = 'Sync Error';
+                        // Show sync status when there's an error
                         elements.syncStatus.classList.add('show');
+                        // Auto-hide after 5 seconds
                         setTimeout(() => {
                             if (elements.syncStatus && elements.syncStatus.classList.contains('error')) {
                                 elements.syncStatus.classList.remove('show');
@@ -1135,7 +1572,6 @@
                 }
             }
         }
-        
         function updateDashboard() {
             try {
                 const totalPlayers = players.length;
@@ -1156,7 +1592,6 @@
                 console.error('Error updating dashboard:', error);
             }
         }
-        
         function renderTable() {
             try {
                 // Filter players
@@ -1221,7 +1656,6 @@
                 console.error('Error rendering table:', error);
             }
         }
-        
         function setActiveFilter(filter) {
             activeFilter = filter;
             
@@ -1237,11 +1671,10 @@
             
             renderTable();
         }
-        
         function updateLastUpdatedTime() {
             if (!lastUpdateTime) {
                 if (elements.updateTime) {
-                    elements.updateTime.textContent = 'Never';
+                    elements.updateTime.textContent = translations[currentLang].never;
                 }
                 return;
             }
@@ -1254,37 +1687,40 @@
             let timeText;
             
             if (days > 0) {
-                timeText = `${days} days`;
+                timeText = `${days} ${translations[currentLang].days}`;
             } else if (hours > 0) {
-                timeText = `${hours} hours`;
+                timeText = `${hours} ${translations[currentLang].hours}`;
             } else {
-                timeText = `${minutes} minutes`;
+                timeText = `${minutes} ${translations[currentLang].minutes}`;
             }
             
             if (elements.updateTime) {
                 elements.updateTime.textContent = timeText;
             }
         }
-        
         function showNotification(message, type) {
             if (elements.notificationMessage) {
                 elements.notificationMessage.textContent = message;
             }
             
             if (elements.notification) {
+                // Remove existing notification
                 elements.notification.classList.remove('show');
+                
+                // Force reflow to restart animation
                 void elements.notification.offsetWidth;
+                
                 elements.notification.className = `notification ${type}`;
                 elements.notification.classList.add('show');
             }
             
+            // Auto-hide after 3 seconds
             setTimeout(() => {
                 if (elements.notification) {
                     elements.notification.classList.remove('show');
                 }
             }, 3000);
         }
-        
         // Calculation functions
         function calculateWeekScore(player) {
             if (!player || typeof player.totalScores === 'undefined' || typeof player.startingPoints === 'undefined') {
@@ -1292,14 +1728,12 @@
             }
             return player.totalScores - player.startingPoints;
         }
-        
         function calculateLeftToAchieve(player) {
             if (!player || typeof player.targetPoints === 'undefined' || typeof player.totalScores === 'undefined') {
                 return 0;
             }
             return player.targetPoints - player.totalScores;
         }
-        
         function calculateRank(player) {
             if (!player) return 0;
             
@@ -1314,7 +1748,6 @@
             
             return sortedPlayers.findIndex(p => p.player === player.player) + 1;
         }
-        
         function getStatusClass(player) {
             const leftToAchieve = calculateLeftToAchieve(player);
             if (leftToAchieve <= 0) return 'status-done';
@@ -1322,13 +1755,142 @@
             if (leftToAchieve < 500) return 'status-yellow';
             return 'status-red';
         }
-        
         function getStatusText(player) {
             const leftToAchieve = calculateLeftToAchieve(player);
-            if (leftToAchieve <= 0) return 'Done';
+            if (leftToAchieve <= 0) return translations[currentLang].done;
             return leftToAchieve;
         }
-        
+        // File handling functions
+        function handleFileImport(event) {
+            if (!currentUser || userRole !== 'admin') {
+                showNotification('Permission denied', 'error');
+                return;
+            }
+            
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            // Validate file type
+            if (!file.name.match(/\.(xlsx|xls)$/)) {
+                showNotification('Please select a valid Excel file', 'error');
+                return;
+            }
+            
+            showLoadingIndicator(true);
+            updateSyncStatus('syncing');
+            
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    
+                    if (!workbook.SheetNames || workbook.SheetNames.length === 0) {
+                        throw new Error('No sheets found in the Excel file');
+                    }
+                    
+                    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                    const jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+                    
+                    if (!jsonData || jsonData.length < 2) {
+                        throw new Error('No data found in the Excel file');
+                    }
+                    
+                    // Process imported data
+                    const newPlayers = [];
+                    for (let i = 1; i < jsonData.length; i++) {
+                        const row = jsonData[i];
+                        if (row && row[1]) { // Check if player name exists
+                            newPlayers.push({
+                                player: String(row[1]),
+                                startingPoints: parseInt(row[2]) || 0,
+                                targetPoints: parseInt(row[3]) || 0,
+                                totalScores: parseInt(row[4]) || 0
+                            });
+                        }
+                    }
+                    
+                    if (newPlayers.length === 0) {
+                        throw new Error('No valid player data found');
+                    }
+                    
+                    // Save to Firebase
+                    const playersObj = {};
+                    newPlayers.forEach((player, index) => {
+                        playersObj[index] = player;
+                    });
+                    
+                    const metadata = {
+                        lastUpdateTime: new Date().toISOString(),
+                        version: '1.0'
+                    };
+                    
+                    database.ref('players').set(playersObj)
+                        .then(() => {
+                            return database.ref('metadata').set(metadata);
+                        })
+                        .then(() => {
+                            lastUpdateTime = new Date();
+                            updateLastUpdatedTime();
+                            showLoadingIndicator(false);
+                            updateSyncStatus('synced');
+                            showNotification(translations[currentLang].importSuccess, 'success');
+                        })
+                        .catch((error) => {
+                            console.error('Error importing data:', error);
+                            showLoadingIndicator(false);
+                            updateSyncStatus('error');
+                            showNotification('Error importing data: ' + error.message, 'error');
+                        });
+                    
+                } catch (error) {
+                    console.error('Error processing file:', error);
+                    showLoadingIndicator(false);
+                    updateSyncStatus('error');
+                    showNotification('Error processing file: ' + error.message, 'error');
+                }
+            };
+            
+            reader.onerror = function() {
+                console.error('Error reading file');
+                showLoadingIndicator(false);
+                updateSyncStatus('error');
+                showNotification('Error reading file', 'error');
+            };
+            
+            reader.readAsArrayBuffer(file);
+            event.target.value = '';
+        }
+        function exportData() {
+            try {
+                // Create Excel file
+                const exportData = players.map(player => ({
+                    Rank: calculateRank(player),
+                    Player: player.player,
+                    'Starting Points': player.startingPoints,
+                    'Target Points': player.targetPoints,
+                    'Total Scores': player.totalScores,
+                    'Week Score': calculateWeekScore(player),
+                    'Left to Achieve': calculateLeftToAchieve(player)
+                }));
+                
+                if (exportData.length === 0) {
+                    showNotification('No data to export', 'error');
+                    return;
+                }
+                
+                const worksheet = XLSX.utils.json_to_sheet(exportData);
+                const workbook = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(workbook, worksheet, 'Scoring Data');
+                XLSX.writeFile(workbook, 'scoring_data.xlsx');
+                
+                showNotification(translations[currentLang].exportSuccess, 'success');
+            } catch (error) {
+                console.error('Error exporting data:', error);
+                showNotification('Error exporting data: ' + error.message, 'error');
+            }
+        }
         // Global functions for inline event handlers
         window.updatePlayerScore = function(playerName, newScore) {
             if (!currentUser) {
