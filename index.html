@@ -322,7 +322,7 @@
             transform: translateY(-2px);
             box-shadow: var(--shadow-lg);
         }
-        .export-btn, .save-btn {
+        .export-btn, .save-btn, .refresh-btn {
             background: var(--primary);
             color: var(--white);
             border: none;
@@ -337,7 +337,7 @@
             transition: all 0.3s ease;
             box-shadow: var(--shadow);
         }
-        .export-btn:hover, .save-btn:hover {
+        .export-btn:hover, .save-btn:hover, .refresh-btn:hover {
             background: var(--primary-dark);
             transform: translateY(-2px);
             box-shadow: var(--shadow-lg);
@@ -347,6 +347,12 @@
         }
         .save-btn:hover {
             background: #16a34a;
+        }
+        .refresh-btn {
+            background: var(--warning);
+        }
+        .refresh-btn:hover {
+            background: #d97706;
         }
         .dashboard {
             background: rgba(255, 255, 255, 0.95);
@@ -694,6 +700,9 @@
         .notification.error {
             border-left: 5px solid var(--danger);
         }
+        .notification.warning {
+            border-left: 5px solid var(--warning);
+        }
         .notification i {
             font-size: 24px;
         }
@@ -702,6 +711,9 @@
         }
         .notification.error i {
             color: var(--danger);
+        }
+        .notification.warning i {
+            color: var(--warning);
         }
         .notification-message {
             font-weight: 600;
@@ -750,6 +762,9 @@
         }
         .sync-status.error i {
             color: var(--danger);
+        }
+        .sync-status.offline i {
+            color: var(--warning);
         }
         .sort-options {
             display: flex;
@@ -921,6 +936,10 @@
                 <button class="save-btn" id="saveBtn">
                     <i class="fas fa-save"></i>
                     <span data-i18n="saveData">Salvează Date</span>
+                </button>
+                <button class="refresh-btn" id="refreshBtn">
+                    <i class="fas fa-sync-alt"></i>
+                    <span>Refresh</span>
                 </button>
             </div>
         </div>
@@ -1171,7 +1190,11 @@
                 tournaments: "Nr. Turnee",
                 sortByRank: "Sortează după Rank",
                 sortByName: "Sortează după Nume",
-                dashboardZilnic: "Dashboard Zilnic"
+                dashboardZilnic: "Dashboard Zilnic",
+                offlineMode: "Mod Offline",
+                connectionRestored: "Conexiune restabilită!",
+                syncError: "Eroare sincronizare. Datele salvate local.",
+                dataSynced: "Date sincronizate cu succes!"
             },
             en: {
                 appTitle: "Scoring System",
@@ -1222,7 +1245,11 @@
                 tournaments: "Tournaments",
                 sortByRank: "Sort by Rank",
                 sortByName: "Sort by Name",
-                dashboardZilnic: "Daily Dashboard"
+                dashboardZilnic: "Daily Dashboard",
+                offlineMode: "Offline Mode",
+                connectionRestored: "Connection restored!",
+                syncError: "Sync error. Data saved locally.",
+                dataSynced: "Data synced successfully!"
             },
             es: {
                 appTitle: "Sistema de Puntuación",
@@ -1273,7 +1300,11 @@
                 tournaments: "Torneos",
                 sortByRank: "Ordenar por Rango",
                 sortByName: "Ordenar por Nombre",
-                dashboardZilnic: "Panel Diaria"
+                dashboardZilnic: "Panel Diaria",
+                offlineMode: "Modo Offline",
+                connectionRestored: "¡Conexión restaurada!",
+                syncError: "Error de sincronización. Datos guardados localmente.",
+                dataSynced: "¡Datos sincronizados con éxito!"
             }
         };
         
@@ -1289,16 +1320,12 @@
             measurementId: "G-HHCTDB7CFS"
         };
         
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-        
         // Application state
         let currentLang = 'ro';
         let currentUser = null;
         let userRole = null;
         let players = [];
-        let dailyData = {}; // Store daily scores by player name
+        let dailyData = {};
         let lastUpdateTime = null;
         let dailyLastUpdateTime = null;
         let activeFilter = 'all';
@@ -1307,11 +1334,14 @@
         let dailySearchQuery = '';
         let isSyncing = false;
         let dailyIsSyncing = false;
-        let sortBy = 'rank'; // 'rank' or 'name'
+        let sortBy = 'rank';
         let dailyColumns = [];
         let dayColumnCheckInterval = null;
         let syncRetryCount = 0;
         const MAX_SYNC_RETRIES = 3;
+        let isOnline = true;
+        let database = null;
+        let pendingSyncs = [];
         
         // Default users
         const defaultUsers = [
@@ -1334,7 +1364,8 @@
                 'currentLang', 'loadingIndicator', 'syncStatus', 'userInfo',
                 'userName', 'userRole', 'logoutBtn', 'username', 'importWrapper',
                 'mainTab', 'dailyTab', 'dailyTableBody', 'dailyUpdateTime', 'dailyTotalPlayers', 
-                'top10', 'top32', 'missedTournaments', 'min2Missed', 'sortByRank', 'sortByName'
+                'top10', 'top32', 'missedTournaments', 'min2Missed', 'sortByRank', 'sortByName',
+                'refreshBtn'
             ];
             
             elementIds.forEach(id => {
@@ -1351,34 +1382,143 @@
             elements.tabContents = document.querySelectorAll('.tab-content');
         }
         
+        // Initialize Firebase with error handling
+        function initializeFirebase() {
+            try {
+                firebase.initializeApp(firebaseConfig);
+                database = firebase.database();
+                
+                // Check connection status
+                const connectedRef = database.ref('.info/connected');
+                connectedRef.on('value', (snap) => {
+                    if (snap.val() === true) {
+                        if (!isOnline) {
+                            isOnline = true;
+                            showNotification(translations[currentLang].connectionRestored, 'success');
+                            processPendingSyncs();
+                        }
+                        updateSyncStatus('synced');
+                    } else {
+                        isOnline = false;
+                        updateSyncStatus('offline');
+                        showNotification(translations[currentLang].offlineMode, 'warning');
+                    }
+                });
+                
+                return true;
+            } catch (error) {
+                console.error('Firebase initialization error:', error);
+                isOnline = false;
+                updateSyncStatus('offline');
+                showNotification('Working in offline mode', 'warning');
+                return false;
+            }
+        }
+        
         // Initialize app
         function initApp() {
             cacheElements();
             loadLanguage();
             setupEventListeners();
             checkLoginStatus();
-            checkConnectionStatus();
-            generateDailyColumns();
-            loadDataFromFirebase();
-            loadDailyDataFromFirebase();
             
-            // Set up periodic sync status check
-            setInterval(() => {
-                if (isSyncing) {
-                    updateSyncStatus('syncing');
-                } else {
-                    updateSyncStatus('synced');
-                }
-                
-                if (dailyIsSyncing) {
-                    updateDailySyncStatus('syncing');
-                } else {
-                    updateDailySyncStatus('synced');
-                }
-            }, 5000);
+            // Try to initialize Firebase
+            const firebaseInitialized = initializeFirebase();
+            
+            if (firebaseInitialized) {
+                loadDataFromLocalStorage();
+                loadDataFromFirebase();
+                loadDailyDataFromFirebase();
+            } else {
+                // Work entirely from localStorage
+                loadDataFromLocalStorage();
+                showNotification('Working in offline mode. Data will sync when connection is restored.', 'warning');
+            }
+            
+            generateDailyColumns();
+            updateMainDashboard();
+            updateDailyDashboard();
+            renderMainTable();
+            renderDailyTable();
             
             // Set up daily column generation check
             setupDayColumnGeneration();
+            
+            // Set up periodic sync status check
+            setInterval(() => {
+                if (isOnline) {
+                    if (isSyncing) {
+                        updateSyncStatus('syncing');
+                    } else {
+                        updateSyncStatus('synced');
+                    }
+                    
+                    if (dailyIsSyncing) {
+                        updateDailySyncStatus('syncing');
+                    } else {
+                        updateDailySyncStatus('synced');
+                    }
+                }
+            }, 5000);
+        }
+        
+        // Load data from localStorage
+        function loadDataFromLocalStorage() {
+            try {
+                // Load players
+                const savedPlayers = localStorage.getItem('players');
+                if (savedPlayers) {
+                    players = JSON.parse(savedPlayers);
+                } else {
+                    // Initialize with empty array
+                    players = [];
+                }
+                
+                // Load daily data
+                const savedDailyData = localStorage.getItem('dailyData');
+                if (savedDailyData) {
+                    dailyData = JSON.parse(savedDailyData);
+                } else {
+                    dailyData = {};
+                }
+                
+                // Load timestamps
+                const savedLastUpdate = localStorage.getItem('lastUpdateTime');
+                if (savedLastUpdate) {
+                    lastUpdateTime = new Date(savedLastUpdate);
+                }
+                
+                const savedDailyLastUpdate = localStorage.getItem('dailyLastUpdateTime');
+                if (savedDailyLastUpdate) {
+                    dailyLastUpdateTime = new Date(savedDailyLastUpdate);
+                }
+                
+                // Load pending syncs
+                const savedPendingSyncs = localStorage.getItem('pendingSyncs');
+                if (savedPendingSyncs) {
+                    pendingSyncs = JSON.parse(savedPendingSyncs);
+                }
+                
+                updateLastUpdatedTime();
+                updateDailyLastUpdatedTime();
+            } catch (error) {
+                console.error('Error loading data from localStorage:', error);
+                players = [];
+                dailyData = {};
+            }
+        }
+        
+        // Save data to localStorage
+        function saveDataToLocalStorage() {
+            try {
+                localStorage.setItem('players', JSON.stringify(players));
+                localStorage.setItem('dailyData', JSON.stringify(dailyData));
+                localStorage.setItem('lastUpdateTime', lastUpdateTime ? lastUpdateTime.toISOString() : '');
+                localStorage.setItem('dailyLastUpdateTime', dailyLastUpdateTime ? dailyLastUpdateTime.toISOString() : '');
+                localStorage.setItem('pendingSyncs', JSON.stringify(pendingSyncs));
+            } catch (error) {
+                console.error('Error saving data to localStorage:', error);
+            }
         }
         
         // Setup day column generation
@@ -1386,7 +1526,7 @@
             // Check every minute if we need to add a new day column
             dayColumnCheckInterval = setInterval(() => {
                 checkAndAddDayColumn();
-            }, 60000); // Check every minute
+            }, 60000);
             
             // Also check immediately
             checkAndAddDayColumn();
@@ -1492,6 +1632,7 @@
                 if (elements.importWrapper) elements.importWrapper.style.display = 'none';
                 if (elements.exportBtn) elements.exportBtn.style.display = 'none';
                 if (elements.saveBtn) elements.saveBtn.style.display = 'none';
+                if (elements.refreshBtn) elements.refreshBtn.style.display = 'none';
                 return;
             }
             
@@ -1500,11 +1641,13 @@
                 if (elements.importWrapper) elements.importWrapper.style.display = 'inline-block';
                 if (elements.exportBtn) elements.exportBtn.style.display = 'flex';
                 if (elements.saveBtn) elements.saveBtn.style.display = 'flex';
+                if (elements.refreshBtn) elements.refreshBtn.style.display = 'flex';
             } else if (userRole === 'editor') {
                 // Editor can see export and save
                 if (elements.importWrapper) elements.importWrapper.style.display = 'none';
                 if (elements.exportBtn) elements.exportBtn.style.display = 'flex';
                 if (elements.saveBtn) elements.saveBtn.style.display = 'flex';
+                if (elements.refreshBtn) elements.refreshBtn.style.display = 'flex';
             }
         }
         
@@ -1564,6 +1707,11 @@
                         elements.adminPanel.classList.remove('active');
                     }
                 });
+            }
+            
+            // Refresh button
+            if (elements.refreshBtn) {
+                elements.refreshBtn.addEventListener('click', forceRefreshData);
             }
             
             // Sort buttons
@@ -1668,9 +1816,9 @@
                     // Check which tab is active and save accordingly
                     const activeTab = document.querySelector('.nav-tab.active').getAttribute('data-tab');
                     if (activeTab === 'main') {
-                        saveMainDataToFirebase();
+                        saveMainData();
                     } else {
-                        saveDailyDataToFirebase();
+                        saveDailyData();
                     }
                 });
             }
@@ -1859,6 +2007,8 @@
         
         // Firebase functions for main data
         function loadDataFromFirebase() {
+            if (!isOnline || !database) return;
+            
             showLoadingIndicator(true);
             updateSyncStatus('syncing');
             
@@ -1871,6 +2021,7 @@
                     const data = snapshot.val();
                     if (data) {
                         players = Object.values(data);
+                        saveDataToLocalStorage();
                     } else {
                         players = [];
                     }
@@ -1890,6 +2041,7 @@
                 showLoadingIndicator(false);
                 updateSyncStatus('error');
                 showNotification('Main database connection error', 'error');
+                isOnline = false;
             });
             
             // Get metadata
@@ -1897,6 +2049,7 @@
                 const metadata = snapshot.val();
                 if (metadata && metadata.lastUpdateTime) {
                     lastUpdateTime = new Date(metadata.lastUpdateTime);
+                    saveDataToLocalStorage();
                 }
                 updateLastUpdatedTime();
             }).catch((error) => {
@@ -1906,7 +2059,7 @@
             });
         }
         
-        function saveMainDataToFirebase() {
+        function saveMainData() {
             if (!currentUser) {
                 showNotification('Permission denied', 'error');
                 return;
@@ -1915,6 +2068,19 @@
             // Disable save button to prevent multiple clicks
             if (elements.saveBtn) {
                 elements.saveBtn.disabled = true;
+            }
+            
+            // Save to localStorage first
+            saveDataToLocalStorage();
+            
+            if (!isOnline || !database) {
+                showNotification('Data saved locally. Will sync when online.', 'warning');
+                if (elements.saveBtn) {
+                    setTimeout(() => {
+                        elements.saveBtn.disabled = false;
+                    }, 2000);
+                }
+                return;
             }
             
             showLoadingIndicator(true);
@@ -1938,6 +2104,7 @@
                 })
                 .then(() => {
                     lastUpdateTime = new Date();
+                    saveDataToLocalStorage();
                     updateLastUpdatedTime();
                     showLoadingIndicator(false);
                     updateSyncStatus('synced');
@@ -1954,7 +2121,7 @@
                     console.error('Error saving main data:', error);
                     showLoadingIndicator(false);
                     updateSyncStatus('error');
-                    showNotification('Error saving main data: ' + error.message, 'error');
+                    showNotification(translations[currentLang].syncError, 'error');
                     
                     // Re-enable save button after a delay
                     if (elements.saveBtn) {
@@ -1965,38 +2132,58 @@
                 });
         }
         
-        function updatePlayerScoreInFirebase(playerName, newScore) {
+        function updatePlayerScore(playerName, newScore) {
             if (!currentUser) {
                 showNotification('Permission denied', 'error');
                 return;
             }
             
-            const playerIndex = players.findIndex(p => p.player === playerName);
-            if (playerIndex === -1) return;
-            
-            updateSyncStatus('syncing');
-            
-            // Update the player's score in Firebase
-            database.ref(`players/${playerIndex}/totalScores`).set(parseInt(newScore) || 0)
-                .then(() => {
-                    // Update metadata
-                    return database.ref('metadata/lastUpdateTime').set(new Date().toISOString());
-                })
-                .then(() => {
-                    lastUpdateTime = new Date();
-                    updateLastUpdatedTime();
-                    updateSyncStatus('synced');
-                    updateMainDashboard();
-                })
-                .catch((error) => {
-                    console.error('Error updating player score:', error);
-                    updateSyncStatus('error');
-                    showNotification('Error updating score: ' + error.message, 'error');
-                });
+            const player = players.find(p => p.player === playerName);
+            if (player) {
+                player.totalScores = parseInt(newScore) || 0;
+                
+                // Save to localStorage first
+                saveDataToLocalStorage();
+                
+                // Update UI immediately
+                updateMainDashboard();
+                renderMainTable();
+                
+                if (!isOnline || !database) {
+                    showNotification('Score saved locally. Will sync when online.', 'warning');
+                    return;
+                }
+                
+                updateSyncStatus('syncing');
+                
+                // Find player index
+                const playerIndex = players.findIndex(p => p.player === playerName);
+                if (playerIndex === -1) return;
+                
+                // Update the player's score in Firebase
+                database.ref(`players/${playerIndex}/totalScores`).set(parseInt(newScore) || 0)
+                    .then(() => {
+                        // Update metadata
+                        return database.ref('metadata/lastUpdateTime').set(new Date().toISOString());
+                    })
+                    .then(() => {
+                        lastUpdateTime = new Date();
+                        saveDataToLocalStorage();
+                        updateLastUpdatedTime();
+                        updateSyncStatus('synced');
+                    })
+                    .catch((error) => {
+                        console.error('Error updating player score:', error);
+                        updateSyncStatus('error');
+                        showNotification(translations[currentLang].syncError, 'error');
+                    });
+            }
         }
         
         // Firebase functions for daily data
         function loadDailyDataFromFirebase() {
+            if (!isOnline || !database) return;
+            
             showLoadingIndicator(true);
             updateDailySyncStatus('syncing');
             
@@ -2009,17 +2196,9 @@
                     const data = snapshot.val();
                     if (data) {
                         dailyData = data;
-                        // Salvăm datele și în localStorage pentru backup
-                        localStorage.setItem('dailyDataBackup', JSON.stringify(dailyData));
+                        saveDataToLocalStorage();
                     } else {
-                        // Încercăm să restaurăm din backup
-                        const backupData = localStorage.getItem('dailyDataBackup');
-                        if (backupData) {
-                            dailyData = JSON.parse(backupData);
-                            showNotification('Data restored from local backup', 'warning');
-                        } else {
-                            dailyData = {};
-                        }
+                        dailyData = {};
                     }
                     
                     updateDailyDashboard();
@@ -2031,38 +2210,13 @@
                     showLoadingIndicator(false);
                     updateDailySyncStatus('error');
                     showNotification('Error loading daily data', 'error');
-                    
-                    // Încercăm să restaurăm din backup
-                    const backupData = localStorage.getItem('dailyDataBackup');
-                    if (backupData) {
-                        try {
-                            dailyData = JSON.parse(backupData);
-                            updateDailyDashboard();
-                            renderDailyTable();
-                            showNotification('Data restored from local backup', 'warning');
-                        } catch (e) {
-                            console.error('Error restoring from backup:', e);
-                        }
-                    }
                 }
             }, (error) => {
                 console.error('Daily database error:', error);
                 showLoadingIndicator(false);
                 updateDailySyncStatus('error');
                 showNotification('Daily database connection error', 'error');
-                
-                // Încercăm să restaurăm din backup
-                const backupData = localStorage.getItem('dailyDataBackup');
-                if (backupData) {
-                    try {
-                        dailyData = JSON.parse(backupData);
-                        updateDailyDashboard();
-                        renderDailyTable();
-                        showNotification('Data restored from local backup', 'warning');
-                    } catch (e) {
-                        console.error('Error restoring from backup:', e);
-                    }
-                }
+                isOnline = false;
             });
             
             // Get metadata
@@ -2070,6 +2224,7 @@
                 const metadata = snapshot.val();
                 if (metadata && metadata.lastUpdateTime) {
                     dailyLastUpdateTime = new Date(metadata.lastUpdateTime);
+                    saveDataToLocalStorage();
                 }
                 updateDailyLastUpdatedTime();
             }).catch((error) => {
@@ -2079,7 +2234,7 @@
             });
         }
         
-        function saveDailyDataToFirebase() {
+        function saveDailyData() {
             if (!currentUser) {
                 showNotification('Permission denied', 'error');
                 return;
@@ -2088,6 +2243,19 @@
             // Disable save button to prevent multiple clicks
             if (elements.saveBtn) {
                 elements.saveBtn.disabled = true;
+            }
+            
+            // Save to localStorage first
+            saveDataToLocalStorage();
+            
+            if (!isOnline || !database) {
+                showNotification('Data saved locally. Will sync when online.', 'warning');
+                if (elements.saveBtn) {
+                    setTimeout(() => {
+                        elements.saveBtn.disabled = false;
+                    }, 2000);
+                }
+                return;
             }
             
             showLoadingIndicator(true);
@@ -2107,6 +2275,7 @@
             database.ref().update(updates)
                 .then(() => {
                     dailyLastUpdateTime = new Date();
+                    saveDataToLocalStorage();
                     updateDailyLastUpdatedTime();
                     showLoadingIndicator(false);
                     updateDailySyncStatus('synced');
@@ -2123,7 +2292,7 @@
                     console.error('Error saving daily data:', error);
                     showLoadingIndicator(false);
                     updateDailySyncStatus('error');
-                    showNotification('Error saving daily data: ' + error.message, 'error');
+                    showNotification(translations[currentLang].syncError, 'error');
                     
                     // Re-enable save button after a delay
                     if (elements.saveBtn) {
@@ -2148,6 +2317,18 @@
             // Update the player's score for the day
             dailyData[playerName][day] = parseInt(newScore) || 0;
             
+            // Save to localStorage first
+            saveDataToLocalStorage();
+            
+            // Update UI immediately
+            updateDailyDashboard();
+            renderDailyTable();
+            
+            if (!isOnline || !database) {
+                showNotification('Score saved locally. Will sync when online.', 'warning');
+                return;
+            }
+            
             // Show immediate syncing status
             updateDailySyncStatus('syncing');
             
@@ -2161,7 +2342,7 @@
         function attemptSyncWithRetry(playerName, day, newScore) {
             if (syncRetryCount >= MAX_SYNC_RETRIES) {
                 updateDailySyncStatus('error');
-                showNotification('Failed to sync after multiple attempts', 'error');
+                showNotification('Failed to sync after multiple attempts. Data saved locally.', 'error');
                 return;
             }
             
@@ -2173,10 +2354,9 @@
                 })
                 .then(() => {
                     dailyLastUpdateTime = new Date();
+                    saveDataToLocalStorage();
                     updateDailyLastUpdatedTime();
                     updateDailySyncStatus('synced');
-                    updateDailyDashboard();
-                    renderDailyTable();
                 })
                 .catch((error) => {
                     console.error('Error updating player day score (attempt ' + (syncRetryCount + 1) + '):', error);
@@ -2187,6 +2367,34 @@
                         attemptSyncWithRetry(playerName, day, newScore);
                     }, 1000 * syncRetryCount); // Exponential backoff
                 });
+        }
+        
+        // Process pending syncs when connection is restored
+        function processPendingSyncs() {
+            if (pendingSyncs.length === 0) return;
+            
+            showNotification(`Processing ${pendingSyncs.length} pending syncs...`, 'info');
+            
+            // Process each pending sync
+            const syncPromises = pendingSyncs.map(sync => {
+                return new Promise((resolve) => {
+                    if (sync.type === 'playerScore') {
+                        database.ref(`players/${sync.playerIndex}/totalScores`).set(sync.value)
+                            .then(() => resolve())
+                            .catch(() => resolve());
+                    } else if (sync.type === 'dailyScore') {
+                        database.ref(`dailyData/${sync.playerName}/${sync.day}`).set(sync.value)
+                            .then(() => resolve())
+                            .catch(() => resolve());
+                    }
+                });
+            });
+            
+            Promise.all(syncPromises).then(() => {
+                pendingSyncs = [];
+                saveDataToLocalStorage();
+                showNotification(translations[currentLang].dataSynced, 'success');
+            });
         }
         
         // UI functions
@@ -2212,26 +2420,27 @@
                     case 'syncing':
                         icon.className = 'fas fa-sync-alt';
                         text.textContent = 'Syncing...';
-                        // Show sync status only when syncing
                         elements.syncStatus.classList.add('show');
                         break;
                     case 'synced':
                         icon.className = 'fas fa-check-circle';
                         text.textContent = 'Synced';
-                        // Hide sync status when synced
                         elements.syncStatus.classList.remove('show');
                         break;
                     case 'error':
                         icon.className = 'fas fa-exclamation-circle';
                         text.textContent = 'Sync Error';
-                        // Show sync status when there's an error
                         elements.syncStatus.classList.add('show');
-                        // Auto-hide after 5 seconds
                         setTimeout(() => {
                             if (elements.syncStatus && elements.syncStatus.classList.contains('error')) {
                                 elements.syncStatus.classList.remove('show');
                             }
                         }, 5000);
+                        break;
+                    case 'offline':
+                        icon.className = 'fas fa-wifi-slash';
+                        text.textContent = 'Offline';
+                        elements.syncStatus.classList.add('show');
                         break;
                 }
             }
@@ -2252,26 +2461,27 @@
                         case 'syncing':
                             icon.className = 'fas fa-sync-alt';
                             text.textContent = 'Syncing...';
-                            // Show sync status only when syncing
                             elements.syncStatus.classList.add('show');
                             break;
                         case 'synced':
                             icon.className = 'fas fa-check-circle';
                             text.textContent = 'Synced';
-                            // Hide sync status when synced
                             elements.syncStatus.classList.remove('show');
                             break;
                         case 'error':
                             icon.className = 'fas fa-exclamation-circle';
                             text.textContent = 'Sync Error';
-                            // Show sync status when there's an error
                             elements.syncStatus.classList.add('show');
-                            // Auto-hide after 5 seconds
                             setTimeout(() => {
                                 if (elements.syncStatus && elements.syncStatus.classList.contains('error')) {
                                     elements.syncStatus.classList.remove('show');
                                 }
                             }, 5000);
+                            break;
+                        case 'offline':
+                            icon.className = 'fas fa-wifi-slash';
+                            text.textContent = 'Offline';
+                            elements.syncStatus.classList.add('show');
                             break;
                     }
                 }
@@ -2767,6 +2977,19 @@
                             throw new Error('No valid player data found');
                         }
                         
+                        // Update local data first
+                        players = newPlayers;
+                        saveDataToLocalStorage();
+                        
+                        if (!isOnline || !database) {
+                            showNotification('Data imported locally. Will sync when online.', 'warning');
+                            showLoadingIndicator(false);
+                            updateSyncStatus('synced');
+                            updateMainDashboard();
+                            renderMainTable();
+                            return;
+                        }
+                        
                         // Save to Firebase
                         const playersObj = {};
                         newPlayers.forEach((player, index) => {
@@ -2784,6 +3007,7 @@
                             })
                             .then(() => {
                                 lastUpdateTime = new Date();
+                                saveDataToLocalStorage();
                                 updateLastUpdatedTime();
                                 showLoadingIndicator(false);
                                 updateSyncStatus('synced');
@@ -2817,6 +3041,18 @@
                             }
                         }
                         
+                        // Save to localStorage first
+                        saveDataToLocalStorage();
+                        
+                        if (!isOnline || !database) {
+                            showNotification('Data imported locally. Will sync when online.', 'warning');
+                            showLoadingIndicator(false);
+                            updateDailySyncStatus('synced');
+                            updateDailyDashboard();
+                            renderDailyTable();
+                            return;
+                        }
+                        
                         // Save to Firebase
                         const metadata = {
                             lastUpdateTime: new Date().toISOString(),
@@ -2829,6 +3065,7 @@
                             })
                             .then(() => {
                                 dailyLastUpdateTime = new Date();
+                                saveDataToLocalStorage();
                                 updateDailyLastUpdatedTime();
                                 showLoadingIndicator(false);
                                 updateDailySyncStatus('synced');
@@ -2933,54 +3170,12 @@
         
         // Global functions for inline event handlers
         window.updatePlayerScore = function(playerName, newScore) {
-            if (!currentUser) {
-                showNotification('Permission denied', 'error');
-                return;
-            }
-            
-            const player = players.find(p => p.player === playerName);
-            if (player) {
-                player.totalScores = parseInt(newScore) || 0;
-                updatePlayerScoreInFirebase(playerName, newScore);
-            }
+            updatePlayerScore(playerName, newScore);
         };
         
         window.updatePlayerDayScore = function(playerName, day, newScore) {
-            if (!currentUser) {
-                showNotification('Permission denied', 'error');
-                return;
-            }
-            
             updatePlayerDayScore(playerName, day, newScore);
-            updateDailyDashboard();
         };
-        
-        // Funcție pentru a verifica starea conexiunii
-        function checkConnectionStatus() {
-            const connectedRef = database.ref('.info/connected');
-            
-            connectedRef.on('value', (snap) => {
-                if (snap.val() === true) {
-                    // Conectat
-                    if (isSyncing) {
-                        updateSyncStatus('syncing');
-                    } else {
-                        updateSyncStatus('synced');
-                    }
-                    
-                    if (dailyIsSyncing) {
-                        updateDailySyncStatus('syncing');
-                    } else {
-                        updateDailySyncStatus('synced');
-                    }
-                } else {
-                    // Deconectat
-                    updateSyncStatus('error');
-                    updateDailySyncStatus('error');
-                    showNotification('Connection lost. Please check your internet connection.', 'error');
-                }
-            });
-        }
         
         // Funcție pentru a forța reîncărcarea datelor
         function forceRefreshData() {
@@ -2988,45 +3183,61 @@
             updateSyncStatus('syncing');
             updateDailySyncStatus('syncing');
             
-            // Forțăm reîncărcarea datelor principale
-            database.ref('players').once('value')
-                .then((snapshot) => {
-                    const data = snapshot.val();
-                    if (data) {
-                        players = Object.values(data);
-                    } else {
-                        players = [];
-                    }
-                    
-                    updateMainDashboard();
-                    renderMainTable();
-                    
-                    // Forțăm reîncărcarea datelor zilnice
-                    return database.ref('dailyData').once('value');
-                })
-                .then((snapshot) => {
-                    const data = snapshot.val();
-                    if (data) {
-                        dailyData = data;
-                    } else {
-                        dailyData = {};
-                    }
-                    
-                    updateDailyDashboard();
-                    renderDailyTable();
-                    
-                    showLoadingIndicator(false);
-                    updateSyncStatus('synced');
-                    updateDailySyncStatus('synced');
-                    showNotification('Data refreshed successfully', 'success');
-                })
-                .catch((error) => {
-                    console.error('Error refreshing data:', error);
-                    showLoadingIndicator(false);
-                    updateSyncStatus('error');
-                    updateDailySyncStatus('error');
-                    showNotification('Error refreshing data: ' + error.message, 'error');
-                });
+            if (isOnline && database) {
+                // Forțăm reîncărcarea datelor principale
+                database.ref('players').once('value')
+                    .then((snapshot) => {
+                        const data = snapshot.val();
+                        if (data) {
+                            players = Object.values(data);
+                            saveDataToLocalStorage();
+                        } else {
+                            players = [];
+                        }
+                        
+                        updateMainDashboard();
+                        renderMainTable();
+                        
+                        // Forțăm reîncărcarea datelor zilnice
+                        return database.ref('dailyData').once('value');
+                    })
+                    .then((snapshot) => {
+                        const data = snapshot.val();
+                        if (data) {
+                            dailyData = data;
+                            saveDataToLocalStorage();
+                        } else {
+                            dailyData = {};
+                        }
+                        
+                        updateDailyDashboard();
+                        renderDailyTable();
+                        
+                        showLoadingIndicator(false);
+                        updateSyncStatus('synced');
+                        updateDailySyncStatus('synced');
+                        showNotification('Data refreshed successfully', 'success');
+                    })
+                    .catch((error) => {
+                        console.error('Error refreshing data:', error);
+                        showLoadingIndicator(false);
+                        updateSyncStatus('error');
+                        updateDailySyncStatus('error');
+                        showNotification('Error refreshing data: ' + error.message, 'error');
+                    });
+            } else {
+                // Reload from localStorage
+                loadDataFromLocalStorage();
+                updateMainDashboard();
+                updateDailyDashboard();
+                renderMainTable();
+                renderDailyTable();
+                
+                showLoadingIndicator(false);
+                updateSyncStatus('offline');
+                updateDailySyncStatus('offline');
+                showNotification('Working offline. Data loaded from local storage.', 'warning');
+            }
         }
         
         // Initialize app when DOM is loaded
