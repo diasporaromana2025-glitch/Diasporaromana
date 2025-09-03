@@ -167,6 +167,26 @@
             transform: translateY(-2px);
             box-shadow: var(--shadow-lg);
         }
+        .daily-btn {
+            background: var(--secondary);
+            color: var(--white);
+            border: none;
+            border-radius: 12px;
+            padding: 12px 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+        }
+        .daily-btn:hover {
+            background: #059669;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
         .admin-panel {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 16px;
@@ -338,7 +358,7 @@
         .stat-card.zero .stat-icon {
             color: var(--danger);
         }
-        .stat-card.average .stat-icon {
+        .stat-card.average {
             color: var(--secondary);
         }
         .stat-value {
@@ -800,6 +820,10 @@
                     <i class="fas fa-user-shield"></i>
                     <span data-i18n="adminPanel">Admin Panel</span>
                 </button>
+                <button class="daily-btn" id="dailyBtn">
+                    <i class="fas fa-calendar-day"></i>
+                    <span data-i18n="dailyPage">Pagina Zilnică</span>
+                </button>
             </div>
         </header>
         <div class="admin-panel" id="adminPanel">
@@ -975,7 +999,8 @@
                 hours: "ore",
                 days: "zile",
                 done: "Realizat",
-                logoutSuccess: "Deconectare reușită!"
+                logoutSuccess: "Deconectare reușită!",
+                dailyPage: "Pagina Zilnică"
             },
             en: {
                 appTitle: "Scoring System",
@@ -1015,7 +1040,8 @@
                 hours: "hours",
                 days: "days",
                 done: "Done",
-                logoutSuccess: "Logout successful!"
+                logoutSuccess: "Logout successful!",
+                dailyPage: "Daily Page"
             },
             es: {
                 appTitle: "Sistema de Puntuación",
@@ -1055,7 +1081,8 @@
                 hours: "horas",
                 days: "días",
                 done: "Hecho",
-                logoutSuccess: "¡Cierre de sesión exitoso!"
+                logoutSuccess: "¡Cierre de sesión exitoso!",
+                dailyPage: "Página Diaria"
             }
         };
         // Firebase Configuration
@@ -1099,7 +1126,8 @@
                 'totalPlayers', 'targetAchieved', 'closeToTarget',
                 'attentionNeeded', 'zeroPoints', 'weeklyAverage',
                 'currentLang', 'loadingIndicator', 'syncStatus', 'userInfo',
-                'userName', 'userRole', 'logoutBtn', 'username', 'importWrapper'
+                'userName', 'userRole', 'logoutBtn', 'username', 'importWrapper',
+                'dailyBtn'
             ];
             elementIds.forEach(id => {
                 const element = document.getElementById(id);
@@ -1203,6 +1231,12 @@
                     if (elements.adminPanel) {
                         elements.adminPanel.classList.remove('active');
                     }
+                });
+            }
+            // Daily page button
+            if (elements.dailyBtn) {
+                elements.dailyBtn.addEventListener('click', () => {
+                    window.location.href = 'daily.html';
                 });
             }
             // Login
