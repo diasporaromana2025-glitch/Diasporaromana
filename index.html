@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* Toate stilurile CSS rămân neschimbate */
         :root {
             --primary: #2563eb;
             --primary-dark: #1d4ed8;
@@ -287,40 +288,6 @@
             gap: 15px;
             flex-wrap: wrap;
             margin-bottom: 20px;
-        }
-        .player-actions {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
-        }
-        .add-player-btn, .remove-player-btn {
-            background: var(--success);
-            color: var(--white);
-            border: none;
-            border-radius: 12px;
-            padding: 12px 18px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            font-size: 15px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: var(--shadow);
-        }
-        .remove-player-btn {
-            background: var(--danger);
-        }
-        .add-player-btn:hover {
-            background: #16a34a;
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-        }
-        .remove-player-btn:hover {
-            background: #dc2626;
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
         }
         .file-input-wrapper {
             position: relative;
@@ -939,16 +906,6 @@
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div class="player-actions" id="playerActions">
-                <button class="add-player-btn" id="addPlayerBtn">
-                    <i class="fas fa-user-plus"></i>
-                    <span data-i18n="addPlayer">Adaugă Jucător</span>
-                </button>
-                <button class="remove-player-btn" id="removePlayerBtn">
-                    <i class="fas fa-user-minus"></i>
-                    <span data-i18n="removePlayer">Șterge Jucător</span>
-                </button>
-            </div>
             <div class="admin-actions">
                 <div class="file-input-wrapper" id="importWrapper">
                     <input type="file" id="fileInput" accept=".xlsx, .xls">
@@ -1206,13 +1163,6 @@
                 logoutSuccess: "Deconectare reușită!",
                 mainPage: "Pagina Principală",
                 dailyPage: "Pagina Zilnică",
-                addPlayer: "Adaugă Jucător",
-                removePlayer: "Șterge Jucător",
-                playerAdded: "Jucător adăugat cu succes!",
-                playerRemoved: "Jucător șters cu succes!",
-                playerExists: "Acest jucător există deja!",
-                playerNotFound: "Jucătorul nu a fost găsit!",
-                enterPlayerName: "Introduceți numele jucătorului:",
                 top10: "Top 10",
                 top32: "Top 32",
                 missedTournaments: "Turnee Ratate",
@@ -1264,13 +1214,6 @@
                 logoutSuccess: "Logout successful!",
                 mainPage: "Main Page",
                 dailyPage: "Daily Page",
-                addPlayer: "Add Player",
-                removePlayer: "Remove Player",
-                playerAdded: "Player added successfully!",
-                playerRemoved: "Player removed successfully!",
-                playerExists: "This player already exists!",
-                playerNotFound: "Player not found!",
-                enterPlayerName: "Enter player name:",
                 top10: "Top 10",
                 top32: "Top 32",
                 missedTournaments: "Missed Tournaments",
@@ -1322,13 +1265,6 @@
                 logoutSuccess: "¡Cierre de sesión exitoso!",
                 mainPage: "Página Principal",
                 dailyPage: "Página Diaria",
-                addPlayer: "Agregar Jugador",
-                removePlayer: "Eliminar Jugador",
-                playerAdded: "¡Jugador agregado con éxito!",
-                playerRemoved: "¡Jugador eliminado con éxito!",
-                playerExists: "¡Este jugador ya existe!",
-                playerNotFound: "¡Jugador no encontrado!",
-                enterPlayerName: "Ingrese el nombre del jugador:",
                 top10: "Top 10",
                 top32: "Top 32",
                 missedTournaments: "Torneos Perdidos",
@@ -1374,6 +1310,8 @@
         let sortBy = 'rank'; // 'rank' or 'name'
         let dailyColumns = [];
         let dayColumnCheckInterval = null;
+        let syncRetryCount = 0;
+        const MAX_SYNC_RETRIES = 3;
         
         // Default users
         const defaultUsers = [
@@ -1395,9 +1333,8 @@
                 'attentionNeeded', 'zeroPoints', 'weeklyAverage',
                 'currentLang', 'loadingIndicator', 'syncStatus', 'userInfo',
                 'userName', 'userRole', 'logoutBtn', 'username', 'importWrapper',
-                'mainTab', 'dailyTab', 'playerActions', 'addPlayerBtn', 'removePlayerBtn',
-                'dailyTableBody', 'dailyUpdateTime', 'dailyTotalPlayers', 'top10', 'top32',
-                'missedTournaments', 'min2Missed', 'sortByRank', 'sortByName'
+                'mainTab', 'dailyTab', 'dailyTableBody', 'dailyUpdateTime', 'dailyTotalPlayers', 
+                'top10', 'top32', 'missedTournaments', 'min2Missed', 'sortByRank', 'sortByName'
             ];
             
             elementIds.forEach(id => {
@@ -1420,6 +1357,7 @@
             loadLanguage();
             setupEventListeners();
             checkLoginStatus();
+            checkConnectionStatus();
             generateDailyColumns();
             loadDataFromFirebase();
             loadDailyDataFromFirebase();
@@ -1554,7 +1492,6 @@
                 if (elements.importWrapper) elements.importWrapper.style.display = 'none';
                 if (elements.exportBtn) elements.exportBtn.style.display = 'none';
                 if (elements.saveBtn) elements.saveBtn.style.display = 'none';
-                if (elements.playerActions) elements.playerActions.style.display = 'none';
                 return;
             }
             
@@ -1563,13 +1500,11 @@
                 if (elements.importWrapper) elements.importWrapper.style.display = 'inline-block';
                 if (elements.exportBtn) elements.exportBtn.style.display = 'flex';
                 if (elements.saveBtn) elements.saveBtn.style.display = 'flex';
-                if (elements.playerActions) elements.playerActions.style.display = 'flex';
             } else if (userRole === 'editor') {
                 // Editor can see export and save
                 if (elements.importWrapper) elements.importWrapper.style.display = 'none';
                 if (elements.exportBtn) elements.exportBtn.style.display = 'flex';
                 if (elements.saveBtn) elements.saveBtn.style.display = 'flex';
-                if (elements.playerActions) elements.playerActions.style.display = 'flex';
             }
         }
         
@@ -1629,15 +1564,6 @@
                         elements.adminPanel.classList.remove('active');
                     }
                 });
-            }
-            
-            // Add/Remove player buttons (only for main page)
-            if (elements.addPlayerBtn) {
-                elements.addPlayerBtn.addEventListener('click', addPlayer);
-            }
-            
-            if (elements.removePlayerBtn) {
-                elements.removePlayerBtn.addEventListener('click', removePlayer);
             }
             
             // Sort buttons
@@ -1766,9 +1692,22 @@
             // Dashboard filters
             if (elements.statCards) {
                 elements.statCards.forEach(card => {
+                    // Asigurăm că pointer-ul este vizibil
+                    card.style.cursor = 'pointer';
+                    
+                    // Eliminăm event listener-ele existente pentru a evita duplicate
+                    card.replaceWith(card.cloneNode(true));
+                });
+                
+                // Adăugăm event listener-ele din nou
+                document.querySelectorAll('.stat-card').forEach(card => {
                     card.addEventListener('click', () => {
                         const filter = card.getAttribute('data-filter');
                         const activeTab = document.querySelector('.nav-tab.active').getAttribute('data-tab');
+                        
+                        // Actualizăm starea activă a cardurilor
+                        document.querySelectorAll('.stat-card').forEach(c => c.classList.remove('active'));
+                        card.classList.add('active');
                         
                         if (activeTab === 'main') {
                             activeFilter = filter;
@@ -1823,82 +1762,6 @@
             if (elements.sortByName) {
                 elements.sortByName.classList.toggle('active', sortBy === 'name');
             }
-        }
-        
-        // Add player (for main page)
-        function addPlayer() {
-            if (!currentUser) {
-                showNotification('Permission denied', 'error');
-                return;
-            }
-            
-            const playerName = prompt(translations[currentLang].enterPlayerName);
-            if (!playerName) return;
-            
-            // Check if player already exists
-            if (players.some(p => p.player === playerName)) {
-                showNotification(translations[currentLang].playerExists, 'error');
-                return;
-            }
-            
-            // Add new player
-            const newPlayer = {
-                player: playerName,
-                startingPoints: 0,
-                targetPoints: 1000,
-                totalScores: 0
-            };
-            
-            players.push(newPlayer);
-            
-            // Also add entry in daily data
-            if (!dailyData[playerName]) {
-                dailyData[playerName] = {};
-            }
-            
-            saveMainDataToFirebase();
-            saveDailyDataToFirebase();
-            renderMainTable();
-            renderDailyTable();
-            updateMainDashboard();
-            updateDailyDashboard();
-            
-            showNotification(translations[currentLang].playerAdded, 'success');
-        }
-        
-        // Remove player (for main page)
-        function removePlayer() {
-            if (!currentUser) {
-                showNotification('Permission denied', 'error');
-                return;
-            }
-            
-            const playerName = prompt(translations[currentLang].enterPlayerName);
-            if (!playerName) return;
-            
-            // Find player index
-            const playerIndex = players.findIndex(p => p.player === playerName);
-            if (playerIndex === -1) {
-                showNotification(translations[currentLang].playerNotFound, 'error');
-                return;
-            }
-            
-            // Remove player
-            players.splice(playerIndex, 1);
-            
-            // Also remove from daily data
-            if (dailyData[playerName]) {
-                delete dailyData[playerName];
-            }
-            
-            saveMainDataToFirebase();
-            saveDailyDataToFirebase();
-            renderMainTable();
-            renderDailyTable();
-            updateMainDashboard();
-            updateDailyDashboard();
-            
-            showNotification(translations[currentLang].playerRemoved, 'success');
         }
         
         // Update UI for logged in user
@@ -2057,11 +1920,6 @@
             showLoadingIndicator(true);
             updateSyncStatus('syncing');
             
-            // Clear any existing timeout
-            if (syncTimeout) {
-                clearTimeout(syncTimeout);
-            }
-            
             const playersObj = {};
             players.forEach((player, index) => {
                 playersObj[index] = player;
@@ -2118,11 +1976,6 @@
             
             updateSyncStatus('syncing');
             
-            // Clear any existing timeout
-            if (syncTimeout) {
-                clearTimeout(syncTimeout);
-            }
-            
             // Update the player's score in Firebase
             database.ref(`players/${playerIndex}/totalScores`).set(parseInt(newScore) || 0)
                 .then(() => {
@@ -2156,8 +2009,17 @@
                     const data = snapshot.val();
                     if (data) {
                         dailyData = data;
+                        // Salvăm datele și în localStorage pentru backup
+                        localStorage.setItem('dailyDataBackup', JSON.stringify(dailyData));
                     } else {
-                        dailyData = {};
+                        // Încercăm să restaurăm din backup
+                        const backupData = localStorage.getItem('dailyDataBackup');
+                        if (backupData) {
+                            dailyData = JSON.parse(backupData);
+                            showNotification('Data restored from local backup', 'warning');
+                        } else {
+                            dailyData = {};
+                        }
                     }
                     
                     updateDailyDashboard();
@@ -2169,12 +2031,38 @@
                     showLoadingIndicator(false);
                     updateDailySyncStatus('error');
                     showNotification('Error loading daily data', 'error');
+                    
+                    // Încercăm să restaurăm din backup
+                    const backupData = localStorage.getItem('dailyDataBackup');
+                    if (backupData) {
+                        try {
+                            dailyData = JSON.parse(backupData);
+                            updateDailyDashboard();
+                            renderDailyTable();
+                            showNotification('Data restored from local backup', 'warning');
+                        } catch (e) {
+                            console.error('Error restoring from backup:', e);
+                        }
+                    }
                 }
             }, (error) => {
                 console.error('Daily database error:', error);
                 showLoadingIndicator(false);
                 updateDailySyncStatus('error');
                 showNotification('Daily database connection error', 'error');
+                
+                // Încercăm să restaurăm din backup
+                const backupData = localStorage.getItem('dailyDataBackup');
+                if (backupData) {
+                    try {
+                        dailyData = JSON.parse(backupData);
+                        updateDailyDashboard();
+                        renderDailyTable();
+                        showNotification('Data restored from local backup', 'warning');
+                    } catch (e) {
+                        console.error('Error restoring from backup:', e);
+                    }
+                }
             });
             
             // Get metadata
@@ -2205,22 +2093,18 @@
             showLoadingIndicator(true);
             updateDailySyncStatus('syncing');
             
-            // Clear any existing timeout
-            if (dailySyncTimeout) {
-                clearTimeout(dailySyncTimeout);
-            }
-            
             const metadata = {
                 lastUpdateTime: new Date().toISOString(),
                 version: '1.0'
             };
             
-            // Save daily data
-            database.ref('dailyData').set(dailyData)
-                .then(() => {
-                    // Save metadata
-                    return database.ref('dailyMetadata').set(metadata);
-                })
+            // Save daily data with immediate confirmation
+            const updates = {};
+            updates['/dailyData'] = dailyData;
+            updates['/dailyMetadata'] = metadata;
+            
+            // Use update instead of set for atomic operation
+            database.ref().update(updates)
                 .then(() => {
                     dailyLastUpdateTime = new Date();
                     updateDailyLastUpdatedTime();
@@ -2264,7 +2148,24 @@
             // Update the player's score for the day
             dailyData[playerName][day] = parseInt(newScore) || 0;
             
-            // Update in Firebase
+            // Show immediate syncing status
+            updateDailySyncStatus('syncing');
+            
+            // Reset retry count
+            syncRetryCount = 0;
+            
+            // Attempt to sync with retries
+            attemptSyncWithRetry(playerName, day, newScore);
+        }
+        
+        function attemptSyncWithRetry(playerName, day, newScore) {
+            if (syncRetryCount >= MAX_SYNC_RETRIES) {
+                updateDailySyncStatus('error');
+                showNotification('Failed to sync after multiple attempts', 'error');
+                return;
+            }
+            
+            // Update in Firebase immediately
             database.ref(`dailyData/${playerName}/${day}`).set(parseInt(newScore) || 0)
                 .then(() => {
                     // Update metadata
@@ -2275,12 +2176,16 @@
                     updateDailyLastUpdatedTime();
                     updateDailySyncStatus('synced');
                     updateDailyDashboard();
-                    renderDailyTable(); // Re-render table to update calculations
+                    renderDailyTable();
                 })
                 .catch((error) => {
-                    console.error('Error updating player day score:', error);
-                    updateDailySyncStatus('error');
-                    showNotification('Error updating day score: ' + error.message, 'error');
+                    console.error('Error updating player day score (attempt ' + (syncRetryCount + 1) + '):', error);
+                    syncRetryCount++;
+                    
+                    // Retry after a delay
+                    setTimeout(() => {
+                        attemptSyncWithRetry(playerName, day, newScore);
+                    }, 1000 * syncRetryCount); // Exponential backoff
                 });
         }
         
@@ -2629,22 +2534,6 @@
             } catch (error) {
                 console.error('Error rendering daily table:', error);
             }
-        }
-        
-        function setActiveFilter(filter) {
-            activeFilter = filter;
-            
-            // Update active state
-            if (elements.statCards) {
-                elements.statCards.forEach(card => {
-                    card.classList.remove('active');
-                    if (card.getAttribute('data-filter') === filter) {
-                        card.classList.add('active');
-                    }
-                });
-            }
-            
-            renderMainTable();
         }
         
         function updateLastUpdatedTime() {
@@ -3065,6 +2954,80 @@
             updatePlayerDayScore(playerName, day, newScore);
             updateDailyDashboard();
         };
+        
+        // Funcție pentru a verifica starea conexiunii
+        function checkConnectionStatus() {
+            const connectedRef = database.ref('.info/connected');
+            
+            connectedRef.on('value', (snap) => {
+                if (snap.val() === true) {
+                    // Conectat
+                    if (isSyncing) {
+                        updateSyncStatus('syncing');
+                    } else {
+                        updateSyncStatus('synced');
+                    }
+                    
+                    if (dailyIsSyncing) {
+                        updateDailySyncStatus('syncing');
+                    } else {
+                        updateDailySyncStatus('synced');
+                    }
+                } else {
+                    // Deconectat
+                    updateSyncStatus('error');
+                    updateDailySyncStatus('error');
+                    showNotification('Connection lost. Please check your internet connection.', 'error');
+                }
+            });
+        }
+        
+        // Funcție pentru a forța reîncărcarea datelor
+        function forceRefreshData() {
+            showLoadingIndicator(true);
+            updateSyncStatus('syncing');
+            updateDailySyncStatus('syncing');
+            
+            // Forțăm reîncărcarea datelor principale
+            database.ref('players').once('value')
+                .then((snapshot) => {
+                    const data = snapshot.val();
+                    if (data) {
+                        players = Object.values(data);
+                    } else {
+                        players = [];
+                    }
+                    
+                    updateMainDashboard();
+                    renderMainTable();
+                    
+                    // Forțăm reîncărcarea datelor zilnice
+                    return database.ref('dailyData').once('value');
+                })
+                .then((snapshot) => {
+                    const data = snapshot.val();
+                    if (data) {
+                        dailyData = data;
+                    } else {
+                        dailyData = {};
+                    }
+                    
+                    updateDailyDashboard();
+                    renderDailyTable();
+                    
+                    showLoadingIndicator(false);
+                    updateSyncStatus('synced');
+                    updateDailySyncStatus('synced');
+                    showNotification('Data refreshed successfully', 'success');
+                })
+                .catch((error) => {
+                    console.error('Error refreshing data:', error);
+                    showLoadingIndicator(false);
+                    updateSyncStatus('error');
+                    updateDailySyncStatus('error');
+                    showNotification('Error refreshing data: ' + error.message, 'error');
+                });
+        }
         
         // Initialize app when DOM is loaded
         document.addEventListener('DOMContentLoaded', initApp);
