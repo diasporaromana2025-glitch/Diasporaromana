@@ -75,6 +75,57 @@
             gap: 15px;
             flex-wrap: wrap;
         }
+        .language-selector {
+            position: relative;
+        }
+        .language-btn {
+            background: var(--white);
+            border: 2px solid var(--light-gray);
+            border-radius: 12px;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+        }
+        .language-btn:hover {
+            border-color: var(--primary);
+        }
+        .language-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            margin-top: 5px;
+            display: none;
+            z-index: 100;
+            min-width: 150px;
+        }
+        .language-dropdown.active {
+            display: block;
+        }
+        .language-option {
+            padding: 12px 15px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .language-option:hover {
+            background: var(--light);
+        }
+        .language-option.active {
+            background: var(--primary);
+            color: var(--white);
+        }
         .search-box {
             position: relative;
         }
@@ -840,18 +891,39 @@
         <header>
             <div class="logo">
                 <i class="fas fa-trophy"></i>
-                <h1>Sistem de Punctaj</h1>
+                <h1 id="appTitle">Sistem de Punctaj</h1>
             </div>
             <div class="header-actions">
                 <div class="nav-links">
                     <a href="#" class="nav-link active" data-page="main">
                         <i class="fas fa-trophy"></i>
-                        <span>Clasament General</span>
+                        <span id="navMain">Clasament General</span>
                     </a>
                     <a href="#" class="nav-link" data-page="daily">
                         <i class="fas fa-calendar-day"></i>
-                        <span>Turnee Zilnice</span>
+                        <span id="navDaily">Turnee Zilnice</span>
                     </a>
+                </div>
+                <div class="language-selector">
+                    <div class="language-btn" id="languageBtn">
+                        <i class="fas fa-globe"></i>
+                        <span id="currentLang">RO</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="language-dropdown" id="languageDropdown">
+                        <div class="language-option active" data-lang="ro">
+                            <i class="fas fa-flag"></i>
+                            <span>Română</span>
+                        </div>
+                        <div class="language-option" data-lang="en">
+                            <i class="fas fa-flag"></i>
+                            <span>English</span>
+                        </div>
+                        <div class="language-option" data-lang="es">
+                            <i class="fas fa-flag"></i>
+                            <span>Español</span>
+                        </div>
+                    </div>
                 </div>
                 <div class="search-box">
                     <i class="fas fa-search"></i>
@@ -867,7 +939,7 @@
                 </div>
                 <button class="admin-btn" id="adminBtn">
                     <i class="fas fa-user-shield"></i>
-                    <span>Admin Panel</span>
+                    <span id="adminPanelText">Admin Panel</span>
                 </button>
             </div>
         </header>
@@ -876,7 +948,7 @@
             <div class="admin-header">
                 <h2 class="admin-title">
                     <i class="fas fa-cogs"></i>
-                    <span>Admin Panel</span>
+                    <span id="adminTitle">Admin Panel</span>
                 </h2>
                 <button class="close-admin" id="closeAdmin">
                     <i class="fas fa-times"></i>
@@ -887,16 +959,16 @@
                     <input type="file" id="fileInput" accept=".xlsx, .xls">
                     <label for="fileInput" class="file-input-label">
                         <i class="fas fa-file-excel"></i>
-                        <span>Import Excel</span>
+                        <span id="importExcelText">Import Excel</span>
                     </label>
                 </div>
                 <button class="export-btn" id="exportBtn">
                     <i class="fas fa-download"></i>
-                    <span>Export Date</span>
+                    <span id="exportDataText">Export Date</span>
                 </button>
                 <button class="save-btn" id="saveBtn">
                     <i class="fas fa-save"></i>
-                    <span>Salvează Date</span>
+                    <span id="saveDataText">Salvează Date</span>
                 </button>
             </div>
         </div>
@@ -906,7 +978,7 @@
             <div class="dashboard">
                 <h2 class="dashboard-title">
                     <i class="fas fa-chart-line"></i>
-                    <span>Dashboard</span>
+                    <span id="dashboardTitle">Dashboard</span>
                 </h2>
                 <div class="dashboard-stats">
                     <div class="stat-card total" data-filter="all">
@@ -914,42 +986,42 @@
                             <i class="fas fa-users"></i>
                         </div>
                         <div class="stat-value" id="totalPlayers">0</div>
-                        <div class="stat-label">Total Jucători</div>
+                        <div class="stat-label" id="totalPlayersLabel">Total Jucători</div>
                     </div>
                     <div class="stat-card target" data-filter="target">
                         <div class="stat-icon">
                             <i class="fas fa-check-circle"></i>
                         </div>
                         <div class="stat-value" id="targetAchieved">0</div>
-                        <div class="stat-label">Target Atins</div>
+                        <div class="stat-label" id="targetAchievedLabel">Target Atins</div>
                     </div>
                     <div class="stat-card close" data-filter="close">
                         <div class="stat-icon">
                             <i class="fas fa-hourglass-half"></i>
                         </div>
                         <div class="stat-value" id="closeToTarget">0</div>
-                        <div class="stat-label">Aproape de Target</div>
+                        <div class="stat-label" id="closeToTargetLabel">Aproape de Target</div>
                     </div>
                     <div class="stat-card attention" data-filter="attention">
                         <div class="stat-icon">
                             <i class="fas fa-exclamation-triangle"></i>
                         </div>
                         <div class="stat-value" id="attentionNeeded">0</div>
-                        <div class="stat-label">Atenție</div>
+                        <div class="stat-label" id="attentionNeededLabel">Atenție</div>
                     </div>
                     <div class="stat-card zero" data-filter="zero">
                         <div class="stat-icon">
                             <i class="fas fa-times-circle"></i>
                         </div>
                         <div class="stat-value" id="zeroPoints">0</div>
-                        <div class="stat-label">0 Puncte</div>
+                        <div class="stat-label" id="zeroPointsLabel">0 Puncte</div>
                     </div>
                     <div class="stat-card average">
                         <div class="stat-icon">
                             <i class="fas fa-chart-bar"></i>
                         </div>
                         <div class="stat-value" id="weeklyAverage">0</div>
-                        <div class="stat-label">Media Săptămânii</div>
+                        <div class="stat-label" id="weeklyAverageLabel">Media Săptămânii</div>
                     </div>
                 </div>
             </div>
@@ -957,36 +1029,36 @@
                 <div class="table-header">
                     <h2 class="table-title">
                         <i class="fas fa-trophy"></i>
-                        <span>Clasament</span>
+                        <span id="rankingTitle">Clasament</span>
                     </h2>
                     <div class="sort-options">
                         <button class="sort-btn active" id="sortByRank">
                             <i class="fas fa-sort-numeric-down"></i>
-                            <span>După Rank</span>
+                            <span id="sortByRankText">După Rank</span>
                         </button>
                         <button class="sort-btn" id="sortByName">
                             <i class="fas fa-sort-alpha-down"></i>
-                            <span>După Nume</span>
+                            <span id="sortByNameText">După Nume</span>
                         </button>
                         <button class="sort-btn" id="sortByTotal">
                             <i class="fas fa-sort-numeric-down"></i>
-                            <span>După Total Score</span>
+                            <span id="sortByTotalText">După Total Score</span>
                         </button>
                     </div>
                     <div class="last-updated" id="lastUpdated">
                         <i class="fas fa-clock"></i>
-                        <span>Ultima actualizare:</span>
+                        <span id="lastUpdatedText">Ultima actualizare:</span>
                         <span id="updateTime">Niciodată</span>
                     </div>
                 </div>
                 <table id="rankingTable">
                     <thead>
                         <tr>
-                            <th>Poziție</th>
-                            <th>Jucător</th>
-                            <th>Punctaj Total</th>
-                            <th>Punctaj Săptămână</th>
-                            <th>Până la Target</th>
+                            <th id="positionHeader">Poziție</th>
+                            <th id="playerHeader">Jucător</th>
+                            <th id="totalScoresHeader">Punctaj Total</th>
+                            <th id="weekScoreHeader">Punctaj Săptămână</th>
+                            <th id="leftToAchieveHeader">Până la Target</th>
                         </tr>
                     </thead>
                     <tbody id="rankingBody">
@@ -1001,7 +1073,7 @@
             <div class="dashboard">
                 <h2 class="dashboard-title">
                     <i class="fas fa-chart-line"></i>
-                    <span>Dashboard</span>
+                    <span id="dailyDashboardTitle">Dashboard</span>
                 </h2>
                 <div class="dashboard-stats">
                     <div class="stat-card total" data-filter="all">
@@ -1009,35 +1081,35 @@
                             <i class="fas fa-users"></i>
                         </div>
                         <div class="stat-value" id="dailyTotalPlayers">0</div>
-                        <div class="stat-label">Total Jucători</div>
+                        <div class="stat-label" id="dailyTotalPlayersLabel">Total Jucători</div>
                     </div>
                     <div class="stat-card top10" data-filter="top10">
                         <div class="stat-icon">
                             <i class="fas fa-medal"></i>
                         </div>
                         <div class="stat-value" id="top10Players">0</div>
-                        <div class="stat-label">Top 10</div>
+                        <div class="stat-label" id="top10PlayersLabel">Top 10</div>
                     </div>
                     <div class="stat-card top32" data-filter="top32">
                         <div class="stat-icon">
                             <i class="fas fa-award"></i>
                         </div>
                         <div class="stat-value" id="top32Players">0</div>
-                        <div class="stat-label">Top 32</div>
+                        <div class="stat-label" id="top32PlayersLabel">Top 32</div>
                     </div>
                     <div class="stat-card missed" data-filter="missed">
                         <div class="stat-icon">
                             <i class="fas fa-times-circle"></i>
                         </div>
                         <div class="stat-value" id="missedTournaments">0</div>
-                        <div class="stat-label">Turnee Ratate</div>
+                        <div class="stat-label" id="missedTournamentsLabel">Turnee Ratate</div>
                     </div>
                     <div class="stat-card min2" data-filter="min2">
                         <div class="stat-icon">
                             <i class="fas fa-exclamation-triangle"></i>
                         </div>
                         <div class="stat-value" id="min2Missed">0</div>
-                        <div class="stat-label">Minim 2 Ratate</div>
+                        <div class="stat-label" id="min2MissedLabel">Minim 2 Ratate</div>
                     </div>
                 </div>
             </div>
@@ -1045,21 +1117,21 @@
                 <div class="table-header">
                     <h2 class="table-title">
                         <i class="fas fa-table"></i>
-                        <span>Turnee Zilnice</span>
+                        <span id="dailyTableTitle">Turnee Zilnice</span>
                     </h2>
                     <div class="sort-options">
                         <button class="sort-btn active" id="sortByRankDaily">
                             <i class="fas fa-sort-numeric-down"></i>
-                            <span>După Rank</span>
+                            <span id="sortByRankDailyText">După Rank</span>
                         </button>
                         <button class="sort-btn" id="sortByNameDaily">
                             <i class="fas fa-sort-alpha-down"></i>
-                            <span>După Nume</span>
+                            <span id="sortByNameDailyText">După Nume</span>
                         </button>
                     </div>
                     <div class="last-updated" id="lastUpdatedDaily">
                         <i class="fas fa-clock"></i>
-                        <span>Ultima actualizare:</span>
+                        <span id="lastUpdatedDailyText">Ultima actualizare:</span>
                         <span id="updateTimeDaily">Niciodată</span>
                     </div>
                 </div>
@@ -1067,10 +1139,10 @@
                     <table id="dailyTable">
                         <thead>
                             <tr>
-                                <th class="fixed-cols-header">Rank</th>
-                                <th class="fixed-cols-header">Player Name</th>
-                                <th class="fixed-cols-header">Average</th>
-                                <th class="fixed-cols-header">Nr. Tournament</th>
+                                <th class="fixed-cols-header" id="rankHeader">Rank</th>
+                                <th class="fixed-cols-header" id="playerNameHeader">Player Name</th>
+                                <th class="fixed-cols-header" id="averageHeader">Average</th>
+                                <th class="fixed-cols-header" id="tournamentsHeader">Nr. Tournament</th>
                                 <!-- Dynamic date columns will be added here -->
                             </tr>
                         </thead>
@@ -1080,8 +1152,8 @@
                     </table>
                     <div id="dailyTableEmpty" class="empty-state" style="display: none;">
                         <i class="fas fa-user-slash"></i>
-                        <h3>Nu s-au găsit jucători</h3>
-                        <p>Verificați dacă există jucători în sistem sau dacă filtrele aplicate sunt corecte.</p>
+                        <h3 id="noPlayersFoundTitle">Nu s-au găsit jucători</h3>
+                        <p id="noPlayersFoundText">Verificați dacă există jucători în sistem sau dacă filtrele aplicate sunt corecte.</p>
                     </div>
                 </div>
             </div>
@@ -1092,18 +1164,18 @@
         <div class="login-form">
             <h2 class="login-title">
                 <i class="fas fa-user-shield"></i>
-                <span>Login</span>
+                <span id="loginTitle">Login</span>
             </h2>
             <div class="form-group">
-                <label for="username">Utilizator</label>
+                <label for="username" id="usernameLabel">Utilizator</label>
                 <input type="text" id="username" placeholder="Introdu utilizator...">
             </div>
             <div class="form-group">
-                <label for="password">Parolă</label>
+                <label for="password" id="passwordLabel">Parolă</label>
                 <input type="password" id="password" placeholder="Introdu parola...">
             </div>
-            <button class="login-btn" id="loginBtn">Autentificare</button>
-            <button class="cancel-btn" id="cancelLogin">Anulează</button>
+            <button class="login-btn" id="loginBtn" data-login="Autentificare">Autentificare</button>
+            <button class="cancel-btn" id="cancelLogin" data-cancel="Anulează">Anulează</button>
         </div>
     </div>
     
@@ -1160,28 +1232,50 @@
         const translations = {
             ro: {
                 appTitle: "Sistem de Punctaj",
+                navMain: "Clasament General",
+                navDaily: "Turnee Zilnice",
+                adminPanelText: "Admin Panel",
                 searchPlaceholder: "Caută jucători...",
-                adminPanel: "Panou Admin",
-                importExcel: "Import Excel",
-                exportData: "Export Date",
-                saveData: "Salvează Date",
-                dashboard: "Panou",
-                totalPlayers: "Total Jucători",
-                targetAchieved: "Target Atins",
-                closeToTarget: "Aproape de Target",
-                attentionNeeded: "Atenție",
-                zeroPoints: "0 Puncte",
-                weeklyAverage: "Media Săptămânii",
-                ranking: "Clasament",
-                lastUpdated: "Ultima actualizare:",
-                rank: "Poziție",
-                player: "Jucător",
-                totalScores: "Punctaj Total",
-                weekScore: "Punctaj Săptămână",
-                leftToAchieve: "Până la Target",
-                adminLogin: "Autentificare",
-                password: "Parolă",
-                username: "Utilizator",
+                adminTitle: "Panou Admin",
+                importExcelText: "Import Excel",
+                exportDataText: "Export Date",
+                saveDataText: "Salvează Date",
+                dashboardTitle: "Panou",
+                totalPlayersLabel: "Total Jucători",
+                targetAchievedLabel: "Target Atins",
+                closeToTargetLabel: "Aproape de Target",
+                attentionNeededLabel: "Atenție",
+                zeroPointsLabel: "0 Puncte",
+                weeklyAverageLabel: "Media Săptămânii",
+                dailyDashboardTitle: "Panou",
+                dailyTotalPlayersLabel: "Total Jucători",
+                top10PlayersLabel: "Top 10",
+                top32PlayersLabel: "Top 32",
+                missedTournamentsLabel: "Turnee Ratate",
+                min2MissedLabel: "Minim 2 Ratate",
+                rankingTitle: "Clasament",
+                lastUpdatedText: "Ultima actualizare:",
+                positionHeader: "Poziție",
+                playerHeader: "Jucător",
+                totalScoresHeader: "Punctaj Total",
+                weekScoreHeader: "Punctaj Săptămână",
+                leftToAchieveHeader: "Până la Target",
+                dailyTableTitle: "Turnee Zilnice",
+                lastUpdatedDailyText: "Ultima actualizare:",
+                rankHeader: "Rank",
+                playerNameHeader: "Player Name",
+                averageHeader: "Average",
+                tournamentsHeader: "Nr. Tournament",
+                noPlayersFoundTitle: "Nu s-au găsit jucători",
+                noPlayersFoundText: "Verificați dacă există jucători în sistem sau dacă filtrele aplicate sunt corecte.",
+                sortByRankText: "După Rank",
+                sortByNameText: "După Nume",
+                sortByTotalText: "După Total Score",
+                sortByRankDailyText: "După Rank",
+                sortByNameDailyText: "După Nume",
+                loginTitle: "Login",
+                usernameLabel: "Utilizator",
+                passwordLabel: "Parolă",
                 login: "Autentificare",
                 cancel: "Anulează",
                 dataSaved: "Date salvate cu succes!",
@@ -1196,7 +1290,140 @@
                 hours: "ore",
                 days: "zile",
                 done: "Realizat",
-                logoutSuccess: "Deconectare reușită!"
+                logoutSuccess: "Deconectare reușită!",
+                synced: "Sincronizat",
+                syncing: "Se sincronizează...",
+                syncError: "Eroare sincronizare"
+            },
+            en: {
+                appTitle: "Scoring System",
+                navMain: "General Ranking",
+                navDaily: "Daily Tournaments",
+                adminPanelText: "Admin Panel",
+                searchPlaceholder: "Search players...",
+                adminTitle: "Admin Panel",
+                importExcelText: "Import Excel",
+                exportDataText: "Export Data",
+                saveDataText: "Save Data",
+                dashboardTitle: "Dashboard",
+                totalPlayersLabel: "Total Players",
+                targetAchievedLabel: "Target Achieved",
+                closeToTargetLabel: "Close to Target",
+                attentionNeededLabel: "Attention Needed",
+                zeroPointsLabel: "0 Points",
+                weeklyAverageLabel: "Weekly Average",
+                dailyDashboardTitle: "Dashboard",
+                dailyTotalPlayersLabel: "Total Players",
+                top10PlayersLabel: "Top 10",
+                top32PlayersLabel: "Top 32",
+                missedTournamentsLabel: "Missed Tournaments",
+                min2MissedLabel: "Min 2 Missed",
+                rankingTitle: "Ranking",
+                lastUpdatedText: "Last update:",
+                positionHeader: "Position",
+                playerHeader: "Player",
+                totalScoresHeader: "Total Score",
+                weekScoreHeader: "Week Score",
+                leftToAchieveHeader: "Left to Achieve",
+                dailyTableTitle: "Daily Tournaments",
+                lastUpdatedDailyText: "Last update:",
+                rankHeader: "Rank",
+                playerNameHeader: "Player Name",
+                averageHeader: "Average",
+                tournamentsHeader: "No. Tournaments",
+                noPlayersFoundTitle: "No players found",
+                noPlayersFoundText: "Check if there are players in the system or if the applied filters are correct.",
+                sortByRankText: "By Rank",
+                sortByNameText: "By Name",
+                sortByTotalText: "By Total Score",
+                sortByRankDailyText: "By Rank",
+                sortByNameDailyText: "By Name",
+                loginTitle: "Login",
+                usernameLabel: "Username",
+                passwordLabel: "Password",
+                login: "Login",
+                cancel: "Cancel",
+                dataSaved: "Data saved successfully!",
+                dataLoaded: "Data loaded successfully!",
+                loginSuccess: "Login successful!",
+                loginError: "Incorrect username or password!",
+                exportSuccess: "Data exported successfully!",
+                importSuccess: "Data imported successfully!",
+                noDataFound: "No saved data found. Loading test data.",
+                never: "Never",
+                minutes: "minutes",
+                hours: "hours",
+                days: "days",
+                done: "Achieved",
+                logoutSuccess: "Logout successful!",
+                synced: "Synced",
+                syncing: "Syncing...",
+                syncError: "Sync Error"
+            },
+            es: {
+                appTitle: "Sistema de Puntuación",
+                navMain: "Clasificación General",
+                navDaily: "Torneos Diarios",
+                adminPanelText: "Panel de Admin",
+                searchPlaceholder: "Buscar jugadores...",
+                adminTitle: "Panel de Admin",
+                importExcelText: "Importar Excel",
+                exportDataText: "Exportar Datos",
+                saveDataText: "Guardar Datos",
+                dashboardTitle: "Panel",
+                totalPlayersLabel: "Total Jugadores",
+                targetAchievedLabel: "Objetivo Alcanzado",
+                closeToTargetLabel: "Cerca del Objetivo",
+                attentionNeededLabel: "Atención Necesaria",
+                zeroPointsLabel: "0 Puntos",
+                weeklyAverageLabel: "Promedio Semanal",
+                dailyDashboardTitle: "Panel",
+                dailyTotalPlayersLabel: "Total Jugadores",
+                top10PlayersLabel: "Top 10",
+                top32PlayersLabel: "Top 32",
+                missedTournamentsLabel: "Torneos Perdidos",
+                min2MissedLabel: "Mín 2 Perdidos",
+                rankingTitle: "Clasificación",
+                lastUpdatedText: "Última actualización:",
+                positionHeader: "Posición",
+                playerHeader: "Jugador",
+                totalScoresHeader: "Puntuación Total",
+                weekScoreHeader: "Puntuación Semanal",
+                leftToAchieveHeader: "Restante para Objetivo",
+                dailyTableTitle: "Torneos Diarios",
+                lastUpdatedDailyText: "Última actualización:",
+                rankHeader: "Rango",
+                playerNameHeader: "Nombre del Jugador",
+                averageHeader: "Promedio",
+                tournamentsHeader: "Nº de Torneos",
+                noPlayersFoundTitle: "No se encontraron jugadores",
+                noPlayersFoundText: "Verifique si hay jugadores en el sistema o si los filtros aplicados son correctos.",
+                sortByRankText: "Por Rango",
+                sortByNameText: "Por Nombre",
+                sortByTotalText: "Por Puntuación Total",
+                sortByRankDailyText: "Por Rango",
+                sortByNameDailyText: "Por Nombre",
+                loginTitle: "Inicio de Sesión",
+                usernameLabel: "Usuario",
+                passwordLabel: "Contraseña",
+                login: "Iniciar Sesión",
+                cancel: "Cancelar",
+                dataSaved: "¡Datos guardados con éxito!",
+                dataLoaded: "¡Datos cargados con éxito!",
+                loginSuccess: "¡Inicio de sesión exitoso!",
+                loginError: "¡Usuario o contraseña incorrectos!",
+                exportSuccess: "¡Datos exportados con éxito!",
+                importSuccess: "¡Datos importados con éxito!",
+                noDataFound: "No se encontraron datos guardados. Cargando datos de prueba.",
+                never: "Nunca",
+                minutes: "minutos",
+                hours: "horas",
+                days: "días",
+                done: "Logrado",
+                logoutSuccess: "¡Cierre de sesión exitoso!",
+                synced: "Sincronizado",
+                syncing: "Sincronizando...",
+                syncError: "Error de Sincronización"
             }
         };
         
@@ -1215,7 +1442,7 @@
                 'dailyTableBody', 'updateTimeDaily', 'dailyTotalPlayers', 'top10Players', 
                 'top32Players', 'missedTournaments', 'min2Missed', 'sortByRank', 
                 'sortByName', 'sortByTotal', 'sortByRankDaily', 'sortByNameDaily', 'dailyTable',
-                'dailyTableEmpty'
+                'dailyTableEmpty', 'languageBtn', 'languageDropdown', 'currentLang'
             ];
             
             elementIds.forEach(id => {
@@ -1229,6 +1456,7 @@
             elements.statCards = document.querySelectorAll('.stat-card');
             elements.navLinks = document.querySelectorAll('.nav-link');
             elements.pages = document.querySelectorAll('.page');
+            elements.languageOptions = document.querySelectorAll('.language-option');
         }
         
         // Initialize app
@@ -1250,6 +1478,13 @@
             
             // Set up daily column update at midnight
             setupMidnightUpdate();
+            
+            // Load saved language preference
+            const savedLang = localStorage.getItem('preferredLanguage');
+            if (savedLang && ['ro', 'en', 'es'].includes(savedLang)) {
+                currentLang = savedLang;
+                updateLanguage();
+            }
         }
         
         // Generate date columns
@@ -1356,6 +1591,39 @@
                         e.preventDefault();
                         const page = link.getAttribute('data-page');
                         switchPage(page);
+                    });
+                });
+            }
+            
+            // Language selector
+            if (elements.languageBtn) {
+                elements.languageBtn.addEventListener('click', () => {
+                    if (elements.languageDropdown) {
+                        elements.languageDropdown.classList.toggle('active');
+                    }
+                });
+            }
+            
+            // Language options
+            if (elements.languageOptions) {
+                elements.languageOptions.forEach(option => {
+                    option.addEventListener('click', () => {
+                        const lang = option.getAttribute('data-lang');
+                        if (lang && ['ro', 'en', 'es'].includes(lang)) {
+                            currentLang = lang;
+                            localStorage.setItem('preferredLanguage', lang);
+                            updateLanguage();
+                            
+                            // Update active state
+                            elements.languageOptions.forEach(opt => {
+                                opt.classList.remove('active');
+                            });
+                            option.classList.add('active');
+                            
+                            if (elements.languageDropdown) {
+                                elements.languageDropdown.classList.remove('active');
+                            }
+                        }
                     });
                 });
             }
@@ -1527,6 +1795,74 @@
                     updateSortButtons('daily');
                     renderDailyTable();
                 });
+            }
+            
+            // Close language dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.language-selector') && elements.languageDropdown) {
+                    elements.languageDropdown.classList.remove('active');
+                }
+            });
+        }
+        
+        // Update language
+        function updateLanguage() {
+            const t = translations[currentLang];
+            
+            // Update all text elements
+            document.getElementById('appTitle').textContent = t.appTitle;
+            document.getElementById('navMain').textContent = t.navMain;
+            document.getElementById('navDaily').textContent = t.navDaily;
+            document.getElementById('adminPanelText').textContent = t.adminPanelText;
+            document.getElementById('searchInput').placeholder = t.searchPlaceholder;
+            document.getElementById('adminTitle').textContent = t.adminTitle;
+            document.getElementById('importExcelText').textContent = t.importExcelText;
+            document.getElementById('exportDataText').textContent = t.exportDataText;
+            document.getElementById('saveDataText').textContent = t.saveDataText;
+            document.getElementById('dashboardTitle').textContent = t.dashboardTitle;
+            document.getElementById('totalPlayersLabel').textContent = t.totalPlayersLabel;
+            document.getElementById('targetAchievedLabel').textContent = t.targetAchievedLabel;
+            document.getElementById('closeToTargetLabel').textContent = t.closeToTargetLabel;
+            document.getElementById('attentionNeededLabel').textContent = t.attentionNeededLabel;
+            document.getElementById('zeroPointsLabel').textContent = t.zeroPointsLabel;
+            document.getElementById('weeklyAverageLabel').textContent = t.weeklyAverageLabel;
+            document.getElementById('dailyDashboardTitle').textContent = t.dailyDashboardTitle;
+            document.getElementById('dailyTotalPlayersLabel').textContent = t.dailyTotalPlayersLabel;
+            document.getElementById('top10PlayersLabel').textContent = t.top10PlayersLabel;
+            document.getElementById('top32PlayersLabel').textContent = t.top32PlayersLabel;
+            document.getElementById('missedTournamentsLabel').textContent = t.missedTournamentsLabel;
+            document.getElementById('min2MissedLabel').textContent = t.min2MissedLabel;
+            document.getElementById('rankingTitle').textContent = t.rankingTitle;
+            document.getElementById('lastUpdatedText').textContent = t.lastUpdatedText;
+            document.getElementById('positionHeader').textContent = t.positionHeader;
+            document.getElementById('playerHeader').textContent = t.playerHeader;
+            document.getElementById('totalScoresHeader').textContent = t.totalScoresHeader;
+            document.getElementById('weekScoreHeader').textContent = t.weekScoreHeader;
+            document.getElementById('leftToAchieveHeader').textContent = t.leftToAchieveHeader;
+            document.getElementById('dailyTableTitle').textContent = t.dailyTableTitle;
+            document.getElementById('lastUpdatedDailyText').textContent = t.lastUpdatedDailyText;
+            document.getElementById('rankHeader').textContent = t.rankHeader;
+            document.getElementById('playerNameHeader').textContent = t.playerNameHeader;
+            document.getElementById('averageHeader').textContent = t.averageHeader;
+            document.getElementById('tournamentsHeader').textContent = t.tournamentsHeader;
+            document.getElementById('noPlayersFoundTitle').textContent = t.noPlayersFoundTitle;
+            document.getElementById('noPlayersFoundText').textContent = t.noPlayersFoundText;
+            document.getElementById('sortByRankText').textContent = t.sortByRankText;
+            document.getElementById('sortByNameText').textContent = t.sortByNameText;
+            document.getElementById('sortByTotalText').textContent = t.sortByTotalText;
+            document.getElementById('sortByRankDailyText').textContent = t.sortByRankDailyText;
+            document.getElementById('sortByNameDailyText').textContent = t.sortByNameDailyText;
+            document.getElementById('loginTitle').textContent = t.loginTitle;
+            document.getElementById('usernameLabel').textContent = t.usernameLabel;
+            document.getElementById('passwordLabel').textContent = t.passwordLabel;
+            
+            // Update button texts
+            document.getElementById('loginBtn').textContent = t.login;
+            document.getElementById('cancelLogin').textContent = t.cancel;
+            
+            // Update current language display
+            if (elements.currentLang) {
+                elements.currentLang.textContent = currentLang.toUpperCase();
             }
         }
         
@@ -1921,17 +2257,17 @@
                 switch (status) {
                     case 'syncing':
                         icon.className = 'fas fa-sync-alt';
-                        text.textContent = 'Syncing...';
+                        text.textContent = translations[currentLang].syncing;
                         elements.syncStatus.classList.add('show');
                         break;
                     case 'synced':
                         icon.className = 'fas fa-check-circle';
-                        text.textContent = 'Synced';
+                        text.textContent = translations[currentLang].synced;
                         elements.syncStatus.classList.remove('show');
                         break;
                     case 'error':
                         icon.className = 'fas fa-exclamation-circle';
-                        text.textContent = 'Sync Error';
+                        text.textContent = translations[currentLang].syncError;
                         elements.syncStatus.classList.add('show');
                         setTimeout(() => {
                             if (elements.syncStatus && elements.syncStatus.classList.contains('error')) {
