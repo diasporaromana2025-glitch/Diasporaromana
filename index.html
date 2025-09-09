@@ -167,6 +167,37 @@ background: var(--primary-dark);
 transform: translateY(-2px);
 box-shadow: var(--shadow-lg);
 }
+.navigation {
+display: flex;
+gap: 15px;
+width: 100%;
+margin-bottom: 25px;
+}
+.nav-btn {
+background: var(--white);
+border: 2px solid var(--light-gray);
+border-radius: 12px;
+padding: 12px 18px;
+display: flex;
+align-items: center;
+gap: 10px;
+cursor: pointer;
+font-size: 15px;
+font-weight: 600;
+transition: all 0.3s ease;
+box-shadow: var(--shadow);
+flex: 1;
+justify-content: center;
+}
+.nav-btn:hover {
+border-color: var(--primary);
+transform: translateY(-2px);
+}
+.nav-btn.active {
+background: var(--primary);
+color: var(--white);
+border-color: var(--primary);
+}
 .admin-panel {
 background: rgba(255, 255, 255, 0.95);
 border-radius: 16px;
@@ -224,6 +255,7 @@ margin-bottom: 20px;
 position: relative;
 overflow: hidden;
 display: inline-block;
+flex: 1;
 }
 .file-input-wrapper input[type=file] {
 position: absolute;
@@ -247,6 +279,8 @@ font-size: 15px;
 font-weight: 600;
 transition: all 0.3s ease;
 box-shadow: var(--shadow);
+width: 100%;
+justify-content: center;
 }
 .file-input-label:hover {
 background: #059669;
@@ -267,6 +301,8 @@ font-size: 15px;
 font-weight: 600;
 transition: all 0.3s ease;
 box-shadow: var(--shadow);
+flex: 1;
+justify-content: center;
 }
 .export-btn:hover, .save-btn:hover {
 background: var(--primary-dark);
@@ -298,7 +334,7 @@ gap: 10px;
 }
 .dashboard-stats {
 display: grid;
-grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 gap: 20px;
 }
 .stat-card {
@@ -364,8 +400,8 @@ backdrop-filter: blur(10px);
 }
 .table-header {
 display: flex;
-justify-content: space-between;
-align-items: center;
+flex-direction: column;
+gap: 15px;
 margin-bottom: 25px;
 padding-bottom: 15px;
 border-bottom: 2px solid var(--light-gray);
@@ -378,6 +414,17 @@ display: flex;
 align-items: center;
 gap: 10px;
 }
+.header-actions {
+display: flex;
+flex-direction: column;
+gap: 15px;
+}
+.search-box {
+width: 100%;
+}
+.search-box input {
+width: 100%;
+}
 .last-updated {
 font-size: 14px;
 color: var(--gray);
@@ -385,7 +432,6 @@ display: flex;
 align-items: center;
 gap: 8px;
 }
-/* Stiluri pentru butoanele de sortare */
 .sorting-container {
 display: flex;
 gap: 10px;
@@ -406,6 +452,8 @@ font-weight: 600;
 color: var(--dark);
 transition: all 0.3s ease;
 box-shadow: var(--shadow);
+flex: 1;
+justify-content: center;
 }
 .sort-btn:hover {
 border-color: var(--primary);
@@ -731,6 +779,84 @@ transition: all 0.3s ease;
 background: rgba(255, 255, 255, 0.5);
 transform: rotate(90deg);
 }
+/* Page specific styles */
+.page {
+display: none;
+}
+.page.active {
+display: block;
+}
+/* Daily tournaments table styles */
+.daily-table-container {
+overflow-x: auto;
+}
+.daily-table {
+min-width: 800px;
+}
+.daily-table th, .daily-table td {
+padding: 12px 15px;
+}
+.daily-table th:first-child, .daily-table td:first-child {
+position: sticky;
+left: 0;
+background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+color: var(--white);
+z-index: 11;
+}
+.daily-table td:first-child {
+background: var(--white);
+}
+.daily-table th:nth-child(2), .daily-table td:nth-child(2) {
+position: sticky;
+left: 80px;
+background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+color: var(--white);
+z-index: 11;
+}
+.daily-table td:nth-child(2) {
+background: var(--white);
+}
+.daily-table th:nth-child(3), .daily-table td:nth-child(3) {
+position: sticky;
+left: 220px;
+background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+color: var(--white);
+z-index: 11;
+}
+.daily-table td:nth-child(3) {
+background: var(--white);
+}
+.daily-table th:nth-child(4), .daily-table td:nth-child(4) {
+position: sticky;
+left: 320px;
+background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+color: var(--white);
+z-index: 11;
+}
+.daily-table td:nth-child(4) {
+background: var(--white);
+}
+.zero-value {
+background-color: rgba(239, 68, 68, 0.2) !important;
+color: var(--danger) !important;
+font-weight: 700;
+}
+.zero-value::after {
+content: " ⚠️";
+}
+/* Adăugăm stiluri pentru celulele din tabelul zilnic pentru a asigura vizibilitatea textului */
+.daily-table td {
+    color: var(--dark) !important;
+}
+.daily-table input.editable {
+    color: var(--primary) !important;
+}
+/* Dashboard buttons for daily tournaments */
+.daily-dashboard-stats {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+gap: 20px;
+}
 @keyframes spin {
 0% { transform: rotate(0deg); }
 100% { transform: rotate(360deg); }
@@ -750,11 +876,10 @@ justify-content: space-between;
 .search-box input {
 width: 150px;
 }
-.dashboard-stats {
-grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+.dashboard-stats, .daily-dashboard-stats {
+grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
 gap: 15px;
 }
-/* Reduce dashboard button sizes for mobile */
 .stat-card {
 padding: 10px;
 }
@@ -788,6 +913,18 @@ flex-direction: column;
 .sort-btn {
 width: 100%;
 justify-content: center;
+}
+.navigation {
+flex-direction: column;
+}
+.nav-btn {
+width: 100%;
+}
+.admin-actions {
+flex-direction: column;
+}
+.file-input-wrapper, .export-btn, .save-btn {
+width: 100%;
 }
 }
 </style>
@@ -844,6 +981,18 @@ justify-content: center;
 </button>
 </div>
 </header>
+<div class="navigation">
+<button class="nav-btn active" id="mainPageBtn">
+<i class="fas fa-trophy"></i>
+<span data-i18n="mainPage">Main Page</span>
+</button>
+<button class="nav-btn" id="dailyTournamentsBtn">
+<i class="fas fa-calendar-day"></i>
+<span data-i18n="dailyTournaments">Daily Tournaments</span>
+</button>
+</div>
+<!-- Main Page -->
+<div id="mainPage" class="page active">
 <div class="admin-panel" id="adminPanel">
 <div class="admin-header">
 <h2 class="admin-title">
@@ -964,6 +1113,127 @@ justify-content: center;
 </table>
 </div>
 </div>
+</div>
+<!-- Daily Tournaments Page -->
+<div id="dailyTournamentsPage" class="page">
+<div class="admin-panel" id="dailyAdminPanel">
+<div class="admin-header">
+<h2 class="admin-title">
+<i class="fas fa-cogs"></i>
+<span data-i18n="adminPanel">Admin Panel</span>
+</h2>
+<button class="close-admin" id="closeDailyAdmin">
+<i class="fas fa-times"></i>
+</button>
+</div>
+<div class="admin-actions">
+<div class="file-input-wrapper" id="dailyImportWrapper">
+<input type="file" id="dailyFileInput" accept=".xlsx, .xls">
+<label for="dailyFileInput" class="file-input-label">
+<i class="fas fa-file-excel"></i>
+<span data-i18n="importPlayers">Import Players</span>
+</label>
+</div>
+<button class="export-btn" id="dailyExportBtn">
+<i class="fas fa-download"></i>
+<span data-i18n="exportDailyData">Export Daily Data</span>
+</button>
+<button class="save-btn" id="dailySaveBtn">
+<i class="fas fa-save"></i>
+<span data-i18n="saveDailyData">Save Daily Data</span>
+</button>
+</div>
+</div>
+<div class="dashboard">
+<h2 class="dashboard-title">
+<i class="fas fa-chart-line"></i>
+<span data-i18n="dailyDashboard">Daily Tournaments Dashboard</span>
+</h2>
+<div class="daily-dashboard-stats">
+<div class="stat-card total" data-daily-filter="all">
+<div class="stat-icon">
+<i class="fas fa-users"></i>
+</div>
+<div class="stat-value" id="dailyTotalPlayers">0</div>
+<div class="stat-label" data-i18n="totalPlayers">Total Players</div>
+</div>
+<div class="stat-card target" data-daily-filter="top10">
+<div class="stat-icon">
+<i class="fas fa-trophy"></i>
+</div>
+<div class="stat-value" id="top10Players">0</div>
+<div class="stat-label" data-i18n="top10Players">Top 10 Players</div>
+</div>
+<div class="stat-card close" data-daily-filter="top32">
+<div class="stat-icon">
+<i class="fas fa-medal"></i>
+</div>
+<div class="stat-value" id="top32Players">0</div>
+<div class="stat-label" data-i18n="top32Players">Top 32 Players</div>
+</div>
+<div class="stat-card attention" data-daily-filter="missed">
+<div class="stat-icon">
+<i class="fas fa-times-circle"></i>
+</div>
+<div class="stat-value" id="missedTournaments">0</div>
+<div class="stat-label" data-i18n="missedTournaments">Missed Tournaments</div>
+</div>
+<div class="stat-card zero" data-daily-filter="min2missed">
+<div class="stat-icon">
+<i class="fas fa-exclamation-triangle"></i>
+</div>
+<div class="stat-value" id="min2Missed">0</div>
+<div class="stat-label" data-i18n="min2Missed">Min 2 Missed</div>
+</div>
+</div>
+</div>
+<div class="table-container">
+<div class="table-header">
+<h2 class="table-title">
+<i class="fas fa-calendar-day"></i>
+<span data-i18n="dailyTournaments">Daily Tournaments</span>
+</h2>
+<div class="header-actions">
+<div class="search-box">
+<i class="fas fa-search"></i>
+<input type="text" id="dailySearchInput" placeholder="Search players..." data-i18n-placeholder="searchPlaceholder">
+</div>
+<div class="last-updated" id="dailyLastUpdated">
+<i class="fas fa-clock"></i>
+<span data-i18n="lastUpdated">Last updated:</span>
+<span id="dailyUpdateTime">Never</span>
+</div>
+</div>
+</div>
+<div class="sorting-container">
+<button class="sort-btn active" data-daily-sort="rank">
+<i class="fas fa-sort-numeric-down"></i>
+<span data-i18n="sortByRank">Sort by Rank</span>
+</button>
+<button class="sort-btn" data-daily-sort="name">
+<i class="fas fa-sort-alpha-down"></i>
+<span data-i18n="sortByName">Sort by Name</span>
+</button>
+</div>
+<div class="daily-table-container">
+<table id="dailyTournamentsTable" class="daily-table">
+<thead>
+<tr>
+<th data-i18n="rank">Rank</th>
+<th data-i18n="playerName">Player Name</th>
+<th data-i18n="average">Average</th>
+<th data-i18n="nrTournaments">Nr. Tournament</th>
+<!-- Daily columns will be generated here -->
+</tr>
+</thead>
+<tbody id="dailyTournamentsBody">
+<!-- Table rows will be generated here -->
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
 <div class="login-modal" id="loginModal">
 <div class="login-form">
 <h2 class="login-title">
@@ -1025,7 +1295,7 @@ loginSuccess: "Autentificare reușită!",
 loginError: "Utilizator sau parolă incorectă!",
 exportSuccess: "Date exportate cu succes!",
 importSuccess: "Date importate cu succes!",
-noDataFound: "Nu s-au găsit date salvate. Se încarcă date de test.",
+noDataFound: "Nu s-au găcut date salvate. Se încarcă date de test.",
 never: "Niciodată",
 minutes: "minute",
 hours: "ore",
@@ -1034,7 +1304,20 @@ done: "Realizat",
 logoutSuccess: "Deconectare reușită!",
 sortByRank: "Sortare după poziție",
 sortByName: "Sortare după nume",
-sortByScore: "Sortare după punctaj"
+sortByScore: "Sortare după punctaj",
+mainPage: "Pagina Principală",
+dailyTournaments: "Turnee Zilnice",
+importPlayers: "Import Jucători",
+exportDailyData: "Export Date Zilnice",
+saveDailyData: "Salvează Date Zilnice",
+dailyDashboard: "Panou Turnee Zilnice",
+top10Players: "Top 10 Jucători",
+top32Players: "Top 32 Jucători",
+missedTournaments: "Turnee Ratate",
+min2Missed: "Minim 2 Ratate",
+playerName: "Nume Jucător",
+average: "Medie",
+nrTournaments: "Nr. Turnee"
 },
 en: {
 appTitle: "Scoring System",
@@ -1077,7 +1360,20 @@ done: "Done",
 logoutSuccess: "Logout successful!",
 sortByRank: "Sort by Rank",
 sortByName: "Sort by Name",
-sortByScore: "Sort by Score"
+sortByScore: "Sort by Score",
+mainPage: "Main Page",
+dailyTournaments: "Daily Tournaments",
+importPlayers: "Import Players",
+exportDailyData: "Export Daily Data",
+saveDailyData: "Save Daily Data",
+dailyDashboard: "Daily Tournaments Dashboard",
+top10Players: "Top 10 Players",
+top32Players: "Top 32 Players",
+missedTournaments: "Missed Tournaments",
+min2Missed: "Min 2 Missed",
+playerName: "Player Name",
+average: "Average",
+nrTournaments: "Nr. Tournament"
 },
 es: {
 appTitle: "Sistema de Puntuación",
@@ -1120,7 +1416,20 @@ done: "Hecho",
 logoutSuccess: "¡Cierre de sesión exitoso!",
 sortByRank: "Ordenar por Rango",
 sortByName: "Ordenar por Nombre",
-sortByScore: "Ordenar por Puntuación"
+sortByScore: "Ordenar por Puntuación",
+mainPage: "Página Principal",
+dailyTournaments: "Torneos Diarios",
+importPlayers: "Importar Jugadores",
+exportDailyData: "Exportar Datos Diarios",
+saveDailyData: "Guardar Datos Diarios",
+dailyDashboard: "Panel de Torneos Diarios",
+top10Players: "Top 10 Jugadores",
+top32Players: "Top 32 Jugadores",
+missedTournaments: "Torneos Perdidos",
+min2Missed: "Mínimo 2 Perdidos",
+playerName: "Nombre del Jugador",
+average: "Promedio",
+nrTournaments: "Nr. Torneo"
 }
 };
 // Firebase Configuration
@@ -1142,12 +1451,18 @@ let currentLang = 'ro';
 let currentUser = null;
 let userRole = null;
 let players = [];
+let dailyPlayers = [];
 let lastUpdateTime = null;
+let dailyLastUpdateTime = null;
 let activeFilter = 'all';
+let dailyActiveFilter = 'all';
 let searchQuery = '';
+let dailySearchQuery = '';
 let isSyncing = false;
 let syncTimeout = null;
 let currentSortMethod = 'rank';
+let dailyCurrentSortMethod = 'rank';
+let activePage = 'mainPage';
 // Default users
 const defaultUsers = [
 { username: 'admin', password: 'diasporaromana123', role: 'admin' },
@@ -1165,7 +1480,12 @@ const elementIds = [
 'totalPlayers', 'targetAchieved', 'closeToTarget',
 'attentionNeeded', 'zeroPoints', 'weeklyAverage',
 'currentLang', 'loadingIndicator', 'syncStatus', 'userInfo',
-'userName', 'userRole', 'logoutBtn', 'username', 'importWrapper'
+'userName', 'userRole', 'logoutBtn', 'username', 'importWrapper',
+'mainPageBtn', 'dailyTournamentsBtn', 'mainPage', 'dailyTournamentsPage',
+'dailyAdminPanel', 'closeDailyAdmin', 'dailyFileInput', 'dailyExportBtn',
+'dailySaveBtn', 'dailyImportWrapper', 'dailyTournamentsBody', 'dailyUpdateTime',
+'dailyTotalPlayers', 'top10Players', 'top32Players', 'missedTournaments', 'min2Missed',
+'dailySearchInput'
 ];
 elementIds.forEach(id => {
 const element = document.getElementById(id);
@@ -1176,7 +1496,9 @@ elements[id] = element;
 // Cache elements by class
 elements.languageOptions = document.querySelectorAll('.language-option');
 elements.statCards = document.querySelectorAll('.stat-card');
+elements.dailyStatCards = document.querySelectorAll('[data-daily-filter]');
 elements.sortButtons = document.querySelectorAll('.sort-btn');
+elements.dailySortButtons = document.querySelectorAll('[data-daily-sort]');
 }
 // Initialize app
 function initApp() {
@@ -1186,6 +1508,7 @@ setupEventListeners();
 setupSortButtons();
 checkLoginStatus();
 loadDataFromFirebase();
+loadDailyDataFromFirebase();
 // Set up periodic sync status check
 setInterval(() => {
 if (isSyncing) {
@@ -1194,6 +1517,132 @@ updateSyncStatus('syncing');
 updateSyncStatus('synced');
 }
 }, 5000);
+// Check for daily columns generation
+checkDailyColumns();
+// Set up daily column generation at midnight
+setupMidnightColumnGeneration();
+}
+// Setup midnight column generation
+function setupMidnightColumnGeneration() {
+const now = new Date();
+const night = new Date(
+now.getFullYear(),
+now.getMonth(),
+now.getDate() + 1, // the next day
+0, 0, 0 // at 00:00:00 hours
+);
+const msToMidnight = night.getTime() - now.getTime();
+setTimeout(() => {
+generateDailyColumn();
+// Set up daily generation
+setInterval(generateDailyColumn, 24 * 60 * 60 * 1000); // every 24 hours
+}, msToMidnight);
+}
+// Generate daily column
+function generateDailyColumn() {
+const today = new Date();
+const formattedDate = formatDate(today);
+// Check if column already exists
+const existingColumn = document.querySelector(`th[data-date="${formattedDate}"]`);
+if (!existingColumn) {
+// Add new column to header (after the first 4 columns)
+const headerRow = document.querySelector('#dailyTournamentsTable thead tr');
+const newHeader = document.createElement('th');
+newHeader.setAttribute('data-date', formattedDate);
+newHeader.textContent = formattedDate;
+        
+// Insert after the 4th column (index 3)
+if (headerRow.children.length > 3) {
+headerRow.insertBefore(newHeader, headerRow.children[4]);
+} else {
+headerRow.appendChild(newHeader);
+}
+        
+// Add new column to each player row
+const rows = document.querySelectorAll('#dailyTournamentsBody tr');
+rows.forEach(row => {
+const newCell = document.createElement('td');
+newCell.setAttribute('data-date', formattedDate);
+const playerName = row.querySelector('.player-name').textContent;
+const player = dailyPlayers.find(p => p.playerName === playerName);
+if (player && player.scores && player.scores[formattedDate] !== undefined) {
+const score = player.scores[formattedDate];
+if (score === 0) {
+newCell.classList.add('zero-value');
+}
+newCell.innerHTML = `<input type="number" class="editable" value="${score}" 
+onchange="updateDailyScore('${playerName}', '${formattedDate}', this.value)">`;
+} else {
+newCell.innerHTML = `<input type="number" class="editable" value="" 
+onchange="updateDailyScore('${playerName}', '${formattedDate}', this.value)">`;
+}
+            
+// Insert after the 4th column (index 3)
+if (row.children.length > 3) {
+row.insertBefore(newCell, row.children[4]);
+} else {
+row.appendChild(newCell);
+}
+});
+        
+// Update player data structure
+dailyPlayers.forEach(player => {
+if (!player.scores) {
+player.scores = {};
+}
+if (player.scores[formattedDate] === undefined) {
+player.scores[formattedDate] = null;
+}
+});
+        
+// Save updated data
+saveDailyDataToFirebase();
+showNotification(`New column added for ${formattedDate}`, 'success');
+}
+}
+// Check and generate missing daily columns
+function checkDailyColumns() {
+const startDate = new Date('2025-09-01');
+const today = new Date();
+const headerRow = document.querySelector('#dailyTournamentsTable thead tr');
+if (!headerRow) return;
+    
+// Clear existing date columns (keep first 4 columns)
+while (headerRow.children.length > 4) {
+headerRow.removeChild(headerRow.lastChild);
+}
+    
+// Generate columns from today to start date (reverse order)
+for (let d = new Date(today); d >= startDate; d.setDate(d.getDate() - 1)) {
+const formattedDate = formatDate(d);
+const newHeader = document.createElement('th');
+newHeader.setAttribute('data-date', formattedDate);
+newHeader.textContent = formattedDate;
+headerRow.appendChild(newHeader);
+}
+    
+// Update player data structure
+dailyPlayers.forEach(player => {
+if (!player.scores) {
+player.scores = {};
+}
+for (let d = new Date(startDate); d <= today; d.setDate(d.getDate() + 1)) {
+const dateStr = formatDate(new Date(d));
+if (player.scores[dateStr] === undefined) {
+player.scores[dateStr] = null;
+}
+}
+});
+    
+// Re-render the table
+renderDailyTable();
+}
+// Format date as DD-MM-YYYY
+function formatDate(date) {
+const day = String(date.getDate()).padStart(2, '0');
+const month = String(date.getMonth() + 1).padStart(2, '0');
+const year = date.getFullYear();
+return `${day}-${month}-${year}`;
 }
 // Check login status from localStorage
 function checkLoginStatus() {
@@ -1207,24 +1656,39 @@ updateUIForLoggedInUser();
 }
 // Update admin panel visibility based on user role
 function updateAdminPanelVisibility() {
-if (!currentUser) {
-// Hide all buttons if not logged in
-if (elements.importWrapper) elements.importWrapper.style.display = 'none';
-if (elements.exportBtn) elements.exportBtn.style.display = 'none';
-if (elements.saveBtn) elements.saveBtn.style.display = 'none';
-return;
-}
-if (userRole === 'admin') {
-// Admin can see everything
-if (elements.importWrapper) elements.importWrapper.style.display = 'inline-block';
-if (elements.exportBtn) elements.exportBtn.style.display = 'flex';
-if (elements.saveBtn) elements.saveBtn.style.display = 'flex';
-} else if (userRole === 'editor') {
-// Editor can see export and save
-if (elements.importWrapper) elements.importWrapper.style.display = 'none';
-if (elements.exportBtn) elements.exportBtn.style.display = 'flex';
-if (elements.saveBtn) elements.saveBtn.style.display = 'flex';
-}
+// Verificăm dacă utilizatorul este autentificat
+const isLoggedIn = currentUser && (userRole === 'admin' || userRole === 'editor');
+    
+    // Panoul de administrare pentru pagina principală
+    if (elements.importWrapper) {
+        elements.importWrapper.style.display = isLoggedIn && userRole === 'admin' ? 'block' : 'none';
+    }
+    if (elements.exportBtn) {
+        elements.exportBtn.style.display = isLoggedIn ? 'block' : 'none';
+    }
+    if (elements.saveBtn) {
+        elements.saveBtn.style.display = isLoggedIn ? 'block' : 'none';
+    }
+    
+    // Panoul de administrare pentru pagina de turnee zilnice
+    if (elements.dailyImportWrapper) {
+        elements.dailyImportWrapper.style.display = isLoggedIn && userRole === 'admin' ? 'block' : 'none';
+    }
+    if (elements.dailyExportBtn) {
+        elements.dailyExportBtn.style.display = isLoggedIn ? 'block' : 'none';
+    }
+    if (elements.dailySaveBtn) {
+        elements.dailySaveBtn.style.display = isLoggedIn ? 'block' : 'none';
+    }
+    
+    // Asigurăm că panoul de administrare este vizibil pentru utilizatorii autentificați
+    if (isLoggedIn) {
+        if (activePage === 'mainPage' && elements.adminPanel) {
+            elements.adminPanel.classList.add('active');
+        } else if (activePage === 'dailyTournamentsPage' && elements.dailyAdminPanel) {
+            elements.dailyAdminPanel.classList.add('active');
+        }
+    }
 }
 // Setup event listeners
 function setupEventListeners() {
@@ -1251,11 +1715,13 @@ elements.languageDropdown.classList.remove('active');
 if (elements.adminBtn) {
 elements.adminBtn.addEventListener('click', () => {
 if (currentUser) {
-if (elements.adminPanel) {
+if (activePage === 'mainPage' && elements.adminPanel) {
 elements.adminPanel.classList.toggle('active');
-// Update visibility when panel is opened
-updateAdminPanelVisibility();
+} else if (activePage === 'dailyTournamentsPage' && elements.dailyAdminPanel) {
+elements.dailyAdminPanel.classList.toggle('active');
 }
+// Actualizăm vizibilitatea butoanelor la deschiderea panoului
+updateAdminPanelVisibility();
 } else {
 if (elements.loginModal) {
 elements.loginModal.classList.add('active');
@@ -1267,6 +1733,13 @@ if (elements.closeAdmin) {
 elements.closeAdmin.addEventListener('click', () => {
 if (elements.adminPanel) {
 elements.adminPanel.classList.remove('active');
+}
+});
+}
+if (elements.closeDailyAdmin) {
+elements.closeDailyAdmin.addEventListener('click', () => {
+if (elements.dailyAdminPanel) {
+elements.dailyAdminPanel.classList.remove('active');
 }
 });
 }
@@ -1326,19 +1799,38 @@ showNotification(translations[currentLang].logoutSuccess, 'success');
 if (elements.fileInput) {
 elements.fileInput.addEventListener('change', handleFileImport);
 }
+// Daily file import
+if (elements.dailyFileInput) {
+elements.dailyFileInput.addEventListener('change', handleDailyFileImport);
+}
 // Export
 if (elements.exportBtn) {
 elements.exportBtn.addEventListener('click', exportData);
 }
+// Daily export
+if (elements.dailyExportBtn) {
+elements.dailyExportBtn.addEventListener('click', exportDailyData);
+}
 // Save
 if (elements.saveBtn) {
 elements.saveBtn.addEventListener('click', saveDataToFirebase);
+}
+// Daily save
+if (elements.dailySaveBtn) {
+elements.dailySaveBtn.addEventListener('click', saveDailyDataToFirebase);
 }
 // Search
 if (elements.searchInput) {
 elements.searchInput.addEventListener('input', (e) => {
 searchQuery = e.target.value.toLowerCase();
 renderTable();
+});
+}
+// Daily search
+if (elements.dailySearchInput) {
+elements.dailySearchInput.addEventListener('input', (e) => {
+dailySearchQuery = e.target.value.toLowerCase();
+renderDailyTable();
 });
 }
 // Dashboard filters
@@ -1350,6 +1842,26 @@ setActiveFilter(filter);
 });
 });
 }
+// Daily dashboard filters
+if (elements.dailyStatCards) {
+elements.dailyStatCards.forEach(card => {
+card.addEventListener('click', () => {
+const filter = card.getAttribute('data-daily-filter');
+setDailyActiveFilter(filter);
+});
+});
+}
+// Navigation
+if (elements.mainPageBtn) {
+elements.mainPageBtn.addEventListener('click', () => {
+showPage('mainPage');
+});
+}
+if (elements.dailyTournamentsBtn) {
+elements.dailyTournamentsBtn.addEventListener('click', () => {
+showPage('dailyTournamentsPage');
+});
+}
 // Close dropdowns when clicking outside
 document.addEventListener('click', (e) => {
 if (!e.target.closest('.language-selector') && elements.languageDropdown) {
@@ -1359,6 +1871,7 @@ elements.languageDropdown.classList.remove('active');
 }
 // Setup sort buttons
 function setupSortButtons() {
+// Main page sort buttons
 if (elements.sortButtons) {
 elements.sortButtons.forEach(button => {
 button.addEventListener('click', () => {
@@ -1373,6 +1886,43 @@ renderTable();
 });
 });
 }
+// Daily page sort buttons
+if (elements.dailySortButtons) {
+elements.dailySortButtons.forEach(button => {
+button.addEventListener('click', () => {
+// Remove active class from all buttons
+elements.dailySortButtons.forEach(btn => btn.classList.remove('active'));
+// Add active class to clicked button
+button.classList.add('active');
+// Update sort method
+dailyCurrentSortMethod = button.getAttribute('data-daily-sort');
+// Re-render table with new sort
+renderDailyTable();
+});
+});
+}
+}
+// Show page
+function showPage(pageId) {
+// Hide all pages
+document.querySelectorAll('.page').forEach(page => {
+page.classList.remove('active');
+});
+// Show selected page
+const page = document.getElementById(pageId);
+if (page) {
+page.classList.add('active');
+}
+activePage = pageId;
+// Update navigation buttons
+if (elements.mainPageBtn) {
+elements.mainPageBtn.classList.toggle('active', pageId === 'mainPage');
+}
+if (elements.dailyTournamentsBtn) {
+elements.dailyTournamentsBtn.classList.toggle('active', pageId === 'dailyTournamentsPage');
+}
+// Update admin panel visibility
+updateAdminPanelVisibility();
 }
 // Update UI for logged in user
 function updateUIForLoggedInUser() {
@@ -1388,15 +1938,21 @@ elements.userRole.textContent = userRole;
 if (elements.adminBtn) {
 elements.adminBtn.style.display = 'none';
 }
-// Show admin panel if user is admin or editor
-if (userRole === 'admin' || userRole === 'editor') {
-if (elements.adminPanel) {
-elements.adminPanel.classList.add('active');
-}
-}
-// Update admin panel visibility
-updateAdminPanelVisibility();
-renderTable();
+    
+    // Afișăm panoul de administrare corespunzător paginii active
+    if (userRole === 'admin' || userRole === 'editor') {
+        if (activePage === 'mainPage' && elements.adminPanel) {
+            elements.adminPanel.classList.add('active');
+        } else if (activePage === 'dailyTournamentsPage' && elements.dailyAdminPanel) {
+            elements.dailyAdminPanel.classList.add('active');
+        }
+    }
+    
+    // Actualizăm vizibilitatea butoanelor de administrare
+    updateAdminPanelVisibility();
+    
+    renderTable();
+    renderDailyTable();
 }
 // Update UI for logged out user
 function updateUIForLoggedOutUser() {
@@ -1409,9 +1965,15 @@ elements.adminBtn.style.display = 'flex';
 if (elements.adminPanel) {
 elements.adminPanel.classList.remove('active');
 }
-// Update admin panel visibility
-updateAdminPanelVisibility();
-renderTable();
+if (elements.dailyAdminPanel) {
+elements.dailyAdminPanel.classList.remove('active');
+}
+    
+    // Actualizăm vizibilitatea butoanelor de administrare
+    updateAdminPanelVisibility();
+    
+    renderTable();
+    renderDailyTable();
 }
 // Language functions
 function changeLanguage(lang) {
@@ -1421,8 +1983,11 @@ elements.currentLang.textContent = lang.toUpperCase();
 }
 loadLanguage();
 updateDashboard();
+updateDailyDashboard();
 renderTable();
+renderDailyTable();
 updateLastUpdatedTime();
+updateDailyLastUpdatedTime();
 }
 function loadLanguage() {
 // Update all elements with data-i18n attribute
@@ -1452,7 +2017,7 @@ console.error(`Missing placeholder translation for key "${key}" in all languages
 }
 });
 }
-// Firebase functions
+// Firebase functions for main page
 function loadDataFromFirebase() {
 showLoadingIndicator(true);
 updateSyncStatus('syncing');
@@ -1580,6 +2145,134 @@ updateSyncStatus('error');
 showNotification('Error updating score: ' + error.message, 'error');
 });
 }
+// Firebase functions for daily tournaments page
+function loadDailyDataFromFirebase() {
+showLoadingIndicator(true);
+updateSyncStatus('syncing');
+const dailyPlayersRef = database.ref('dailyPlayers');
+const dailyMetadataRef = database.ref('dailyMetadata');
+// Listen for real-time updates
+dailyPlayersRef.on('value', (snapshot) => {
+try {
+const data = snapshot.val();
+if (data) {
+dailyPlayers = Object.values(data);
+} else {
+dailyPlayers = [];
+}
+updateDailyDashboard();
+renderDailyTable();
+showLoadingIndicator(false);
+updateSyncStatus('synced');
+} catch (error) {
+console.error('Error loading daily data:', error);
+showLoadingIndicator(false);
+updateSyncStatus('error');
+showNotification('Error loading daily data', 'error');
+}
+}, (error) => {
+console.error('Database error:', error);
+showLoadingIndicator(false);
+updateSyncStatus('error');
+showNotification('Database connection error', 'error');
+});
+// Get metadata
+dailyMetadataRef.once('value').then((snapshot) => {
+const metadata = snapshot.val();
+if (metadata && metadata.lastUpdateTime) {
+dailyLastUpdateTime = new Date(metadata.lastUpdateTime);
+}
+updateDailyLastUpdatedTime();
+}).catch((error) => {
+console.error('Error loading daily metadata:', error);
+dailyLastUpdateTime = new Date();
+updateDailyLastUpdatedTime();
+});
+}
+function saveDailyDataToFirebase() {
+if (!currentUser) {
+showNotification('Permission denied', 'error');
+return;
+}
+// Disable save button to prevent multiple clicks
+if (elements.dailySaveBtn) {
+elements.dailySaveBtn.disabled = true;
+}
+showLoadingIndicator(true);
+updateSyncStatus('syncing');
+// Clear any existing timeout
+if (syncTimeout) {
+clearTimeout(syncTimeout);
+}
+const dailyPlayersObj = {};
+dailyPlayers.forEach((player, index) => {
+dailyPlayersObj[index] = player;
+});
+const metadata = {
+lastUpdateTime: new Date().toISOString(),
+version: '1.0'
+};
+// Save daily players data
+database.ref('dailyPlayers').set(dailyPlayersObj)
+.then(() => {
+// Save metadata
+return database.ref('dailyMetadata').set(metadata);
+})
+.then(() => {
+dailyLastUpdateTime = new Date();
+updateDailyLastUpdatedTime();
+showLoadingIndicator(false);
+updateSyncStatus('synced');
+showNotification('Daily data saved successfully!', 'success');
+// Re-enable save button after a delay
+if (elements.dailySaveBtn) {
+setTimeout(() => {
+elements.dailySaveBtn.disabled = false;
+}, 2000);
+}
+})
+.catch((error) => {
+console.error('Error saving daily data:', error);
+showLoadingIndicator(false);
+updateSyncStatus('error');
+showNotification('Error saving daily data: ' + error.message, 'error');
+// Re-enable save button after a delay
+if (elements.dailySaveBtn) {
+setTimeout(() => {
+elements.dailySaveBtn.disabled = false;
+}, 2000);
+}
+});
+}
+function updateDailyScoreInFirebase(playerName, date, score) {
+if (!currentUser) {
+showNotification('Permission denied', 'error');
+return;
+}
+const playerIndex = dailyPlayers.findIndex(p => p.playerName === playerName);
+if (playerIndex === -1) return;
+updateSyncStatus('syncing');
+// Clear any existing timeout
+if (syncTimeout) {
+clearTimeout(syncTimeout);
+}
+// Update the player's score in Firebase
+database.ref(`dailyPlayers/${playerIndex}/scores/${date}`).set(score === '' ? null : parseInt(score))
+.then(() => {
+// Update metadata
+return database.ref('dailyMetadata/lastUpdateTime').set(new Date().toISOString());
+})
+.then(() => {
+dailyLastUpdateTime = new Date();
+updateDailyLastUpdatedTime();
+updateSyncStatus('synced');
+})
+.catch((error) => {
+console.error('Error updating daily score:', error);
+updateSyncStatus('error');
+showNotification('Error updating daily score: ' + error.message, 'error');
+});
+}
 // UI functions
 function showLoadingIndicator(show) {
 if (elements.loadingIndicator) {
@@ -1643,7 +2336,23 @@ if (elements.weeklyAverage) elements.weeklyAverage.textContent = weeklyAverage;
 console.error('Error updating dashboard:', error);
 }
 }
-// Sort players function
+function updateDailyDashboard() {
+try {
+const totalPlayers = dailyPlayers.length;
+const top10Players = dailyPlayers.filter(p => calculateDailyAverage(p) > 0).sort((a, b) => calculateDailyAverage(b) - calculateDailyAverage(a)).slice(0, 10).length;
+const top32Players = dailyPlayers.filter(p => calculateDailyAverage(p) > 0).sort((a, b) => calculateDailyAverage(b) - calculateDailyAverage(a)).slice(0, 32).length;
+const missedTournaments = dailyPlayers.filter(p => hasMissedTournament(p)).length;
+const min2Missed = dailyPlayers.filter(p => hasMin2MissedTournaments(p)).length;
+if (elements.dailyTotalPlayers) elements.dailyTotalPlayers.textContent = totalPlayers;
+if (elements.top10Players) elements.top10Players.textContent = top10Players;
+if (elements.top32Players) elements.top32Players.textContent = top32Players;
+if (elements.missedTournaments) elements.missedTournaments.textContent = missedTournaments;
+if (elements.min2Missed) elements.min2Missed.textContent = min2Missed;
+} catch (error) {
+console.error('Error updating daily dashboard:', error);
+}
+}
+// Sort players function for main page
 function sortPlayers(players, sortMethod) {
 const sortedPlayers = [...players];
 switch(sortMethod) {
@@ -1672,6 +2381,34 @@ default:
 sortedPlayers.sort((a, b) => {
 const rankA = calculateRank(a);
 const rankB = calculateRank(b);
+return rankA - rankB;
+});
+}
+return sortedPlayers;
+}
+// Sort players function for daily page
+function sortDailyPlayers(players, sortMethod) {
+const sortedPlayers = [...players];
+switch(sortMethod) {
+case 'rank':
+// Sort by rank (default)
+sortedPlayers.sort((a, b) => {
+const rankA = calculateDailyRank(a);
+const rankB = calculateDailyRank(b);
+return rankA - rankB;
+});
+break;
+case 'name':
+// Sort by name (alphabetical)
+sortedPlayers.sort((a, b) => {
+return a.playerName.localeCompare(b.playerName);
+});
+break;
+default:
+// Default sort by rank
+sortedPlayers.sort((a, b) => {
+const rankA = calculateDailyRank(a);
+const rankB = calculateDailyRank(b);
 return rankA - rankB;
 });
 }
@@ -1732,6 +2469,92 @@ elements.rankingBody.appendChild(row);
 console.error('Error rendering table:', error);
 }
 }
+function renderDailyTable() {
+try {
+// Get all date columns
+const dateColumns = [];
+document.querySelectorAll('#dailyTournamentsTable th[data-date]').forEach(th => {
+dateColumns.push(th.getAttribute('data-date'));
+});
+        
+// Filter players
+let filteredPlayers = dailyPlayers.filter(player => {
+// Validate player object
+if (!player || !player.playerName) {
+return false;
+}
+            
+// Apply search filter
+if (dailySearchQuery && !player.playerName.toLowerCase().includes(dailySearchQuery)) {
+return false;
+}
+            
+// Apply dashboard filter
+switch (dailyActiveFilter) {
+case 'top10':
+return calculateDailyRank(player) <= 10;
+case 'top32':
+return calculateDailyRank(player) <= 32;
+case 'missed':
+return hasMissedTournament(player);
+case 'min2missed':
+return hasMin2MissedTournaments(player);
+default:
+return true;
+}
+});
+        
+// Sort players according to selected method
+filteredPlayers = sortDailyPlayers(filteredPlayers, dailyCurrentSortMethod);
+        
+// Clear table
+if (elements.dailyTournamentsBody) {
+elements.dailyTournamentsBody.innerHTML = '';
+}
+        
+// Render rows
+filteredPlayers.forEach(player => {
+const row = document.createElement('tr');
+const average = calculateDailyAverage(player);
+const nrTournaments = calculateNrTournaments(player);
+const canEdit = currentUser;
+            
+row.innerHTML = `
+<td class="rank">${calculateDailyRank(player)}</td>
+<td class="player player-name">${player.playerName}</td>
+<td class="average">${Math.round(average)}</td>
+<td class="nr-tournaments">${nrTournaments}</td>
+`;
+            
+// Add date columns in reverse order (most recent first)
+const dateColumnsReversed = [...dateColumns].reverse();
+dateColumnsReversed.forEach(date => {
+const cell = document.createElement('td');
+cell.setAttribute('data-date', date);
+                
+if (player.scores && player.scores[date] !== undefined && player.scores[date] !== null) {
+const score = player.scores[date];
+if (score === 0) {
+cell.classList.add('zero-value');
+}
+cell.innerHTML = `<input type="number" class="editable" value="${score}" 
+onchange="updateDailyScore('${player.playerName}', '${date}', this.value)">`;
+} else {
+cell.innerHTML = `<input type="number" class="editable" value="" 
+onchange="updateDailyScore('${player.playerName}', '${date}', this.value)">`;
+}
+                
+row.appendChild(cell);
+});
+            
+if (elements.dailyTournamentsBody) {
+elements.dailyTournamentsBody.appendChild(row);
+}
+});
+} catch (error) {
+console.error('Error rendering daily table:', error);
+}
+}
 function setActiveFilter(filter) {
 activeFilter = filter;
 // Update active state
@@ -1744,6 +2567,19 @@ card.classList.add('active');
 });
 }
 renderTable();
+}
+function setDailyActiveFilter(filter) {
+dailyActiveFilter = filter;
+// Update active state
+if (elements.dailyStatCards) {
+elements.dailyStatCards.forEach(card => {
+card.classList.remove('active');
+if (card.getAttribute('data-daily-filter') === filter) {
+card.classList.add('active');
+}
+});
+}
+renderDailyTable();
 }
 function updateLastUpdatedTime() {
 if (!lastUpdateTime) {
@@ -1769,6 +2605,30 @@ if (elements.updateTime) {
 elements.updateTime.textContent = timeText;
 }
 }
+function updateDailyLastUpdatedTime() {
+if (!dailyLastUpdateTime) {
+if (elements.dailyUpdateTime) {
+elements.dailyUpdateTime.textContent = translations[currentLang].never;
+}
+return;
+}
+const now = new Date();
+const diff = now - dailyLastUpdateTime;
+const minutes = Math.floor(diff / 60000);
+const hours = Math.floor(diff / 3600000);
+const days = Math.floor(diff / 86400000);
+let timeText;
+if (days > 0) {
+timeText = `${days} ${translations[currentLang].days}`;
+} else if (hours > 0) {
+timeText = `${hours} ${translations[currentLang].hours}`;
+} else {
+timeText = `${minutes} ${translations[currentLang].minutes}`;
+}
+if (elements.dailyUpdateTime) {
+elements.dailyUpdateTime.textContent = timeText;
+}
+}
 function showNotification(message, type) {
 if (elements.notificationMessage) {
 elements.notificationMessage.textContent = message;
@@ -1788,7 +2648,7 @@ elements.notification.classList.remove('show');
 }
 }, 3000);
 }
-// Calculation functions
+// Calculation functions for main page
 function calculateWeekScore(player) {
 if (!player || typeof player.totalScores === 'undefined' || typeof player.startingPoints === 'undefined') {
 return 0;
@@ -1825,7 +2685,55 @@ const leftToAchieve = calculateLeftToAchieve(player);
 if (leftToAchieve <= 0) return translations[currentLang].done;
 return leftToAchieve;
 }
-// File handling functions
+// Calculation functions for daily page
+function calculateDailyAverage(player) {
+if (!player || !player.scores) return 0;
+let total = 0;
+let count = 0;
+Object.entries(player.scores).forEach(([date, score]) => {
+if (score !== null && score !== undefined) {
+total += score;
+count++;
+}
+});
+return count > 0 ? total / count : 0;
+}
+function calculateNrTournaments(player) {
+if (!player || !player.scores) return 0;
+let count = 0;
+Object.values(player.scores).forEach(score => {
+if (score !== null && score !== undefined) {
+count++;
+}
+});
+return count;
+}
+function calculateDailyRank(player) {
+if (!player || !player.playerName) return 0;
+const sortedPlayers = [...dailyPlayers].filter(p => p && p.playerName).sort((a, b) => {
+const avgA = calculateDailyAverage(a);
+const avgB = calculateDailyAverage(b);
+if (avgB !== avgA) {
+return avgB - avgA;
+}
+// Fix for localeCompare error - check if playerName exists
+if (a.playerName && b.playerName) {
+return a.playerName.localeCompare(b.playerName);
+}
+return 0;
+});
+return sortedPlayers.findIndex(p => p.playerName === player.playerName) + 1;
+}
+function hasMissedTournament(player) {
+if (!player || !player.scores) return false;
+return Object.values(player.scores).some(score => score === 0);
+}
+function hasMin2MissedTournaments(player) {
+if (!player || !player.scores) return false;
+const missedCount = Object.values(player.scores).filter(score => score === 0).length;
+return missedCount >= 2;
+}
+// File handling functions for main page
 function handleFileImport(event) {
 if (!currentUser || userRole !== 'admin') {
 showNotification('Permission denied', 'error');
@@ -1937,6 +2845,191 @@ console.error('Error exporting data:', error);
 showNotification('Error exporting data: ' + error.message, 'error');
 }
 }
+// File handling functions for daily page
+function handleDailyFileImport(event) {
+    if (!currentUser || userRole !== 'admin') {
+        showNotification('Permission denied', 'error');
+        return;
+    }
+    
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    // Validate file type
+    if (!file.name.match(/\.(xlsx|xls)$/)) {
+        showNotification('Please select a valid Excel file', 'error');
+        return;
+    }
+    
+    showLoadingIndicator(true);
+    updateSyncStatus('syncing');
+    
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, { type: 'array' });
+            
+            if (!workbook.SheetNames || workbook.SheetNames.length === 0) {
+                throw new Error('No sheets found in the Excel file');
+            }
+            
+            const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+            const jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+            
+            if (!jsonData || jsonData.length < 2) {
+                throw new Error('No data found in the Excel file');
+            }
+            
+            // Get headers from the first row
+            const headers = jsonData[0];
+            
+            // Find the Player Name column index
+            const playerNameIndex = headers.findIndex(header => 
+                header && header.toString().toLowerCase().includes('player')
+            );
+            
+            if (playerNameIndex === -1) {
+                throw new Error('Player Name column not found');
+            }
+            
+            // Get all date columns (columns that are dates in DD-MM-YYYY format)
+            const dateColumns = [];
+            for (let i = 0; i < headers.length; i++) {
+                if (i < 4) continue; // Skip first 4 columns (Rank, Player Name, Average, Nr. Tournament)
+                const header = headers[i];
+                if (header && /^\d{2}-\d{2}-\d{4}$/.test(header.toString())) {
+                    dateColumns.push(header.toString());
+                }
+            }
+            
+            // Process imported data
+            const newPlayers = [];
+            for (let i = 1; i < jsonData.length; i++) {
+                const row = jsonData[i];
+                if (row && row[playerNameIndex]) { // Check if player name exists
+                    const player = {
+                        playerName: String(row[playerNameIndex]),
+                        scores: {}
+                    };
+                    
+                    // Add scores for each date column
+                    dateColumns.forEach(date => {
+                        const dateIndex = headers.indexOf(date);
+                        if (dateIndex !== -1 && row[dateIndex] !== undefined) {
+                            const score = parseInt(row[dateIndex]);
+                            player.scores[date] = isNaN(score) ? null : score;
+                        } else {
+                            player.scores[date] = null;
+                        }
+                    });
+                    
+                    newPlayers.push(player);
+                }
+            }
+            
+            if (newPlayers.length === 0) {
+                throw new Error('No valid player data found');
+            }
+            
+            // Clear existing players and add new ones
+            dailyPlayers = newPlayers;
+            
+            // Save to Firebase
+            const dailyPlayersObj = {};
+            dailyPlayers.forEach((player, index) => {
+                dailyPlayersObj[index] = player;
+            });
+            
+            const metadata = {
+                lastUpdateTime: new Date().toISOString(),
+                version: '1.0'
+            };
+            
+            database.ref('dailyPlayers').set(dailyPlayersObj)
+                .then(() => {
+                    return database.ref('dailyMetadata').set(metadata);
+                })
+                .then(() => {
+                    dailyLastUpdateTime = new Date();
+                    updateDailyLastUpdatedTime();
+                    showLoadingIndicator(false);
+                    updateSyncStatus('synced');
+                    showNotification('Players imported successfully!', 'success');
+                    // Regenerate columns and refresh table
+                    checkDailyColumns();
+                    renderDailyTable();
+                })
+                .catch((error) => {
+                    console.error('Error importing daily data:', error);
+                    showLoadingIndicator(false);
+                    updateSyncStatus('error');
+                    showNotification('Error importing daily data: ' + error.message, 'error');
+                });
+        } catch (error) {
+            console.error('Error processing file:', error);
+            showLoadingIndicator(false);
+            updateSyncStatus('error');
+            showNotification('Error processing file: ' + error.message, 'error');
+        }
+    };
+    
+    reader.onerror = function() {
+        console.error('Error reading file');
+        showLoadingIndicator(false);
+        updateSyncStatus('error');
+        showNotification('Error reading file', 'error');
+    };
+    
+    reader.readAsArrayBuffer(file);
+    event.target.value = '';
+}
+function exportDailyData() {
+    try {
+        // Get all date columns in reverse order (most recent first)
+        const dateColumns = [];
+        document.querySelectorAll('#dailyTournamentsTable th[data-date]').forEach(th => {
+            dateColumns.unshift(th.getAttribute('data-date')); // Add to beginning to reverse order
+        });
+        
+        // Create Excel file
+        const exportData = dailyPlayers.filter(player => player && player.playerName).map(player => {
+            const row = {
+                Rank: calculateDailyRank(player),
+                'Player Name': player.playerName,
+                Average: Math.round(calculateDailyAverage(player)),
+                'Nr. Tournament': calculateNrTournaments(player)
+            };
+            
+            // Add scores for each date
+            dateColumns.forEach(date => {
+                row[date] = (player.scores && player.scores[date] !== undefined && player.scores[date] !== null) ? player.scores[date] : '';
+            });
+            
+            return row;
+        });
+        
+        if (exportData.length === 0) {
+            showNotification('No data to export', 'error');
+            return;
+        }
+        
+        const worksheet = XLSX.utils.json_to_sheet(exportData);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Daily Tournaments Data');
+        
+        // Generate filename with current date
+        const now = new Date();
+        const dateStr = now.toISOString().split('T')[0]; // YYYY-MM-DD
+        const filename = `daily_tournaments_data_${dateStr}.xlsx`;
+        
+        XLSX.writeFile(workbook, filename);
+        showNotification('Daily data exported successfully!', 'success');
+    } catch (error) {
+        console.error('Error exporting daily data:', error);
+        showNotification('Error exporting daily data: ' + error.message, 'error');
+    }
+}
 // Global functions for inline event handlers
 window.updatePlayerScore = function(playerName, newScore) {
 if (!currentUser) {
@@ -1947,6 +3040,36 @@ const player = players.find(p => p.player === playerName);
 if (player) {
 player.totalScores = parseInt(newScore) || 0;
 updatePlayerScoreInFirebase(playerName, newScore);
+}
+};
+window.updateDailyScore = function(playerName, date, score) {
+if (!currentUser) {
+showNotification('Permission denied', 'error');
+return;
+}
+const player = dailyPlayers.find(p => p.playerName === playerName);
+if (player) {
+if (!player.scores) {
+player.scores = {};
+}
+player.scores[date] = score === '' ? null : parseInt(score) || null;
+updateDailyScoreInFirebase(playerName, date, score);
+// Update the cell class if score is 0
+const cell = document.querySelector(`#dailyTournamentsBody tr .player-name`);
+if (cell) {
+const row = cell.closest('tr');
+const targetCell = row.querySelector(`td[data-date="${date}"]`);
+if (targetCell) {
+if (score === '0') {
+targetCell.classList.add('zero-value');
+} else {
+targetCell.classList.remove('zero-value');
+}
+}
+}
+// Update dashboard and table
+updateDailyDashboard();
+renderDailyTable();
 }
 };
 // Initialize app when DOM is loaded
