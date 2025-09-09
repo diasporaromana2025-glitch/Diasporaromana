@@ -746,6 +746,25 @@
         .page.active {
             display: block;
         }
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray);
+        }
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 16px;
+            color: var(--light-gray);
+        }
+        .empty-state h3 {
+            font-size: 20px;
+            margin-bottom: 8px;
+            color: var(--dark);
+        }
+        .empty-state p {
+            font-size: 16px;
+            color: var(--gray);
+        }
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -1059,6 +1078,11 @@
                             <!-- Table rows will be generated here -->
                         </tbody>
                     </table>
+                    <div id="dailyTableEmpty" class="empty-state" style="display: none;">
+                        <i class="fas fa-user-slash"></i>
+                        <h3>Nu s-au găsit jucători</h3>
+                        <p>Verificați dacă există jucători în sistem sau dacă filtrele aplicate sunt corecte.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1190,7 +1214,8 @@
                 'userName', 'userRole', 'logoutBtn', 'username', 'importWrapper',
                 'dailyTableBody', 'updateTimeDaily', 'dailyTotalPlayers', 'top10Players', 
                 'top32Players', 'missedTournaments', 'min2Missed', 'sortByRank', 
-                'sortByName', 'sortByTotal', 'sortByRankDaily', 'sortByNameDaily', 'dailyTable'
+                'sortByName', 'sortByTotal', 'sortByRankDaily', 'sortByNameDaily', 'dailyTable',
+                'dailyTableEmpty'
             ];
             
             elementIds.forEach(id => {
@@ -1638,6 +1663,8 @@
                     updateDashboard();
                     if (currentPage === 'main') {
                         renderMainTable();
+                    } else {
+                        renderDailyTable();
                     }
                     showLoadingIndicator(false);
                     updateSyncStatus('synced');
@@ -2009,6 +2036,28 @@
         
         function renderDailyTable() {
             try {
+                // Check if players array is empty
+                if (!players || players.length === 0) {
+                    if (elements.dailyTableBody) {
+                        elements.dailyTableBody.innerHTML = '';
+                    }
+                    if (elements.dailyTable) {
+                        elements.dailyTable.style.display = 'none';
+                    }
+                    if (elements.dailyTableEmpty) {
+                        elements.dailyTableEmpty.style.display = 'block';
+                    }
+                    return;
+                }
+                
+                // Make sure table and empty state are visible/hidden correctly
+                if (elements.dailyTable) {
+                    elements.dailyTable.style.display = 'table';
+                }
+                if (elements.dailyTableEmpty) {
+                    elements.dailyTableEmpty.style.display = 'none';
+                }
+                
                 // Filter players
                 let filteredPlayers = players.filter(player => {
                     if (searchQuery && !player.player.toLowerCase().includes(searchQuery)) {
