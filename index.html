@@ -1299,6 +1299,18 @@
             return dateString.replace(/\./g, '-');
         }
         
+        // Initialize daily scores for all players
+        function initializeDailyScoresForAllPlayers() {
+            if (!players || players.length === 0) return;
+            
+            players.forEach(player => {
+                const cleanName = cleanPlayerName(player.player);
+                if (!dailyScores[cleanName]) {
+                    dailyScores[cleanName] = {};
+                }
+            });
+        }
+        
         // Setup midnight update to add new date column
         function setupMidnightUpdate() {
             const now = new Date();
@@ -1656,6 +1668,8 @@
                     const data = snapshot.val();
                     if (data) {
                         players = Object.values(data);
+                        // Initialize daily scores for all players
+                        initializeDailyScoresForAllPlayers();
                     } else {
                         players = [];
                     }
@@ -1687,8 +1701,12 @@
                     const data = snapshot.val();
                     if (data) {
                         dailyScores = data;
+                        // Make sure all players are initialized
+                        initializeDailyScoresForAllPlayers();
                     } else {
                         dailyScores = {};
+                        // Initialize daily scores for all players
+                        initializeDailyScoresForAllPlayers();
                     }
                     
                     updateDashboard();
@@ -2058,24 +2076,14 @@
                     elements.dailyTableEmpty.style.display = 'none';
                 }
                 
-                // Filter players
+                // Filter players - show all players regardless of filters
                 let filteredPlayers = players.filter(player => {
                     if (searchQuery && !player.player.toLowerCase().includes(searchQuery)) {
                         return false;
                     }
                     
-                    switch (activeFilter) {
-                        case 'top10':
-                            return getTopPlayers(10).some(p => p.player === player.player);
-                        case 'top32':
-                            return getTopPlayers(32).some(p => p.player === player.player);
-                        case 'missed':
-                            return getPlayersWithMissedTournaments().some(p => p.player === player.player);
-                        case 'min2':
-                            return getPlayersWithMinMissedTournaments(2).some(p => p.player === player.player);
-                        default:
-                            return true;
-                    }
+                    // Show all players regardless of filters
+                    return true;
                 });
                 
                 // Sort players
@@ -2435,6 +2443,12 @@
                         throw new Error('No valid player data found');
                     }
                     
+                    // Update players array
+                    players = newPlayers;
+                    
+                    // Initialize daily scores for all players
+                    initializeDailyScoresForAllPlayers();
+                    
                     // Save to Firebase
                     const playersObj = {};
                     newPlayers.forEach((player, index) => {
@@ -2447,6 +2461,9 @@
                     };
                     
                     database.ref('players').set(playersObj)
+                        .then(() => {
+                            return database.ref('dailyScores').set(dailyScores);
+                        })
                         .then(() => {
                             return database.ref('metadata').set(metadata);
                         })
