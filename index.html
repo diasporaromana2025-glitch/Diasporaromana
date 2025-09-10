@@ -858,6 +858,20 @@ background: var(--white);
 .zero-value::after {
     content: " ⚠️";
 }
+
+/* Mobile modification: Double the width of date columns */
+@media (max-width: 768px) {
+    .daily-table td:not(:nth-child(-n+4)) {
+        min-width: 80px !important;
+        max-width: 100px !important;
+    }
+    
+    /* Ensure input fields take the full width of the cell */
+    .daily-table td:not(:nth-child(-n+4)) input.editable {
+        width: 100% !important;
+        min-width: 70px !important;
+    }
+}
 /* MODIFICATIONS END */
 
 /* Adăugăm stiluri pentru celulele din tabelul zilnic pentru a asigura vizibilitatea textului */
