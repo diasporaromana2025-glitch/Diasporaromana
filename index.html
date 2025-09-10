@@ -836,14 +836,30 @@ z-index: 11;
 .daily-table td:nth-child(4) {
 background: var(--white);
 }
+/* MODIFICATIONS START */
+/* Make date columns wider to accommodate at least 2 digits */
+.daily-table td:not(:nth-child(-n+4)) {
+    min-width: 40px;
+    max-width: 60px;
+}
+
+/* Style for player name when any score is 0 */
+.player-name.has-zero {
+    color: var(--danger) !important;
+    font-weight: 700;
+}
+
+/* Style for zero values in cells */
 .zero-value {
-background-color: rgba(239, 68, 68, 0.2) !important;
-color: var(--danger) !important;
-font-weight: 700;
+    background-color: rgba(239, 68, 68, 0.2) !important;
+    color: var(--danger) !important;
+    font-weight: 700;
 }
 .zero-value::after {
-content: " ⚠️";
+    content: " ⚠️";
 }
+/* MODIFICATIONS END */
+
 /* Adăugăm stiluri pentru celulele din tabelul zilnic pentru a asigura vizibilitatea textului */
 .daily-table td {
     color: var(--dark) !important;
@@ -2519,9 +2535,12 @@ const average = calculateDailyAverage(player);
 const nrTournaments = calculateNrTournaments(player);
 const canEdit = currentUser;
             
+// Check if player has any zero scores
+const hasZero = player.scores && Object.values(player.scores).some(score => score === 0);
+            
 row.innerHTML = `
 <td class="rank">${calculateDailyRank(player)}</td>
-<td class="player player-name">${player.playerName}</td>
+<td class="player player-name ${hasZero ? 'has-zero' : ''}">${player.playerName}</td>
 <td class="average">${Math.round(average)}</td>
 <td class="nr-tournaments">${nrTournaments}</td>
 `;
@@ -2687,16 +2706,17 @@ return leftToAchieve;
 }
 // Calculation functions for daily page
 function calculateDailyAverage(player) {
-if (!player || !player.scores) return 0;
-let total = 0;
-let count = 0;
-Object.entries(player.scores).forEach(([date, score]) => {
-if (score !== null && score !== undefined) {
-total += score;
-count++;
-}
-});
-return count > 0 ? total / count : 0;
+    if (!player || !player.scores) return 0;
+    let total = 0;
+    let count = 0;
+    Object.entries(player.scores).forEach(([date, score]) => {
+        // MODIFICATION: Skip zeros in average calculation
+        if (score !== null && score !== undefined && score > 0) {
+            total += score;
+            count++;
+        }
+    });
+    return count > 0 ? total / count : 0;
 }
 function calculateNrTournaments(player) {
 if (!player || !player.scores) return 0;
@@ -2893,47 +2913,53 @@ function handleDailyFileImport(event) {
                 throw new Error('Player Name column not found');
             }
             
-            // Get all date columns (columns that are dates in DD-MM-YYYY format)
-            const dateColumns = [];
-            for (let i = 0; i < headers.length; i++) {
-                if (i < 4) continue; // Skip first 4 columns (Rank, Player Name, Average, Nr. Tournament)
-                const header = headers[i];
-                if (header && /^\d{2}-\d{2}-\d{4}$/.test(header.toString())) {
-                    dateColumns.push(header.toString());
+            // Get all existing date columns from current data
+            const existingDateColumns = new Set();
+            dailyPlayers.forEach(player => {
+                if (player.scores) {
+                    Object.keys(player.scores).forEach(date => {
+                        existingDateColumns.add(date);
+                    });
                 }
-            }
+            });
             
-            // Process imported data
-            const newPlayers = [];
+            // Process imported data - only import player names
+            const importedPlayerNames = [];
             for (let i = 1; i < jsonData.length; i++) {
                 const row = jsonData[i];
                 if (row && row[playerNameIndex]) { // Check if player name exists
-                    const player = {
-                        playerName: String(row[playerNameIndex]),
-                        scores: {}
-                    };
-                    
-                    // Add scores for each date column
-                    dateColumns.forEach(date => {
-                        const dateIndex = headers.indexOf(date);
-                        if (dateIndex !== -1 && row[dateIndex] !== undefined) {
-                            const score = parseInt(row[dateIndex]);
-                            player.scores[date] = isNaN(score) ? null : score;
-                        } else {
-                            player.scores[date] = null;
-                        }
-                    });
-                    
-                    newPlayers.push(player);
+                    const playerName = String(row[playerNameIndex]).trim();
+                    if (playerName && !importedPlayerNames.includes(playerName)) {
+                        importedPlayerNames.push(playerName);
+                    }
                 }
             }
             
-            if (newPlayers.length === 0) {
-                throw new Error('No valid player data found');
+            if (importedPlayerNames.length === 0) {
+                throw new Error('No valid player names found');
             }
             
-            // Clear existing players and add new ones
-            dailyPlayers = newPlayers;
+            // Merge with existing players
+            const updatedPlayers = [...dailyPlayers];
+            
+            // Add new players that don't already exist
+            importedPlayerNames.forEach(playerName => {
+                if (!updatedPlayers.some(p => p.playerName === playerName)) {
+                    // Create new player with empty scores for all existing date columns
+                    const scores = {};
+                    existingDateColumns.forEach(date => {
+                        scores[date] = null;
+                    });
+                    
+                    updatedPlayers.push({
+                        playerName: playerName,
+                        scores: scores
+                    });
+                }
+            });
+            
+            // Update dailyPlayers array
+            dailyPlayers = updatedPlayers;
             
             // Save to Firebase
             const dailyPlayersObj = {};
@@ -3054,22 +3080,43 @@ player.scores = {};
 }
 player.scores[date] = score === '' ? null : parseInt(score) || null;
 updateDailyScoreInFirebase(playerName, date, score);
-// Update the cell class if score is 0
-const cell = document.querySelector(`#dailyTournamentsBody tr .player-name`);
-if (cell) {
-const row = cell.closest('tr');
-const targetCell = row.querySelector(`td[data-date="${date}"]`);
-if (targetCell) {
-if (score === '0') {
-targetCell.classList.add('zero-value');
-} else {
-targetCell.classList.remove('zero-value');
-}
-}
-}
-// Update dashboard and table
-updateDailyDashboard();
-renderDailyTable();
+    
+    // Find the row for this player
+    const rows = document.querySelectorAll('#dailyTournamentsBody tr');
+    for (let i = 0; i < rows.length; i++) {
+        const row = rows[i];
+        const nameCell = row.querySelector('.player-name');
+        if (nameCell && nameCell.textContent === playerName) {
+            // Update the date cell
+            const targetCell = row.querySelector(`td[data-date="${date}"]`);
+            if (targetCell) {
+                if (score === '0') {
+                    targetCell.classList.add('zero-value');
+                } else {
+                    targetCell.classList.remove('zero-value');
+                }
+            }
+            
+            // Check if the player has any zero in the scores
+            const hasZero = player.scores && Object.values(player.scores).some(s => s === 0);
+            if (hasZero) {
+                nameCell.classList.add('has-zero');
+            } else {
+                nameCell.classList.remove('has-zero');
+            }
+            
+            // Update the average cell
+            const avgCell = row.querySelector('.average');
+            if (avgCell) {
+                avgCell.textContent = Math.round(calculateDailyAverage(player));
+            }
+            
+            break;
+        }
+    }
+    
+    // Update dashboard
+    updateDailyDashboard();
 }
 };
 // Initialize app when DOM is loaded
