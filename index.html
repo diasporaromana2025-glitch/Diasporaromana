@@ -842,13 +842,11 @@ background: var(--white);
     min-width: 40px;
     max-width: 60px;
 }
-
 /* Style for player name when any score is 0 */
 .player-name.has-zero {
     color: var(--danger) !important;
     font-weight: 700;
 }
-
 /* Style for zero values in cells */
 .zero-value {
     background-color: rgba(239, 68, 68, 0.2) !important;
@@ -858,7 +856,6 @@ background: var(--white);
 .zero-value::after {
     content: " ⚠️";
 }
-
 /* Mobile modification: Double the width of date columns */
 @media (max-width: 768px) {
     .daily-table td:not(:nth-child(-n+4)) {
@@ -873,7 +870,6 @@ background: var(--white);
     }
 }
 /* MODIFICATIONS END */
-
 /* Adăugăm stiluri pentru celulele din tabelul zilnic pentru a asigura vizibilitatea textului */
 .daily-table td {
     color: var(--dark) !important;
@@ -1632,40 +1628,40 @@ showNotification(`New column added for ${formattedDate}`, 'success');
 }
 // Check and generate missing daily columns
 function checkDailyColumns() {
-const startDate = new Date('2025-09-01');
-const today = new Date();
-const headerRow = document.querySelector('#dailyTournamentsTable thead tr');
-if (!headerRow) return;
+    const startDate = new Date('2025-09-01');
+    const today = new Date();
+    const headerRow = document.querySelector('#dailyTournamentsTable thead tr');
+    if (!headerRow) return;
     
-// Clear existing date columns (keep first 4 columns)
-while (headerRow.children.length > 4) {
-headerRow.removeChild(headerRow.lastChild);
-}
+    // Clear existing date columns (keep first 4 columns)
+    while (headerRow.children.length > 4) {
+        headerRow.removeChild(headerRow.lastChild);
+    }
     
-// Generate columns from today to start date (reverse order)
-for (let d = new Date(today); d >= startDate; d.setDate(d.getDate() - 1)) {
-const formattedDate = formatDate(d);
-const newHeader = document.createElement('th');
-newHeader.setAttribute('data-date', formattedDate);
-newHeader.textContent = formattedDate;
-headerRow.appendChild(newHeader);
-}
+    // Generate columns from today to start date (reverse order)
+    for (let d = new Date(today); d >= startDate; d.setDate(d.getDate() - 1)) {
+        const formattedDate = formatDate(d);
+        const newHeader = document.createElement('th');
+        newHeader.setAttribute('data-date', formattedDate);
+        newHeader.textContent = formattedDate;
+        headerRow.appendChild(newHeader);
+    }
     
-// Update player data structure
-dailyPlayers.forEach(player => {
-if (!player.scores) {
-player.scores = {};
-}
-for (let d = new Date(startDate); d <= today; d.setDate(d.getDate() + 1)) {
-const dateStr = formatDate(new Date(d));
-if (player.scores[dateStr] === undefined) {
-player.scores[dateStr] = null;
-}
-}
-});
+    // Update player data structure
+    dailyPlayers.forEach(player => {
+        if (!player.scores) {
+            player.scores = {};
+        }
+        for (let d = new Date(startDate); d <= today; d.setDate(d.getDate() + 1)) {
+            const dateStr = formatDate(new Date(d));
+            if (player.scores[dateStr] === undefined) {
+                player.scores[dateStr] = null;
+            }
+        }
+    });
     
-// Re-render the table
-renderDailyTable();
+    // Re-render the table
+    renderDailyTable();
 }
 // Format date as DD-MM-YYYY
 function formatDate(date) {
@@ -2500,93 +2496,92 @@ console.error('Error rendering table:', error);
 }
 }
 function renderDailyTable() {
-try {
-// Get all date columns
-const dateColumns = [];
-document.querySelectorAll('#dailyTournamentsTable th[data-date]').forEach(th => {
-dateColumns.push(th.getAttribute('data-date'));
-});
+    try {
+        // Get all date columns
+        const dateColumns = [];
+        document.querySelectorAll('#dailyTournamentsTable th[data-date]').forEach(th => {
+            dateColumns.push(th.getAttribute('data-date'));
+        });
         
-// Filter players
-let filteredPlayers = dailyPlayers.filter(player => {
-// Validate player object
-if (!player || !player.playerName) {
-return false;
-}
+        // Filter players
+        let filteredPlayers = dailyPlayers.filter(player => {
+            // Validate player object
+            if (!player || !player.playerName) {
+                return false;
+            }
             
-// Apply search filter
-if (dailySearchQuery && !player.playerName.toLowerCase().includes(dailySearchQuery)) {
-return false;
-}
+            // Apply search filter
+            if (dailySearchQuery && !player.playerName.toLowerCase().includes(dailySearchQuery)) {
+                return false;
+            }
             
-// Apply dashboard filter
-switch (dailyActiveFilter) {
-case 'top10':
-return calculateDailyRank(player) <= 10;
-case 'top32':
-return calculateDailyRank(player) <= 32;
-case 'missed':
-return hasMissedTournament(player);
-case 'min2missed':
-return hasMin2MissedTournaments(player);
-default:
-return true;
-}
-});
+            // Apply dashboard filter
+            switch (dailyActiveFilter) {
+                case 'top10':
+                    return calculateDailyRank(player) <= 10;
+                case 'top32':
+                    return calculateDailyRank(player) <= 32;
+                case 'missed':
+                    return hasMissedTournament(player);
+                case 'min2missed':
+                    return hasMin2MissedTournaments(player);
+                default:
+                    return true;
+            }
+        });
         
-// Sort players according to selected method
-filteredPlayers = sortDailyPlayers(filteredPlayers, dailyCurrentSortMethod);
+        // Sort players according to selected method
+        filteredPlayers = sortDailyPlayers(filteredPlayers, dailyCurrentSortMethod);
         
-// Clear table
-if (elements.dailyTournamentsBody) {
-elements.dailyTournamentsBody.innerHTML = '';
-}
+        // Clear table
+        if (elements.dailyTournamentsBody) {
+            elements.dailyTournamentsBody.innerHTML = '';
+        }
         
-// Render rows
-filteredPlayers.forEach(player => {
-const row = document.createElement('tr');
-const average = calculateDailyAverage(player);
-const nrTournaments = calculateNrTournaments(player);
-const canEdit = currentUser;
+        // Render rows
+        filteredPlayers.forEach(player => {
+            const row = document.createElement('tr');
+            const average = calculateDailyAverage(player);
+            const nrTournaments = calculateNrTournaments(player);
+            const canEdit = currentUser;
             
-// Check if player has any zero scores
-const hasZero = player.scores && Object.values(player.scores).some(score => score === 0);
+            // Check if player has any zero scores
+            const hasZero = player.scores && Object.values(player.scores).some(score => score === 0);
             
-row.innerHTML = `
-<td class="rank">${calculateDailyRank(player)}</td>
-<td class="player player-name ${hasZero ? 'has-zero' : ''}">${player.playerName}</td>
-<td class="average">${Math.round(average)}</td>
-<td class="nr-tournaments">${nrTournaments}</td>
-`;
+            row.innerHTML = `
+                <td class="rank">${calculateDailyRank(player)}</td>
+                <td class="player player-name ${hasZero ? 'has-zero' : ''}">${player.playerName}</td>
+                <td class="average">${Math.round(average)}</td>
+                <td class="nr-tournaments">${nrTournaments}</td>
+            `;
             
-// Add date columns in reverse order (most recent first)
-const dateColumnsReversed = [...dateColumns].reverse();
-dateColumnsReversed.forEach(date => {
-const cell = document.createElement('td');
-cell.setAttribute('data-date', date);
+            // Add date columns in the same order as headers (most recent first)
+            dateColumns.forEach(date => {
+                const cell = document.createElement('td');
+                cell.setAttribute('data-date', date);
                 
-if (player.scores && player.scores[date] !== undefined && player.scores[date] !== null) {
-const score = player.scores[date];
-if (score === 0) {
-cell.classList.add('zero-value');
-}
-cell.innerHTML = `<input type="number" class="editable" value="${score}" 
-onchange="updateDailyScore('${player.playerName}', '${date}', this.value)">`;
-} else {
-cell.innerHTML = `<input type="number" class="editable" value="" 
-onchange="updateDailyScore('${player.playerName}', '${date}', this.value)">`;
-}
+                if (player.scores && player.scores[date] !== undefined && player.scores[date] !== null) {
+                    const score = player.scores[date];
+                    if (score === 0) {
+                        cell.classList.add('zero-value');
+                    }
+                    cell.innerHTML = `<input type="number" class="editable" value="${score}" 
+                    onchange="updateDailyScore('${player.playerName}', '${date}', this.value)">`;
+                } else {
+                    cell.innerHTML = `<input type="number" class="editable" value="" 
+                    onchange="updateDailyScore('${player.playerName}', '${date}', this.value)">`;
+                }
                 
-row.appendChild(cell);
-});
+                row.appendChild(cell);
+            });
             
-if (elements.dailyTournamentsBody) {
-elements.dailyTournamentsBody.appendChild(row);
-}
-});
-} catch (error) {
-console.error('Error rendering daily table:', error);
-}
+            if (elements.dailyTournamentsBody) {
+                elements.dailyTournamentsBody.appendChild(row);
+            }
+        });
+    } catch (error) {
+        console.error('Error rendering daily table:', error);
+    }
 }
 function setActiveFilter(filter) {
 activeFilter = filter;
@@ -3026,10 +3021,10 @@ function handleDailyFileImport(event) {
 }
 function exportDailyData() {
     try {
-        // Get all date columns in reverse order (most recent first)
+        // Get all date columns in the same order as displayed (most recent first)
         const dateColumns = [];
         document.querySelectorAll('#dailyTournamentsTable th[data-date]').forEach(th => {
-            dateColumns.unshift(th.getAttribute('data-date')); // Add to beginning to reverse order
+            dateColumns.push(th.getAttribute('data-date'));
         });
         
         // Create Excel file
@@ -3041,7 +3036,7 @@ function exportDailyData() {
                 'Nr. Tournament': calculateNrTournaments(player)
             };
             
-            // Add scores for each date
+            // Add scores for each date in the same order as displayed
             dateColumns.forEach(date => {
                 row[date] = (player.scores && player.scores[date] !== undefined && player.scores[date] !== null) ? player.scores[date] : '';
             });
