@@ -36,7 +36,8 @@ color: var(--dark);
 line-height: 1.6;
 }
 .container {
-max-width: 1200px;
+width: 100%;
+max-width: 1400px;
 margin: 0 auto;
 padding: 20px;
 }
@@ -287,7 +288,7 @@ background: #059669;
 transform: translateY(-2px);
 box-shadow: var(--shadow-lg);
 }
-.export-btn, .save-btn {
+.export-btn, .save-btn, .add-player-btn, .delete-player-btn {
 background: var(--primary);
 color: var(--white);
 border: none;
@@ -304,7 +305,7 @@ box-shadow: var(--shadow);
 flex: 1;
 justify-content: center;
 }
-.export-btn:hover, .save-btn:hover {
+.export-btn:hover, .save-btn:hover, .add-player-btn:hover, .delete-player-btn:hover {
 background: var(--primary-dark);
 transform: translateY(-2px);
 box-shadow: var(--shadow-lg);
@@ -314,6 +315,18 @@ background: var(--success);
 }
 .save-btn:hover {
 background: #16a34a;
+}
+.add-player-btn {
+background: var(--secondary);
+}
+.add-player-btn:hover {
+background: #059669;
+}
+.delete-player-btn {
+background: var(--danger);
+}
+.delete-player-btn:hover {
+background: #dc2626;
 }
 .dashboard {
 background: rgba(255, 255, 255, 0.95);
@@ -377,6 +390,12 @@ color: var(--danger);
 .stat-card.average .stat-icon {
 color: var(--secondary);
 }
+.stat-card.top-scorers .stat-icon {
+color: var(--warning);
+}
+.stat-card.bottom-scorers .stat-icon {
+color: var(--danger);
+}
 .stat-value {
 font-size: 32px;
 font-weight: 700;
@@ -395,7 +414,6 @@ background: rgba(255, 255, 255, 0.95);
 border-radius: 16px;
 padding: 25px;
 box-shadow: var(--shadow-lg);
-overflow-x: auto;
 backdrop-filter: blur(10px);
 }
 .table-header {
@@ -789,9 +807,10 @@ display: block;
 /* Daily tournaments table styles */
 .daily-table-container {
 overflow-x: auto;
+max-width: 100%;
 }
 .daily-table {
-min-width: 800px;
+min-width: 1200px; /* Increased minimum width */
 }
 .daily-table th, .daily-table td {
 padding: 12px 15px;
@@ -836,11 +855,28 @@ z-index: 11;
 .daily-table td:nth-child(4) {
 background: var(--white);
 }
-/* MODIFICATIONS START */
 /* Make date columns wider to accommodate at least 2 digits */
 .daily-table td:not(:nth-child(-n+4)) {
-    min-width: 40px;
-    max-width: 60px;
+    min-width: 100px; /* Increased minimum width */
+    max-width: 150px;
+}
+/* Eliminăm săgețile de editare din input-urile numerice */
+.editable::-webkit-outer-spin-button,
+.editable::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.editable[type=number] {
+    -moz-appearance: textfield;
+}
+
+/* Adăugăm stiluri pentru input-urile editabile */
+.editable {
+    width: 100%;
+    min-width: 80px; /* Asigură că input-ul are o lățime minimă */
+    text-align: center;
+    font-size: 16px; /* Am mărit dimensiunea fontului pentru lizibilitate */
 }
 /* Style for player name when any score is 0 */
 .player-name.has-zero {
@@ -859,17 +895,16 @@ background: var(--white);
 /* Mobile modification: Double the width of date columns */
 @media (max-width: 768px) {
     .daily-table td:not(:nth-child(-n+4)) {
-        min-width: 80px !important;
-        max-width: 100px !important;
+        min-width: 100px !important; /* Increased minimum width */
+        max-width: 120px !important;
     }
     
     /* Ensure input fields take the full width of the cell */
     .daily-table td:not(:nth-child(-n+4)) input.editable {
         width: 100% !important;
-        min-width: 70px !important;
+        min-width: 90px !important;
     }
 }
-/* MODIFICATIONS END */
 /* Adăugăm stiluri pentru celulele din tabelul zilnic pentru a asigura vizibilitatea textului */
 .daily-table td {
     color: var(--dark) !important;
@@ -883,10 +918,316 @@ display: grid;
 grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 gap: 20px;
 }
+/* Top scorers modal styles */
+.top-scorers-modal {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0, 0, 0, 0.7);
+display: flex;
+justify-content: center;
+align-items: center;
+z-index: 1000;
+display: none;
+backdrop-filter: blur(5px);
+}
+.top-scorers-modal.active {
+display: flex;
+}
+.top-scorers-content {
+background: var(--white);
+border-radius: 20px;
+padding: 30px;
+width: 90%;
+max-width: 600px;
+box-shadow: var(--shadow-lg);
+max-height: 80vh;
+overflow-y: auto;
+}
+.top-scorers-header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 20px;
+padding-bottom: 15px;
+border-bottom: 2px solid var(--light-gray);
+}
+.top-scorers-title {
+font-size: 24px;
+font-weight: 700;
+color: var(--primary);
+display: flex;
+align-items: center;
+gap: 10px;
+}
+.close-top-scorers {
+background: var(--light);
+border: none;
+font-size: 20px;
+color: var(--gray);
+cursor: pointer;
+width: 40px;
+height: 40px;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+transition: all 0.3s ease;
+}
+.close-top-scorers:hover {
+background: var(--danger);
+color: var(--white);
+transform: rotate(90deg);
+}
+.top-scorers-list {
+list-style: none;
+}
+.top-scorer-item {
+display: flex;
+align-items: center;
+padding: 15px;
+border-radius: 12px;
+margin-bottom: 10px;
+background: var(--light);
+transition: all 0.3s ease;
+}
+.top-scorer-item:hover {
+transform: translateX(5px);
+background: var(--light-gray);
+}
+.top-scorer-rank {
+font-size: 24px;
+font-weight: 700;
+color: var(--primary);
+margin-right: 15px;
+min-width: 30px;
+}
+.top-scorer-name {
+font-size: 18px;
+font-weight: 600;
+color: var(--dark);
+flex-grow: 1;
+}
+.top-scorer-score {
+font-size: 20px;
+font-weight: 700;
+color: var(--warning);
+}
+.bottom-scorer-score {
+font-size: 20px;
+font-weight: 700;
+color: var(--danger);
+}
+/* Excel export dropdown */
+.excel-export-dropdown {
+position: relative;
+display: inline-block;
+margin-left: 15px;
+}
+.excel-export-btn {
+background: var(--success);
+color: var(--white);
+border: none;
+border-radius: 12px;
+padding: 12px 18px;
+display: flex;
+align-items: center;
+gap: 10px;
+cursor: pointer;
+font-size: 15px;
+font-weight: 600;
+transition: all 0.3s ease;
+box-shadow: var(--shadow);
+}
+.excel-export-btn:hover {
+background: #16a34a;
+transform: translateY(-2px);
+box-shadow: var(--shadow-lg);
+}
+.excel-export-menu {
+position: absolute;
+top: 100%;
+right: 0;
+background: var(--white);
+border-radius: 12px;
+box-shadow: var(--shadow-lg);
+z-index: 100;
+min-width: 200px;
+display: none;
+overflow: hidden;
+margin-top: 8px;
+}
+.excel-export-menu.active {
+display: block;
+}
+.excel-export-item {
+padding: 12px 15px;
+cursor: pointer;
+transition: background 0.2s ease;
+display: flex;
+align-items: center;
+gap: 8px;
+}
+.excel-export-item:hover {
+background: var(--light);
+}
+.excel-export-item i {
+color: var(--success);
+}
+/* Add player modal */
+.add-player-modal {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0, 0, 0, 0.7);
+display: flex;
+justify-content: center;
+align-items: center;
+z-index: 1000;
+display: none;
+backdrop-filter: blur(5px);
+}
+.add-player-modal.active {
+display: flex;
+}
+.add-player-form {
+background: var(--white);
+border-radius: 20px;
+padding: 40px;
+width: 90%;
+max-width: 450px;
+box-shadow: var(--shadow-lg);
+}
+.add-player-title {
+font-size: 28px;
+font-weight: 700;
+color: var(--primary);
+margin-bottom: 30px;
+text-align: center;
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 12px;
+}
+.add-player-btn, .cancel-add-player {
+width: 100%;
+border-radius: 12px;
+padding: 15px 20px;
+font-size: 16px;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.3s ease;
+margin-top: 15px;
+}
+.add-player-btn {
+background: var(--secondary);
+color: var(--white);
+border: none;
+}
+.add-player-btn:hover {
+background: #059669;
+transform: translateY(-2px);
+box-shadow: var(--shadow-lg);
+}
+.cancel-add-player {
+background: transparent;
+color: var(--gray);
+border: 2px solid var(--light-gray);
+}
+.cancel-add-player:hover {
+background: var(--light);
+border-color: var(--gray);
+}
+/* Delete player modal */
+.delete-player-modal {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0, 0, 0, 0.7);
+display: flex;
+justify-content: center;
+align-items: center;
+z-index: 1000;
+display: none;
+backdrop-filter: blur(5px);
+}
+.delete-player-modal.active {
+display: flex;
+}
+.delete-player-form {
+background: var(--white);
+border-radius: 20px;
+padding: 40px;
+width: 90%;
+max-width: 450px;
+box-shadow: var(--shadow-lg);
+}
+.delete-player-title {
+font-size: 28px;
+font-weight: 700;
+color: var(--danger);
+margin-bottom: 30px;
+text-align: center;
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 12px;
+}
+.delete-player-select {
+width: 100%;
+padding: 15px 20px;
+border: 2px solid var(--light-gray);
+border-radius: 12px;
+font-size: 16px;
+transition: all 0.3s ease;
+background: var(--white);
+margin-bottom: 20px;
+}
+.delete-player-select:focus {
+outline: none;
+border-color: var(--danger);
+box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+}
+.delete-player-btn, .cancel-delete-player {
+width: 100%;
+border-radius: 12px;
+padding: 15px 20px;
+font-size: 16px;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.3s ease;
+margin-top: 15px;
+}
+.delete-player-btn {
+background: var(--danger);
+color: var(--white);
+border: none;
+}
+.delete-player-btn:hover {
+background: #dc2626;
+transform: translateY(-2px);
+box-shadow: var(--shadow-lg);
+}
+.cancel-delete-player {
+background: transparent;
+color: var(--gray);
+border: 2px solid var(--light-gray);
+}
+.cancel-delete-player:hover {
+background: var(--light);
+border-color: var(--gray);
+}
 @keyframes spin {
 0% { transform: rotate(0deg); }
 100% { transform: rotate(360deg); }
 }
+/* Responsive styles */
 @media (max-width: 768px) {
 .container {
 padding: 15px;
@@ -949,9 +1290,36 @@ width: 100%;
 .admin-actions {
 flex-direction: column;
 }
-.file-input-wrapper, .export-btn, .save-btn {
+.file-input-wrapper, .export-btn, .save-btn, .add-player-btn, .delete-player-btn {
 width: 100%;
 }
+.excel-export-dropdown {
+width: 100%;
+margin-left: 0;
+margin-top: 10px;
+}
+.excel-export-btn {
+width: 100%;
+}
+}
+
+/* Ecrane mari */
+@media (min-width: 1600px) {
+    .container {
+        max-width: 1600px;
+    }
+}
+
+@media (min-width: 1900px) {
+    .container {
+        max-width: 1800px;
+    }
+}
+
+/* Am făcut tabelul mai receptiv */
+.ranking-table-container {
+    max-height: 70vh;
+    overflow-y: auto;
 }
 </style>
 </head>
@@ -1041,6 +1409,16 @@ width: 100%;
 <i class="fas fa-download"></i>
 <span data-i18n="exportData">Export Data</span>
 </button>
+<div class="excel-export-dropdown" id="excelExportDropdown">
+<button class="excel-export-btn" id="excelExportBtn">
+<i class="fas fa-file-excel"></i>
+<span data-i18n="exportHistory">Export History</span>
+<i class="fas fa-chevron-down"></i>
+</button>
+<div class="excel-export-menu" id="excelExportMenu">
+<!-- Excel export items will be generated here -->
+</div>
+</div>
 <button class="save-btn" id="saveBtn">
 <i class="fas fa-save"></i>
 <span data-i18n="saveData">Save Data</span>
@@ -1123,6 +1501,7 @@ width: 100%;
 <span data-i18n="sortByScore">Sort by Score</span>
 </button>
 </div>
+<div class="ranking-table-container" style="max-height: 70vh; overflow-y: auto;">
 <table id="rankingTable">
 <thead>
 <tr>
@@ -1137,6 +1516,7 @@ width: 100%;
 <!-- Table rows will be generated here -->
 </tbody>
 </table>
+</div>
 </div>
 </div>
 </div>
@@ -1167,6 +1547,14 @@ width: 100%;
 <button class="save-btn" id="dailySaveBtn">
 <i class="fas fa-save"></i>
 <span data-i18n="saveDailyData">Save Daily Data</span>
+</button>
+<button class="add-player-btn" id="addPlayerBtn">
+<i class="fas fa-user-plus"></i>
+<span data-i18n="addPlayer">Add Player</span>
+</button>
+<button class="delete-player-btn" id="deletePlayerBtn">
+<i class="fas fa-user-minus"></i>
+<span data-i18n="deletePlayer">Delete Player</span>
 </button>
 </div>
 </div>
@@ -1210,6 +1598,20 @@ width: 100%;
 </div>
 <div class="stat-value" id="min2Missed">0</div>
 <div class="stat-label" data-i18n="min2Missed">Min 2 Missed</div>
+</div>
+<div class="stat-card top-scorers" id="topScorersCard">
+<div class="stat-icon">
+<i class="fas fa-futbol"></i>
+</div>
+<div class="stat-value" id="topScorersCount">0</div>
+<div class="stat-label" data-i18n="topScorers">Top 10 Scorers Last Tournament</div>
+</div>
+<div class="stat-card bottom-scorers" id="bottomScorersCard">
+<div class="stat-icon">
+<i class="fas fa-futbol"></i>
+</div>
+<div class="stat-value" id="bottomScorersCount">0</div>
+<div class="stat-label" data-i18n="bottomScorers">Bottom 5 Scorers Last Tournament</div>
 </div>
 </div>
 </div>
@@ -1278,6 +1680,68 @@ width: 100%;
 <button class="cancel-btn" id="cancelLogin" data-i18n="cancel">Cancel</button>
 </div>
 </div>
+<div class="top-scorers-modal" id="topScorersModal">
+<div class="top-scorers-content">
+<div class="top-scorers-header">
+<h2 class="top-scorers-title">
+<i class="fas fa-futbol"></i>
+<span data-i18n="topScorersLastTournament">Top 10 Scorers Last Tournament</span>
+</h2>
+<button class="close-top-scorers" id="closeTopScorers">
+<i class="fas fa-times"></i>
+</button>
+</div>
+<ul class="top-scorers-list" id="topScorersList">
+<!-- Top scorers will be generated here -->
+</ul>
+</div>
+</div>
+<div class="top-scorers-modal" id="bottomScorersModal">
+<div class="top-scorers-content">
+<div class="top-scorers-header">
+<h2 class="top-scorers-title">
+<i class="fas fa-futbol"></i>
+<span data-i18n="bottomScorersLastTournament">Bottom 5 Scorers Last Tournament</span>
+</h2>
+<button class="close-top-scorers" id="closeBottomScorers">
+<i class="fas fa-times"></i>
+</button>
+</div>
+<ul class="top-scorers-list" id="bottomScorersList">
+<!-- Bottom scorers will be generated here -->
+</ul>
+</div>
+</div>
+<div class="add-player-modal" id="addPlayerModal">
+<div class="add-player-form">
+<h2 class="add-player-title">
+<i class="fas fa-user-plus"></i>
+<span data-i18n="addNewPlayer">Add New Player</span>
+</h2>
+<div class="form-group">
+<label for="newPlayerName" data-i18n="playerName">Player Name</label>
+<input type="text" id="newPlayerName" placeholder="Enter player name...">
+</div>
+<button class="add-player-btn" id="confirmAddPlayer" data-i18n="addPlayer">Add Player</button>
+<button class="cancel-add-player" id="cancelAddPlayer" data-i18n="cancel">Cancel</button>
+</div>
+</div>
+<div class="delete-player-modal" id="deletePlayerModal">
+<div class="delete-player-form">
+<h2 class="delete-player-title">
+<i class="fas fa-user-minus"></i>
+<span data-i18n="deletePlayer">Delete Player</span>
+</h2>
+<div class="form-group">
+<label for="deletePlayerSelect" data-i18n="selectPlayer">Select Player</label>
+<select class="delete-player-select" id="deletePlayerSelect">
+<!-- Players will be populated here -->
+</select>
+</div>
+<button class="delete-player-btn" id="confirmDeletePlayer" data-i18n="deletePlayer">Delete Player</button>
+<button class="cancel-delete-player" id="cancelDeletePlayer" data-i18n="cancel">Cancel</button>
+</div>
+</div>
 <div class="notification" id="notification">
 <i class="fas fa-check-circle"></i>
 <div class="notification-message" id="notificationMessage"></div>
@@ -1343,7 +1807,22 @@ missedTournaments: "Turnee Ratate",
 min2Missed: "Minim 2 Ratate",
 playerName: "Nume Jucător",
 average: "Medie",
-nrTournaments: "Nr. Turnee"
+nrTournaments: "Nr. Turnee",
+topScorers: "Top 10 Golgheteri Ultimul Turneu",
+topScorersLastTournament: "Top 10 Golgheteri Ultimul Turneu",
+bottomScorers: "Ultimii 5 Marcatori Ultimul Turneu",
+bottomScorersLastTournament: "Ultimii 5 Marcatori Ultimul Turneu",
+exportHistory: "Istoric Exporturi",
+addPlayer: "Adaugă Jucător",
+deletePlayer: "Șterge Jucător",
+addNewPlayer: "Adaugă Jucător Nou",
+selectPlayer: "Selectează Jucător",
+playerAdded: "Jucător adăugat cu succes!",
+playerDeleted: "Jucător șters cu succes!",
+noPlayerName: "Vă rugăm introduceți numele jucătorului!",
+playerExists: "Acest jucător există deja!",
+noPlayerSelected: "Vă rugăm selectați un jucător!",
+noExportsAvailable: "Nu există exporturi salvate!"
 },
 en: {
 appTitle: "Scoring System",
@@ -1399,7 +1878,22 @@ missedTournaments: "Missed Tournaments",
 min2Missed: "Min 2 Missed",
 playerName: "Player Name",
 average: "Average",
-nrTournaments: "Nr. Tournament"
+nrTournaments: "Nr. Tournament",
+topScorers: "Top 10 Scorers Last Tournament",
+topScorersLastTournament: "Top 10 Scorers Last Tournament",
+bottomScorers: "Bottom 5 Scorers Last Tournament",
+bottomScorersLastTournament: "Bottom 5 Scorers Last Tournament",
+exportHistory: "Export History",
+addPlayer: "Add Player",
+deletePlayer: "Delete Player",
+addNewPlayer: "Add New Player",
+selectPlayer: "Select Player",
+playerAdded: "Player added successfully!",
+playerDeleted: "Player deleted successfully!",
+noPlayerName: "Please enter player name!",
+playerExists: "This player already exists!",
+noPlayerSelected: "Please select a player!",
+noExportsAvailable: "No saved exports available!"
 },
 es: {
 appTitle: "Sistema de Puntuación",
@@ -1455,7 +1949,22 @@ missedTournaments: "Torneos Perdidos",
 min2Missed: "Mínimo 2 Perdidos",
 playerName: "Nombre del Jugador",
 average: "Promedio",
-nrTournaments: "Nr. Torneo"
+nrTournaments: "Nr. Torneo",
+topScorers: "Top 10 Goleadores Último Torneo",
+topScorersLastTournament: "Top 10 Goleadores Último Torneo",
+bottomScorers: "Últimos 5 Goleadores Último Torneo",
+bottomScorersLastTournament: "Últimos 5 Goleadores Último Torneo",
+exportHistory: "Historial de Exportaciones",
+addPlayer: "Agregar Jugador",
+deletePlayer: "Eliminar Jugador",
+addNewPlayer: "Agregar Nuevo Jugador",
+selectPlayer: "Seleccionar Jugador",
+playerAdded: "¡Jugador agregado con éxito!",
+playerDeleted: "¡Jugador eliminado con éxito!",
+noPlayerName: "¡Por favor ingrese el nombre del jugador!",
+playerExists: "¡Este jugador ya existe!",
+noPlayerSelected: "¡Por favor seleccione un jugador!",
+noExportsAvailable: "¡No hay exportaciones guardadas disponibles!"
 }
 };
 // Firebase Configuration
@@ -1489,6 +1998,7 @@ let syncTimeout = null;
 let currentSortMethod = 'rank';
 let dailyCurrentSortMethod = 'rank';
 let activePage = 'mainPage';
+let excelExports = [];
 // Default users
 const defaultUsers = [
 { username: 'admin', password: 'diasporaromana123', role: 'admin' },
@@ -1511,7 +2021,12 @@ const elementIds = [
 'dailyAdminPanel', 'closeDailyAdmin', 'dailyFileInput', 'dailyExportBtn',
 'dailySaveBtn', 'dailyImportWrapper', 'dailyTournamentsBody', 'dailyUpdateTime',
 'dailyTotalPlayers', 'top10Players', 'top32Players', 'missedTournaments', 'min2Missed',
-'dailySearchInput'
+'dailySearchInput', 'topScorersCard', 'topScorersModal', 'closeTopScorers', 
+'topScorersList', 'topScorersCount', 'excelExportDropdown', 'excelExportBtn', 
+'excelExportMenu', 'addPlayerBtn', 'addPlayerModal', 'newPlayerName', 
+'confirmAddPlayer', 'cancelAddPlayer', 'deletePlayerBtn', 'deletePlayerModal', 
+'deletePlayerSelect', 'confirmDeletePlayer', 'cancelDeletePlayer',
+'bottomScorersCard', 'bottomScorersModal', 'closeBottomScorers', 'bottomScorersList', 'bottomScorersCount'
 ];
 elementIds.forEach(id => {
 const element = document.getElementById(id);
@@ -1535,6 +2050,7 @@ setupSortButtons();
 checkLoginStatus();
 loadDataFromFirebase();
 loadDailyDataFromFirebase();
+loadExcelExportsFromFirebase();
 // Set up periodic sync status check
 setInterval(() => {
 if (isSyncing) {
@@ -1545,8 +2061,284 @@ updateSyncStatus('synced');
 }, 5000);
 // Check for daily columns generation
 checkDailyColumns();
-// Set up daily column generation at midnight
+// Set up midnight column generation
 setupMidnightColumnGeneration();
+// Set up weekly Excel export
+setupWeeklyExcelExport();
+// Set up top scorers card click
+if (elements.topScorersCard) {
+elements.topScorersCard.addEventListener('click', showTopScorersModal);
+}
+// Set up bottom scorers card click
+if (elements.bottomScorersCard) {
+elements.bottomScorersCard.addEventListener('click', showBottomScorersModal);
+}
+}
+// Setup weekly Excel export
+function setupWeeklyExcelExport() {
+// Check every hour if it's Thursday at 5 AM
+setInterval(() => {
+const now = new Date();
+const dayOfWeek = now.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+const hour = now.getHours();
+const minute = now.getMinutes();
+    
+    // If it's Thursday (4) at 5:00 AM
+    if (dayOfWeek === 4 && hour === 5 && minute === 0) {
+        generateWeeklyExcelExport();
+    }
+}, 60000); // Check every minute
+}
+// Generate weekly Excel export
+function generateWeeklyExcelExport() {
+try {
+// Create Excel file
+const exportData = players.map(player => ({
+Rank: calculateRank(player),
+Player: player.player,
+'Starting Points': player.startingPoints,
+'Target Points': player.targetPoints,
+'Total Scores': player.totalScores,
+'Week Score': calculateWeekScore(player),
+'Left to Achieve': calculateLeftToAchieve(player)
+}));
+    
+if (exportData.length === 0) {
+console.log('No data to export');
+return;
+}
+    
+const worksheet = XLSX.utils.json_to_sheet(exportData);
+const workbook = XLSX.utils.book_new();
+XLSX.utils.book_append_sheet(workbook, worksheet, 'Scoring Data');
+    
+// Generate filename with current date
+const now = new Date();
+const day = String(now.getDate()).padStart(2, '0');
+const month = String(now.getMonth() + 1).padStart(2, '0');
+const year = now.getFullYear();
+const dateStr = `${day}-${month}-${year}`;
+const filename = `clasament_${dateStr}.xlsx`;
+    
+// Convert to binary data
+const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    
+// Save to Firebase
+const exportRef = database.ref('excelExports').push();
+exportRef.set({
+filename: filename,
+date: now.toISOString(),
+data: Array.from(excelBuffer)
+}).then(() => {
+console.log('Weekly Excel export saved to Firebase');
+loadExcelExportsFromFirebase();
+}).catch(error => {
+console.error('Error saving weekly Excel export:', error);
+});
+} catch (error) {
+console.error('Error generating weekly Excel export:', error);
+}
+}
+// Load Excel exports from Firebase
+function loadExcelExportsFromFirebase() {
+const exportsRef = database.ref('excelExports');
+exportsRef.on('value', (snapshot) => {
+try {
+const data = snapshot.val();
+if (data) {
+excelExports = Object.values(data);
+updateExcelExportMenu();
+}
+} catch (error) {
+console.error('Error loading Excel exports:', error);
+}
+});
+}
+// Update Excel export menu
+function updateExcelExportMenu() {
+if (!elements.excelExportMenu) return;
+    
+// Clear existing items
+elements.excelExportMenu.innerHTML = '';
+    
+// Add export items
+excelExports.forEach(exportItem => {
+const item = document.createElement('div');
+item.className = 'excel-export-item';
+item.innerHTML = `
+<i class="fas fa-file-excel"></i>
+<span>${exportItem.filename}</span>
+`;
+item.addEventListener('click', () => downloadExcelExport(exportItem));
+elements.excelExportMenu.appendChild(item);
+});
+    
+// Add "No exports available" message if there are no exports
+if (excelExports.length === 0) {
+const noExportsItem = document.createElement('div');
+noExportsItem.className = 'excel-export-item';
+noExportsItem.innerHTML = `
+<i class="fas fa-info-circle"></i>
+<span>${translations[currentLang].noExportsAvailable}</span>
+`;
+elements.excelExportMenu.appendChild(noExportsItem);
+}
+    
+// Show dropdown if there are exports
+if (elements.excelExportDropdown) {
+elements.excelExportDropdown.style.display = 'inline-block';
+}
+}
+// Download Excel export
+function downloadExcelExport(exportItem) {
+try {
+// Convert array buffer back to blob
+const arrayBuffer = new Uint8Array(exportItem.data).buffer;
+const blob = new Blob([arrayBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    
+// Create download link
+const url = URL.createObjectURL(blob);
+const a = document.createElement('a');
+a.href = url;
+a.download = exportItem.filename;
+document.body.appendChild(a);
+a.click();
+document.body.removeChild(a);
+URL.revokeObjectURL(url);
+    
+showNotification('File downloaded successfully!', 'success');
+} catch (error) {
+console.error('Error downloading Excel export:', error);
+showNotification('Error downloading file', 'error');
+}
+}
+// Show top scorers modal
+function showTopScorersModal() {
+if (!elements.topScorersModal) return;
+    
+// Get the latest tournament date
+let latestDate = null;
+if (dailyPlayers.length > 0 && dailyPlayers[0].scores) {
+const dates = Object.keys(dailyPlayers[0].scores).sort((a, b) => {
+// Parse dates in DD-MM-YYYY format
+const [dayA, monthA, yearA] = a.split('-').map(Number);
+const [dayB, monthB, yearB] = b.split('-').map(Number);
+return new Date(yearB, monthB - 1, dayB) - new Date(yearA, monthA - 1, dayA);
+});
+latestDate = dates.length > 0 ? dates[0] : null;
+}
+    
+if (!latestDate) {
+showNotification('No tournament data available', 'error');
+return;
+}
+    
+// Get top scorers for the latest tournament
+const topScorers = dailyPlayers
+.filter(player => player.scores && player.scores[latestDate] !== null && player.scores[latestDate] !== undefined && player.scores[latestDate] > 0)
+.map(player => ({
+name: player.playerName,
+score: player.scores[latestDate]
+}))
+.sort((a, b) => b.score - a.score)
+.slice(0, 10);
+    
+// Update modal content
+if (elements.topScorersList) {
+elements.topScorersList.innerHTML = '';
+    
+if (topScorers.length === 0) {
+const noDataItem = document.createElement('li');
+noDataItem.className = 'top-scorer-item';
+noDataItem.innerHTML = `
+<div class="top-scorer-name">No data available</div>
+`;
+elements.topScorersList.appendChild(noDataItem);
+} else {
+topScorers.forEach((scorer, index) => {
+const item = document.createElement('li');
+item.className = 'top-scorer-item';
+item.innerHTML = `
+<div class="top-scorer-rank">${index + 1}</div>
+<div class="top-scorer-name">${scorer.name}</div>
+<div class="top-scorer-score">${scorer.score}</div>
+`;
+elements.topScorersList.appendChild(item);
+});
+}
+}
+    
+// Update top scorers count
+if (elements.topScorersCount) {
+elements.topScorersCount.textContent = topScorers.length;
+}
+    
+// Show modal
+elements.topScorersModal.classList.add('active');
+}
+// Show bottom scorers modal
+function showBottomScorersModal() {
+if (!elements.bottomScorersModal) return;
+    
+// Get the latest tournament date
+let latestDate = null;
+if (dailyPlayers.length > 0 && dailyPlayers[0].scores) {
+const dates = Object.keys(dailyPlayers[0].scores).sort((a, b) => {
+// Parse dates in DD-MM-YYYY format
+const [dayA, monthA, yearA] = a.split('-').map(Number);
+const [dayB, monthB, yearB] = b.split('-').map(Number);
+return new Date(yearB, monthB - 1, dayB) - new Date(yearA, monthA - 1, dayA);
+});
+latestDate = dates.length > 0 ? dates[0] : null;
+}
+    
+if (!latestDate) {
+showNotification('No tournament data available', 'error');
+return;
+}
+    
+// Get bottom scorers for the latest tournament (players with lowest scores > 0)
+const bottomScorers = dailyPlayers
+.filter(player => player.scores && player.scores[latestDate] !== null && player.scores[latestDate] !== undefined && player.scores[latestDate] > 0)
+.map(player => ({
+name: player.playerName,
+score: player.scores[latestDate]
+}))
+.sort((a, b) => a.score - b.score)
+.slice(0, 5);
+    
+// Update modal content
+if (elements.bottomScorersList) {
+elements.bottomScorersList.innerHTML = '';
+    
+if (bottomScorers.length === 0) {
+const noDataItem = document.createElement('li');
+noDataItem.className = 'top-scorer-item';
+noDataItem.innerHTML = `
+<div class="top-scorer-name">No data available</div>
+`;
+elements.bottomScorersList.appendChild(noDataItem);
+} else {
+bottomScorers.forEach((scorer, index) => {
+const item = document.createElement('li');
+item.className = 'top-scorer-item';
+item.innerHTML = `
+<div class="top-scorer-rank">${index + 1}</div>
+<div class="top-scorer-name">${scorer.name}</div>
+<div class="bottom-scorer-score">${scorer.score}</div>
+`;
+elements.bottomScorersList.appendChild(item);
+});
+}
+}
+    
+// Update bottom scorers count
+if (elements.bottomScorersCount) {
+elements.bottomScorersCount.textContent = bottomScorers.length;
+}
+    
+// Show modal
+elements.bottomScorersModal.classList.add('active');
 }
 // Setup midnight column generation
 function setupMidnightColumnGeneration() {
@@ -1705,6 +2497,12 @@ const isLoggedIn = currentUser && (userRole === 'admin' || userRole === 'editor'
     }
     if (elements.dailySaveBtn) {
         elements.dailySaveBtn.style.display = isLoggedIn ? 'block' : 'none';
+    }
+    if (elements.addPlayerBtn) {
+        elements.addPlayerBtn.style.display = isLoggedIn && userRole === 'admin' ? 'block' : 'none';
+    }
+    if (elements.deletePlayerBtn) {
+        elements.deletePlayerBtn.style.display = isLoggedIn && userRole === 'admin' ? 'block' : 'none';
     }
     
     // Asigurăm că panoul de administrare este vizibil pentru utilizatorii autentificați
@@ -1888,12 +2686,188 @@ elements.dailyTournamentsBtn.addEventListener('click', () => {
 showPage('dailyTournamentsPage');
 });
 }
+// Top scorers modal
+if (elements.closeTopScorers) {
+elements.closeTopScorers.addEventListener('click', () => {
+if (elements.topScorersModal) {
+elements.topScorersModal.classList.remove('active');
+}
+});
+}
+// Bottom scorers modal
+if (elements.closeBottomScorers) {
+elements.closeBottomScorers.addEventListener('click', () => {
+if (elements.bottomScorersModal) {
+elements.bottomScorersModal.classList.remove('active');
+}
+});
+}
+// Excel export dropdown
+if (elements.excelExportBtn) {
+elements.excelExportBtn.addEventListener('click', () => {
+if (elements.excelExportMenu) {
+elements.excelExportMenu.classList.toggle('active');
+}
+});
+}
+// Add player modal
+if (elements.addPlayerBtn) {
+elements.addPlayerBtn.addEventListener('click', () => {
+if (elements.addPlayerModal) {
+elements.addPlayerModal.classList.add('active');
+}
+});
+}
+if (elements.confirmAddPlayer) {
+elements.confirmAddPlayer.addEventListener('click', addNewPlayer);
+}
+if (elements.cancelAddPlayer) {
+elements.cancelAddPlayer.addEventListener('click', () => {
+if (elements.addPlayerModal) {
+elements.addPlayerModal.classList.remove('active');
+}
+if (elements.newPlayerName) {
+elements.newPlayerName.value = '';
+}
+});
+}
+// Delete player modal
+if (elements.deletePlayerBtn) {
+elements.deletePlayerBtn.addEventListener('click', () => {
+populateDeletePlayerSelect();
+if (elements.deletePlayerModal) {
+elements.deletePlayerModal.classList.add('active');
+}
+});
+}
+if (elements.confirmDeletePlayer) {
+elements.confirmDeletePlayer.addEventListener('click', deleteSelectedPlayer);
+}
+if (elements.cancelDeletePlayer) {
+elements.cancelDeletePlayer.addEventListener('click', () => {
+if (elements.deletePlayerModal) {
+elements.deletePlayerModal.classList.remove('active');
+}
+});
+}
 // Close dropdowns when clicking outside
 document.addEventListener('click', (e) => {
 if (!e.target.closest('.language-selector') && elements.languageDropdown) {
 elements.languageDropdown.classList.remove('active');
 }
+if (!e.target.closest('.excel-export-dropdown') && elements.excelExportMenu) {
+elements.excelExportMenu.classList.remove('active');
+}
 });
+}
+// Add new player
+function addNewPlayer() {
+if (!elements.newPlayerName) return;
+    
+const playerName = elements.newPlayerName.value.trim();
+    
+if (!playerName) {
+showNotification(translations[currentLang].noPlayerName, 'error');
+return;
+}
+    
+// Check if player already exists
+if (dailyPlayers.some(p => p.playerName === playerName)) {
+showNotification(translations[currentLang].playerExists, 'error');
+return;
+}
+    
+// Get all existing date columns
+const existingDateColumns = new Set();
+dailyPlayers.forEach(player => {
+if (player.scores) {
+Object.keys(player.scores).forEach(date => {
+existingDateColumns.add(date);
+});
+}
+});
+    
+// Create new player with empty scores for all existing date columns
+const scores = {};
+existingDateColumns.forEach(date => {
+scores[date] = null;
+});
+    
+// Add new player
+const newPlayer = {
+playerName: playerName,
+scores: scores
+};
+    
+dailyPlayers.push(newPlayer);
+    
+// Save to Firebase
+saveDailyDataToFirebase();
+    
+// Close modal and reset form
+if (elements.addPlayerModal) {
+elements.addPlayerModal.classList.remove('active');
+}
+if (elements.newPlayerName) {
+elements.newPlayerName.value = '';
+}
+    
+// Show success notification
+showNotification(translations[currentLang].playerAdded, 'success');
+    
+// Re-render table
+renderDailyTable();
+}
+// Populate delete player select
+function populateDeletePlayerSelect() {
+if (!elements.deletePlayerSelect) return;
+    
+// Clear existing options
+elements.deletePlayerSelect.innerHTML = '<option value="">-- Select a player --</option>';
+    
+// Add player options
+dailyPlayers.forEach(player => {
+const option = document.createElement('option');
+option.value = player.playerName;
+option.textContent = player.playerName;
+elements.deletePlayerSelect.appendChild(option);
+});
+}
+// Delete selected player
+function deleteSelectedPlayer() {
+if (!elements.deletePlayerSelect) return;
+    
+const playerName = elements.deletePlayerSelect.value;
+    
+if (!playerName) {
+showNotification(translations[currentLang].noPlayerSelected, 'error');
+return;
+}
+    
+// Find player index
+const playerIndex = dailyPlayers.findIndex(p => p.playerName === playerName);
+    
+if (playerIndex === -1) {
+showNotification('Player not found', 'error');
+return;
+}
+    
+// Remove player
+dailyPlayers.splice(playerIndex, 1);
+    
+// Save to Firebase
+saveDailyDataToFirebase();
+    
+// Close modal
+if (elements.deletePlayerModal) {
+elements.deletePlayerModal.classList.remove('active');
+}
+    
+// Show success notification
+showNotification(translations[currentLang].playerDeleted, 'success');
+    
+// Re-render table
+renderDailyTable();
 }
 // Setup sort buttons
 function setupSortButtons() {
@@ -2283,7 +3257,7 @@ if (syncTimeout) {
 clearTimeout(syncTimeout);
 }
 // Update the player's score in Firebase
-database.ref(`dailyPlayers/${playerIndex}/scores/${date}`).set(score === '' ? null : parseInt(score))
+database.ref(`dailyPlayers/${playerIndex}/scores/${date}`).set(score === '' ? null : parseInt(score) || null)
 .then(() => {
 // Update metadata
 return database.ref('dailyMetadata/lastUpdateTime').set(new Date().toISOString());
@@ -2719,7 +3693,7 @@ function calculateDailyAverage(player) {
     let total = 0;
     let count = 0;
     Object.entries(player.scores).forEach(([date, score]) => {
-        // MODIFICATION: Skip zeros in average calculation
+        // Skip zeros in average calculation
         if (score !== null && score !== undefined && score > 0) {
             total += score;
             count++;
