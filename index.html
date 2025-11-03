@@ -288,7 +288,7 @@ background: #059669;
 transform: translateY(-2px);
 box-shadow: var(--shadow-lg);
 }
-.export-btn, .save-btn, .add-player-btn, .delete-player-btn {
+.export-btn, .save-btn, .add-player-btn, .delete-player-btn, .edit-player-btn {
 background: var(--primary);
 color: var(--white);
 border: none;
@@ -305,7 +305,7 @@ box-shadow: var(--shadow);
 flex: 1;
 justify-content: center;
 }
-.export-btn:hover, .save-btn:hover, .add-player-btn:hover, .delete-player-btn:hover {
+.export-btn:hover, .save-btn:hover, .add-player-btn:hover, .delete-player-btn:hover, .edit-player-btn:hover {
 background: var(--primary-dark);
 transform: translateY(-2px);
 box-shadow: var(--shadow-lg);
@@ -327,6 +327,12 @@ background: var(--danger);
 }
 .delete-player-btn:hover {
 background: #dc2626;
+}
+.edit-player-btn {
+background: var(--warning);
+}
+.edit-player-btn:hover {
+background: #d97706;
 }
 .dashboard {
 background: rgba(255, 255, 255, 0.95);
@@ -627,7 +633,7 @@ margin-bottom: 10px;
 font-weight: 600;
 color: var(--dark);
 }
-.form-group input {
+.form-group input, .form-group select {
 width: 100%;
 padding: 15px 20px;
 border: 2px solid var(--light-gray);
@@ -636,7 +642,7 @@ font-size: 16px;
 transition: all 0.3s ease;
 background: var(--white);
 }
-.form-group input:focus {
+.form-group input:focus, .form-group select:focus {
 outline: none;
 border-color: var(--primary);
 box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
@@ -1223,6 +1229,160 @@ border: 2px solid var(--light-gray);
 background: var(--light);
 border-color: var(--gray);
 }
+/* Edit player modal */
+.edit-player-modal {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0, 0, 0, 0.7);
+display: flex;
+justify-content: center;
+align-items: center;
+z-index: 1000;
+display: none;
+backdrop-filter: blur(5px);
+}
+.edit-player-modal.active {
+display: flex;
+}
+.edit-player-form {
+background: var(--white);
+border-radius: 20px;
+padding: 40px;
+width: 90%;
+max-width: 450px;
+box-shadow: var(--shadow-lg);
+}
+.edit-player-title {
+font-size: 28px;
+font-weight: 700;
+color: var(--warning);
+margin-bottom: 30px;
+text-align: center;
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 12px;
+}
+.edit-player-select {
+width: 100%;
+padding: 15px 20px;
+border: 2px solid var(--light-gray);
+border-radius: 12px;
+font-size: 16px;
+transition: all 0.3s ease;
+background: var(--white);
+margin-bottom: 20px;
+}
+.edit-player-select:focus {
+outline: none;
+border-color: var(--warning);
+box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+}
+.edit-player-btn, .cancel-edit-player {
+width: 100%;
+border-radius: 12px;
+padding: 15px 20px;
+font-size: 16px;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.3s ease;
+margin-top: 15px;
+}
+.edit-player-btn {
+background: var(--warning);
+color: var(--white);
+border: none;
+}
+.edit-player-btn:hover {
+background: #d97706;
+transform: translateY(-2px);
+box-shadow: var(--shadow-lg);
+}
+.cancel-edit-player {
+background: transparent;
+color: var(--gray);
+border: 2px solid var(--light-gray);
+}
+.cancel-edit-player:hover {
+background: var(--light);
+border-color: var(--gray);
+}
+/* Confirmation modal */
+.confirmation-modal {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0, 0, 0, 0.7);
+display: flex;
+justify-content: center;
+align-items: center;
+z-index: 1000;
+display: none;
+backdrop-filter: blur(5px);
+}
+.confirmation-modal.active {
+display: flex;
+}
+.confirmation-form {
+background: var(--white);
+border-radius: 20px;
+padding: 40px;
+width: 90%;
+max-width: 450px;
+box-shadow: var(--shadow-lg);
+}
+.confirmation-title {
+font-size: 28px;
+font-weight: 700;
+color: var(--primary);
+margin-bottom: 30px;
+text-align: center;
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 12px;
+}
+.confirmation-message {
+font-size: 18px;
+font-weight: 600;
+color: var(--dark);
+margin-bottom: 30px;
+text-align: center;
+}
+.confirmation-btn, .cancel-confirmation {
+width: 100%;
+border-radius: 12px;
+padding: 15px 20px;
+font-size: 16px;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.3s ease;
+margin-top: 15px;
+}
+.confirmation-btn {
+background: var(--primary);
+color: var(--white);
+border: none;
+}
+.confirmation-btn:hover {
+background: var(--primary-dark);
+transform: translateY(-2px);
+box-shadow: var(--shadow-lg);
+}
+.cancel-confirmation {
+background: transparent;
+color: var(--gray);
+border: 2px solid var(--light-gray);
+}
+.cancel-confirmation:hover {
+background: var(--light);
+border-color: var(--gray);
+}
 @keyframes spin {
 0% { transform: rotate(0deg); }
 100% { transform: rotate(360deg); }
@@ -1290,7 +1450,7 @@ width: 100%;
 .admin-actions {
 flex-direction: column;
 }
-.file-input-wrapper, .export-btn, .save-btn, .add-player-btn, .delete-player-btn {
+.file-input-wrapper, .export-btn, .save-btn, .add-player-btn, .delete-player-btn, .edit-player-btn {
 width: 100%;
 }
 .excel-export-dropdown {
@@ -1424,6 +1584,20 @@ width: 100%;
 <span data-i18n="saveData">Save Data</span>
 </button>
 </div>
+<div class="admin-actions">
+<button class="add-player-btn" id="addPlayerBtn">
+<i class="fas fa-user-plus"></i>
+<span data-i18n="addPlayer">Add Player</span>
+</button>
+<button class="delete-player-btn" id="deletePlayerBtn">
+<i class="fas fa-user-minus"></i>
+<span data-i18n="deletePlayer">Delete Player</span>
+</button>
+<button class="edit-player-btn" id="editPlayerBtn">
+<i class="fas fa-user-edit"></i>
+<span data-i18n="editPlayer">Edit Player</span>
+</button>
+</div>
 </div>
 <div class="dashboard">
 <h2 class="dashboard-title">
@@ -1548,11 +1722,11 @@ width: 100%;
 <i class="fas fa-save"></i>
 <span data-i18n="saveDailyData">Save Daily Data</span>
 </button>
-<button class="add-player-btn" id="addPlayerBtn">
+<button class="add-player-btn" id="addDailyPlayerBtn">
 <i class="fas fa-user-plus"></i>
 <span data-i18n="addPlayer">Add Player</span>
 </button>
-<button class="delete-player-btn" id="deletePlayerBtn">
+<button class="delete-player-btn" id="deleteDailyPlayerBtn">
 <i class="fas fa-user-minus"></i>
 <span data-i18n="deletePlayer">Delete Player</span>
 </button>
@@ -1712,6 +1886,7 @@ width: 100%;
 </ul>
 </div>
 </div>
+<!-- Add Player Modal for Main Page -->
 <div class="add-player-modal" id="addPlayerModal">
 <div class="add-player-form">
 <h2 class="add-player-title">
@@ -1722,10 +1897,23 @@ width: 100%;
 <label for="newPlayerName" data-i18n="playerName">Player Name</label>
 <input type="text" id="newPlayerName" placeholder="Enter player name...">
 </div>
+<div class="form-group">
+<label for="startingPoints" data-i18n="startingPoints">Starting Points</label>
+<input type="number" id="startingPoints" placeholder="Enter starting points..." min="0">
+</div>
+<div class="form-group">
+<label for="targetPoints" data-i18n="targetPoints">Target Points</label>
+<input type="number" id="targetPoints" placeholder="Enter target points..." min="0">
+</div>
+<div class="form-group">
+<label for="totalScores" data-i18n="totalScores">Total Scores</label>
+<input type="number" id="totalScores" placeholder="Enter total scores..." min="0">
+</div>
 <button class="add-player-btn" id="confirmAddPlayer" data-i18n="addPlayer">Add Player</button>
 <button class="cancel-add-player" id="cancelAddPlayer" data-i18n="cancel">Cancel</button>
 </div>
 </div>
+<!-- Delete Player Modal for Main Page -->
 <div class="delete-player-modal" id="deletePlayerModal">
 <div class="delete-player-form">
 <h2 class="delete-player-title">
@@ -1740,6 +1928,73 @@ width: 100%;
 </div>
 <button class="delete-player-btn" id="confirmDeletePlayer" data-i18n="deletePlayer">Delete Player</button>
 <button class="cancel-delete-player" id="cancelDeletePlayer" data-i18n="cancel">Cancel</button>
+</div>
+</div>
+<!-- Edit Player Modal for Main Page -->
+<div class="edit-player-modal" id="editPlayerModal">
+<div class="edit-player-form">
+<h2 class="edit-player-title">
+<i class="fas fa-user-edit"></i>
+<span data-i18n="editPlayer">Edit Player</span>
+</h2>
+<div class="form-group">
+<label for="editPlayerSelect" data-i18n="selectPlayer">Select Player</label>
+<select class="edit-player-select" id="editPlayerSelect">
+<!-- Players will be populated here -->
+</select>
+</div>
+<div class="form-group">
+<label for="editPlayerName" data-i18n="newPlayerName">New Player Name</label>
+<input type="text" id="editPlayerName" placeholder="Enter new player name...">
+</div>
+<button class="edit-player-btn" id="confirmEditPlayer" data-i18n="editPlayer">Edit Player</button>
+<button class="cancel-edit-player" id="cancelEditPlayer" data-i18n="cancel">Cancel</button>
+</div>
+</div>
+<!-- Confirmation Modal -->
+<div class="confirmation-modal" id="confirmationModal">
+<div class="confirmation-form">
+<h2 class="confirmation-title">
+<i class="fas fa-question-circle"></i>
+<span data-i18n="confirmation">Confirmation</span>
+</h2>
+<div class="confirmation-message" id="confirmationMessage">
+Are you sure you want to perform this action?
+</div>
+<button class="confirmation-btn" id="confirmAction" data-i18n="confirm">Confirm</button>
+<button class="cancel-confirmation" id="cancelConfirmation" data-i18n="cancel">Cancel</button>
+</div>
+</div>
+<!-- Add Player Modal for Daily Tournaments -->
+<div class="add-player-modal" id="addDailyPlayerModal">
+<div class="add-player-form">
+<h2 class="add-player-title">
+<i class="fas fa-user-plus"></i>
+<span data-i18n="addNewPlayer">Add New Player</span>
+</h2>
+<div class="form-group">
+<label for="newDailyPlayerName" data-i18n="playerName">Player Name</label>
+<input type="text" id="newDailyPlayerName" placeholder="Enter player name...">
+</div>
+<button class="add-player-btn" id="confirmAddDailyPlayer" data-i18n="addPlayer">Add Player</button>
+<button class="cancel-add-player" id="cancelAddDailyPlayer" data-i18n="cancel">Cancel</button>
+</div>
+</div>
+<!-- Delete Player Modal for Daily Tournaments -->
+<div class="delete-player-modal" id="deleteDailyPlayerModal">
+<div class="delete-player-form">
+<h2 class="delete-player-title">
+<i class="fas fa-user-minus"></i>
+<span data-i18n="deletePlayer">Delete Player</span>
+</h2>
+<div class="form-group">
+<label for="deleteDailyPlayerSelect" data-i18n="selectPlayer">Select Player</label>
+<select class="delete-player-select" id="deleteDailyPlayerSelect">
+<!-- Players will be populated here -->
+</select>
+</div>
+<button class="delete-player-btn" id="confirmDeleteDailyPlayer" data-i18n="deletePlayer">Delete Player</button>
+<button class="cancel-delete-player" id="cancelDeleteDailyPlayer" data-i18n="cancel">Cancel</button>
 </div>
 </div>
 <div class="notification" id="notification">
@@ -1822,7 +2077,16 @@ playerDeleted: "Jucător șters cu succes!",
 noPlayerName: "Vă rugăm introduceți numele jucătorului!",
 playerExists: "Acest jucător există deja!",
 noPlayerSelected: "Vă rugăm selectați un jucător!",
-noExportsAvailable: "Nu există exporturi salvate!"
+noExportsAvailable: "Nu există exporturi salvate!",
+startingPoints: "Puncte de Start",
+targetPoints: "Puncte Țintă",
+editPlayer: "Modifică Jucător",
+newPlayerName: "Nume Nou Jucător",
+playerEdited: "Jucător modificat cu succes!",
+confirmation: "Confirmare",
+confirm: "Confirmă",
+deleteConfirmation: "Dorești să ștergi acest jucător din listă?",
+editConfirmation: "Ești sigur că dorești modificarea numelui?"
 },
 en: {
 appTitle: "Scoring System",
@@ -1893,7 +2157,16 @@ playerDeleted: "Player deleted successfully!",
 noPlayerName: "Please enter player name!",
 playerExists: "This player already exists!",
 noPlayerSelected: "Please select a player!",
-noExportsAvailable: "No saved exports available!"
+noExportsAvailable: "No saved exports available!",
+startingPoints: "Starting Points",
+targetPoints: "Target Points",
+editPlayer: "Edit Player",
+newPlayerName: "New Player Name",
+playerEdited: "Player edited successfully!",
+confirmation: "Confirmation",
+confirm: "Confirm",
+deleteConfirmation: "Do you want to delete this player from the list?",
+editConfirmation: "Are you sure you want to change the name?"
 },
 es: {
 appTitle: "Sistema de Puntuación",
@@ -1964,7 +2237,16 @@ playerDeleted: "¡Jugador eliminado con éxito!",
 noPlayerName: "¡Por favor ingrese el nombre del jugador!",
 playerExists: "¡Este jugador ya existe!",
 noPlayerSelected: "¡Por favor seleccione un jugador!",
-noExportsAvailable: "¡No hay exportaciones guardadas disponibles!"
+noExportsAvailable: "¡No hay exportaciones guardadas disponibles!",
+startingPoints: "Puntos de Inicio",
+targetPoints: "Puntos Objetivo",
+editPlayer: "Editar Jugador",
+newPlayerName: "Nuevo Nombre de Jugador",
+playerEdited: "¡Jugador editado con éxito!",
+confirmation: "Confirmación",
+confirm: "Confirmar",
+deleteConfirmation: "¿Quieres eliminar a este jugador de la lista?",
+editConfirmation: "¿Estás seguro de que quieres cambiar el nombre?"
 }
 };
 // Firebase Configuration
@@ -1999,6 +2281,7 @@ let currentSortMethod = 'rank';
 let dailyCurrentSortMethod = 'rank';
 let activePage = 'mainPage';
 let excelExports = [];
+let pendingAction = null;
 // Default users
 const defaultUsers = [
 { username: 'admin', password: 'diasporaromana123', role: 'admin' },
@@ -2026,7 +2309,12 @@ const elementIds = [
 'excelExportMenu', 'addPlayerBtn', 'addPlayerModal', 'newPlayerName', 
 'confirmAddPlayer', 'cancelAddPlayer', 'deletePlayerBtn', 'deletePlayerModal', 
 'deletePlayerSelect', 'confirmDeletePlayer', 'cancelDeletePlayer',
-'bottomScorersCard', 'bottomScorersModal', 'closeBottomScorers', 'bottomScorersList', 'bottomScorersCount'
+'bottomSccorersCard', 'bottomScorersModal', 'closeBottomScorers', 'bottomScorersList', 'bottomScorersCount',
+'addDailyPlayerBtn', 'addDailyPlayerModal', 'newDailyPlayerName', 'confirmAddDailyPlayer', 'cancelAddDailyPlayer',
+'deleteDailyPlayerBtn', 'deleteDailyPlayerModal', 'deleteDailyPlayerSelect', 'confirmDeleteDailyPlayer', 'cancelDeleteDailyPlayer',
+'editPlayerBtn', 'editPlayerModal', 'editPlayerSelect', 'editPlayerName', 'confirmEditPlayer', 'cancelEditPlayer',
+'confirmationModal', 'confirmationMessage', 'confirmAction', 'cancelConfirmation',
+'startingPoints', 'targetPoints', 'totalScores'
 ];
 elementIds.forEach(id => {
 const element = document.getElementById(id);
@@ -2488,6 +2776,17 @@ const isLoggedIn = currentUser && (userRole === 'admin' || userRole === 'editor'
         elements.saveBtn.style.display = isLoggedIn ? 'block' : 'none';
     }
     
+    // Butoanele de administrare a jucătorilor pentru pagina principală
+    if (elements.addPlayerBtn) {
+        elements.addPlayerBtn.style.display = isLoggedIn && userRole === 'admin' ? 'block' : 'none';
+    }
+    if (elements.deletePlayerBtn) {
+        elements.deletePlayerBtn.style.display = isLoggedIn && userRole === 'admin' ? 'block' : 'none';
+    }
+    if (elements.editPlayerBtn) {
+        elements.editPlayerBtn.style.display = isLoggedIn && userRole === 'admin' ? 'block' : 'none';
+    }
+    
     // Panoul de administrare pentru pagina de turnee zilnice
     if (elements.dailyImportWrapper) {
         elements.dailyImportWrapper.style.display = isLoggedIn && userRole === 'admin' ? 'block' : 'none';
@@ -2498,11 +2797,11 @@ const isLoggedIn = currentUser && (userRole === 'admin' || userRole === 'editor'
     if (elements.dailySaveBtn) {
         elements.dailySaveBtn.style.display = isLoggedIn ? 'block' : 'none';
     }
-    if (elements.addPlayerBtn) {
-        elements.addPlayerBtn.style.display = isLoggedIn && userRole === 'admin' ? 'block' : 'none';
+    if (elements.addDailyPlayerBtn) {
+        elements.addDailyPlayerBtn.style.display = isLoggedIn && userRole === 'admin' ? 'block' : 'none';
     }
-    if (elements.deletePlayerBtn) {
-        elements.deletePlayerBtn.style.display = isLoggedIn && userRole === 'admin' ? 'block' : 'none';
+    if (elements.deleteDailyPlayerBtn) {
+        elements.deleteDailyPlayerBtn.style.display = isLoggedIn && userRole === 'admin' ? 'block' : 'none';
     }
     
     // Asigurăm că panoul de administrare este vizibil pentru utilizatorii autentificați
@@ -2710,7 +3009,7 @@ elements.excelExportMenu.classList.toggle('active');
 }
 });
 }
-// Add player modal
+// Add player modal for main page
 if (elements.addPlayerBtn) {
 elements.addPlayerBtn.addEventListener('click', () => {
 if (elements.addPlayerModal) {
@@ -2726,12 +3025,10 @@ elements.cancelAddPlayer.addEventListener('click', () => {
 if (elements.addPlayerModal) {
 elements.addPlayerModal.classList.remove('active');
 }
-if (elements.newPlayerName) {
-elements.newPlayerName.value = '';
-}
+resetAddPlayerForm();
 });
 }
-// Delete player modal
+// Delete player modal for main page
 if (elements.deletePlayerBtn) {
 elements.deletePlayerBtn.addEventListener('click', () => {
 populateDeletePlayerSelect();
@@ -2741,12 +3038,102 @@ elements.deletePlayerModal.classList.add('active');
 });
 }
 if (elements.confirmDeletePlayer) {
-elements.confirmDeletePlayer.addEventListener('click', deleteSelectedPlayer);
+elements.confirmDeletePlayer.addEventListener('click', () => {
+showConfirmation(
+translations[currentLang].deleteConfirmation,
+() => deleteSelectedPlayer()
+);
+});
 }
 if (elements.cancelDeletePlayer) {
 elements.cancelDeletePlayer.addEventListener('click', () => {
 if (elements.deletePlayerModal) {
 elements.deletePlayerModal.classList.remove('active');
+}
+});
+}
+// Edit player modal for main page
+if (elements.editPlayerBtn) {
+elements.editPlayerBtn.addEventListener('click', () => {
+populateEditPlayerSelect();
+if (elements.editPlayerModal) {
+elements.editPlayerModal.classList.add('active');
+}
+});
+}
+if (elements.confirmEditPlayer) {
+elements.confirmEditPlayer.addEventListener('click', () => {
+showConfirmation(
+translations[currentLang].editConfirmation,
+() => editSelectedPlayer()
+);
+});
+}
+if (elements.cancelEditPlayer) {
+elements.cancelEditPlayer.addEventListener('click', () => {
+if (elements.editPlayerModal) {
+elements.editPlayerModal.classList.remove('active');
+}
+resetEditPlayerForm();
+});
+}
+// Add player modal for daily tournaments
+if (elements.addDailyPlayerBtn) {
+elements.addDailyPlayerBtn.addEventListener('click', () => {
+if (elements.addDailyPlayerModal) {
+elements.addDailyPlayerModal.classList.add('active');
+}
+});
+}
+if (elements.confirmAddDailyPlayer) {
+elements.confirmAddDailyPlayer.addEventListener('click', addNewDailyPlayer);
+}
+if (elements.cancelAddDailyPlayer) {
+elements.cancelAddDailyPlayer.addEventListener('click', () => {
+if (elements.addDailyPlayerModal) {
+elements.addDailyPlayerModal.classList.remove('active');
+}
+if (elements.newDailyPlayerName) {
+elements.newDailyPlayerName.value = '';
+}
+});
+}
+// Delete player modal for daily tournaments
+if (elements.deleteDailyPlayerBtn) {
+elements.deleteDailyPlayerBtn.addEventListener('click', () => {
+populateDeleteDailyPlayerSelect();
+if (elements.deleteDailyPlayerModal) {
+elements.deleteDailyPlayerModal.classList.add('active');
+}
+});
+}
+if (elements.confirmDeleteDailyPlayer) {
+elements.confirmDeleteDailyPlayer.addEventListener('click', deleteSelectedDailyPlayer);
+}
+if (elements.cancelDeleteDailyPlayer) {
+elements.cancelDeleteDailyPlayer.addEventListener('click', () => {
+if (elements.deleteDailyPlayerModal) {
+elements.deleteDailyPlayerModal.classList.remove('active');
+}
+});
+}
+// Confirmation modal
+if (elements.confirmAction) {
+elements.confirmAction.addEventListener('click', () => {
+if (pendingAction) {
+pendingAction();
+pendingAction = null;
+}
+if (elements.confirmationModal) {
+elements.confirmationModal.classList.remove('active');
+}
+});
+}
+if (elements.cancelConfirmation) {
+elements.cancelConfirmation.addEventListener('click', () => {
+pendingAction = null;
+if (elements.confirmationModal) {
+elements.confirmationModal.classList.remove('active');
 }
 });
 }
@@ -2760,11 +3147,198 @@ elements.excelExportMenu.classList.remove('active');
 }
 });
 }
-// Add new player
+// Show confirmation modal
+function showConfirmation(message, action) {
+if (elements.confirmationMessage) {
+elements.confirmationMessage.textContent = message;
+}
+pendingAction = action;
+if (elements.confirmationModal) {
+elements.confirmationModal.classList.add('active');
+}
+}
+// Add new player for main page
 function addNewPlayer() {
-if (!elements.newPlayerName) return;
+if (!elements.newPlayerName || !elements.startingPoints || !elements.targetPoints || !elements.totalScores) return;
     
 const playerName = elements.newPlayerName.value.trim();
+const startingPoints = parseInt(elements.startingPoints.value) || 0;
+const targetPoints = parseInt(elements.targetPoints.value) || 0;
+const totalScores = parseInt(elements.totalScores.value) || 0;
+    
+// Validation
+if (!playerName) {
+showNotification(translations[currentLang].noPlayerName, 'error');
+return;
+}
+    
+if (players.some(p => p.player === playerName)) {
+showNotification(translations[currentLang].playerExists, 'error');
+return;
+}
+    
+if (startingPoints < 0 || targetPoints < 0 || totalScores < 0) {
+showNotification('All point values must be positive numbers', 'error');
+return;
+}
+    
+// Add new player
+const newPlayer = {
+player: playerName,
+startingPoints: startingPoints,
+targetPoints: targetPoints,
+totalScores: totalScores
+};
+    
+players.push(newPlayer);
+    
+// Save to Firebase
+saveDataToFirebase();
+    
+// Close modal and reset form
+if (elements.addPlayerModal) {
+elements.addPlayerModal.classList.remove('active');
+}
+resetAddPlayerForm();
+    
+// Show success notification
+showNotification(`${translations[currentLang].playerAdded}: ${playerName}`, 'success');
+    
+// Re-render table
+renderTable();
+}
+// Reset add player form
+function resetAddPlayerForm() {
+if (elements.newPlayerName) elements.newPlayerName.value = '';
+if (elements.startingPoints) elements.startingPoints.value = '';
+if (elements.targetPoints) elements.targetPoints.value = '';
+if (elements.totalScores) elements.totalScores.value = '';
+}
+// Populate delete player select for main page
+function populateDeletePlayerSelect() {
+if (!elements.deletePlayerSelect) return;
+    
+// Clear existing options
+elements.deletePlayerSelect.innerHTML = '<option value="">-- Select a player --</option>';
+    
+// Add player options
+players.forEach(player => {
+const option = document.createElement('option');
+option.value = player.player;
+option.textContent = player.player;
+elements.deletePlayerSelect.appendChild(option);
+});
+}
+// Delete selected player for main page
+function deleteSelectedPlayer() {
+if (!elements.deletePlayerSelect) return;
+    
+const playerName = elements.deletePlayerSelect.value;
+    
+if (!playerName) {
+showNotification(translations[currentLang].noPlayerSelected, 'error');
+return;
+}
+    
+// Find player index
+const playerIndex = players.findIndex(p => p.player === playerName);
+    
+if (playerIndex === -1) {
+showNotification('Player not found', 'error');
+return;
+}
+    
+// Remove player
+players.splice(playerIndex, 1);
+    
+// Save to Firebase
+saveDataToFirebase();
+    
+// Close modal
+if (elements.deletePlayerModal) {
+elements.deletePlayerModal.classList.remove('active');
+}
+    
+// Show success notification
+showNotification(`${translations[currentLang].playerDeleted}: ${playerName}`, 'success');
+    
+// Re-render table
+renderTable();
+}
+// Populate edit player select for main page
+function populateEditPlayerSelect() {
+if (!elements.editPlayerSelect) return;
+    
+// Clear existing options
+elements.editPlayerSelect.innerHTML = '<option value="">-- Select a player --</option>';
+    
+// Add player options
+players.forEach(player => {
+const option = document.createElement('option');
+option.value = player.player;
+option.textContent = player.player;
+elements.editPlayerSelect.appendChild(option);
+});
+}
+// Edit selected player for main page
+function editSelectedPlayer() {
+if (!elements.editPlayerSelect || !elements.editPlayerName) return;
+    
+const oldPlayerName = elements.editPlayerSelect.value;
+const newPlayerName = elements.editPlayerName.value.trim();
+    
+if (!oldPlayerName) {
+showNotification(translations[currentLang].noPlayerSelected, 'error');
+return;
+}
+    
+if (!newPlayerName) {
+showNotification(translations[currentLang].noPlayerName, 'error');
+return;
+}
+    
+// Check if new name already exists (excluding the current player)
+if (players.some(p => p.player === newPlayerName && p.player !== oldPlayerName)) {
+showNotification(translations[currentLang].playerExists, 'error');
+return;
+}
+    
+// Find player index
+const playerIndex = players.findIndex(p => p.player === oldPlayerName);
+    
+if (playerIndex === -1) {
+showNotification('Player not found', 'error');
+return;
+}
+    
+// Update player name
+players[playerIndex].player = newPlayerName;
+    
+// Save to Firebase
+saveDataToFirebase();
+    
+// Close modal and reset form
+if (elements.editPlayerModal) {
+elements.editPlayerModal.classList.remove('active');
+}
+resetEditPlayerForm();
+    
+// Show success notification
+showNotification(`${translations[currentLang].playerEdited}: ${oldPlayerName} → ${newPlayerName}`, 'success');
+    
+// Re-render table
+renderTable();
+}
+// Reset edit player form
+function resetEditPlayerForm() {
+if (elements.editPlayerSelect) elements.editPlayerSelect.value = '';
+if (elements.editPlayerName) elements.editPlayerName.value = '';
+}
+// Add new player for daily tournaments
+function addNewDailyPlayer() {
+if (!elements.newDailyPlayerName) return;
+    
+const playerName = elements.newDailyPlayerName.value.trim();
     
 if (!playerName) {
 showNotification(translations[currentLang].noPlayerName, 'error');
@@ -2805,11 +3379,11 @@ dailyPlayers.push(newPlayer);
 saveDailyDataToFirebase();
     
 // Close modal and reset form
-if (elements.addPlayerModal) {
-elements.addPlayerModal.classList.remove('active');
+if (elements.addDailyPlayerModal) {
+elements.addDailyPlayerModal.classList.remove('active');
 }
-if (elements.newPlayerName) {
-elements.newPlayerName.value = '';
+if (elements.newDailyPlayerName) {
+elements.newDailyPlayerName.value = '';
 }
     
 // Show success notification
@@ -2818,26 +3392,26 @@ showNotification(translations[currentLang].playerAdded, 'success');
 // Re-render table
 renderDailyTable();
 }
-// Populate delete player select
-function populateDeletePlayerSelect() {
-if (!elements.deletePlayerSelect) return;
+// Populate delete player select for daily tournaments
+function populateDeleteDailyPlayerSelect() {
+if (!elements.deleteDailyPlayerSelect) return;
     
 // Clear existing options
-elements.deletePlayerSelect.innerHTML = '<option value="">-- Select a player --</option>';
+elements.deleteDailyPlayerSelect.innerHTML = '<option value="">-- Select a player --</option>';
     
 // Add player options
 dailyPlayers.forEach(player => {
 const option = document.createElement('option');
 option.value = player.playerName;
 option.textContent = player.playerName;
-elements.deletePlayerSelect.appendChild(option);
+elements.deleteDailyPlayerSelect.appendChild(option);
 });
 }
-// Delete selected player
-function deleteSelectedPlayer() {
-if (!elements.deletePlayerSelect) return;
+// Delete selected player for daily tournaments
+function deleteSelectedDailyPlayer() {
+if (!elements.deleteDailyPlayerSelect) return;
     
-const playerName = elements.deletePlayerSelect.value;
+const playerName = elements.deleteDailyPlayerSelect.value;
     
 if (!playerName) {
 showNotification(translations[currentLang].noPlayerSelected, 'error');
@@ -2859,8 +3433,8 @@ dailyPlayers.splice(playerIndex, 1);
 saveDailyDataToFirebase();
     
 // Close modal
-if (elements.deletePlayerModal) {
-elements.deletePlayerModal.classList.remove('active');
+if (elements.deleteDailyPlayerModal) {
+elements.deleteDailyPlayerModal.classList.remove('active');
 }
     
 // Show success notification
@@ -3453,7 +4027,7 @@ row.innerHTML = `
 <td class="rank">${calculateRank(player)}</td>
 <td class="player ${statusClass}">${player.player}</td>
 <td class="total-scores">
-${canEdit ?
+ ${canEdit ?
 `<input type="number" class="editable" value="${player.totalScores}"
 onchange="updatePlayerScore('${player.player}', this.value)">` :
 player.totalScores}
