@@ -288,7 +288,7 @@ background: #059669;
 transform: translateY(-2px);
 box-shadow: var(--shadow-lg);
 }
-.export-btn, .save-btn, .add-player-btn, .delete-player-btn, .edit-player-btn {
+.export-btn, .save-btn, .add-player-btn, .delete-player-btn, .edit-player-btn, .reset-weekly-btn, .reset-season-btn {
 background: var(--primary);
 color: var(--white);
 border: none;
@@ -305,7 +305,7 @@ box-shadow: var(--shadow);
 flex: 1;
 justify-content: center;
 }
-.export-btn:hover, .save-btn:hover, .add-player-btn:hover, .delete-player-btn:hover, .edit-player-btn:hover {
+.export-btn:hover, .save-btn:hover, .add-player-btn:hover, .delete-player-btn:hover, .edit-player-btn:hover, .reset-weekly-btn:hover, .reset-season-btn:hover {
 background: var(--primary-dark);
 transform: translateY(-2px);
 box-shadow: var(--shadow-lg);
@@ -333,6 +333,18 @@ background: var(--warning);
 }
 .edit-player-btn:hover {
 background: #d97706;
+}
+.reset-weekly-btn {
+background: #8b5cf6;
+}
+.reset-weekly-btn:hover {
+background: #7c3aed;
+}
+.reset-season-btn {
+background: #ec4899;
+}
+.reset-season-btn:hover {
+background: #db2777;
 }
 .dashboard {
 background: rgba(255, 255, 255, 0.95);
@@ -1310,6 +1322,152 @@ border: 2px solid var(--light-gray);
 background: var(--light);
 border-color: var(--gray);
 }
+/* Reset weekly modal */
+.reset-weekly-modal {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0, 0, 0, 0.7);
+display: flex;
+justify-content: center;
+align-items: center;
+z-index: 1000;
+display: none;
+backdrop-filter: blur(5px);
+}
+.reset-weekly-modal.active {
+display: flex;
+}
+.reset-weekly-form {
+background: var(--white);
+border-radius: 20px;
+padding: 40px;
+width: 90%;
+max-width: 450px;
+box-shadow: var(--shadow-lg);
+}
+.reset-weekly-title {
+font-size: 28px;
+font-weight: 700;
+color: #8b5cf6;
+margin-bottom: 30px;
+text-align: center;
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 12px;
+}
+.reset-weekly-description {
+font-size: 16px;
+color: var(--gray);
+margin-bottom: 30px;
+text-align: center;
+line-height: 1.6;
+}
+.reset-weekly-btn, .cancel-reset-weekly {
+width: 100%;
+border-radius: 12px;
+padding: 15px 20px;
+font-size: 16px;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.3s ease;
+margin-top: 15px;
+}
+.reset-weekly-btn {
+background: #8b5cf6;
+color: var(--white);
+border: none;
+}
+.reset-weekly-btn:hover {
+background: #7c3aed;
+transform: translateY(-2px);
+box-shadow: var(--shadow-lg);
+}
+.cancel-reset-weekly {
+background: transparent;
+color: var(--gray);
+border: 2px solid var(--light-gray);
+}
+.cancel-reset-weekly:hover {
+background: var(--light);
+border-color: var(--gray);
+}
+/* Reset season modal */
+.reset-season-modal {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0, 0, 0, 0.7);
+display: flex;
+justify-content: center;
+align-items: center;
+z-index: 1000;
+display: none;
+backdrop-filter: blur(5px);
+}
+.reset-season-modal.active {
+display: flex;
+}
+.reset-season-form {
+background: var(--white);
+border-radius: 20px;
+padding: 40px;
+width: 90%;
+max-width: 450px;
+box-shadow: var(--shadow-lg);
+}
+.reset-season-title {
+font-size: 28px;
+font-weight: 700;
+color: #ec4899;
+margin-bottom: 30px;
+text-align: center;
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 12px;
+}
+.reset-season-description {
+font-size: 16px;
+color: var(--gray);
+margin-bottom: 30px;
+text-align: center;
+line-height: 1.6;
+}
+.reset-season-btn, .cancel-reset-season {
+width: 100%;
+border-radius: 12px;
+padding: 15px 20px;
+font-size: 16px;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.3s ease;
+margin-top: 15px;
+}
+.reset-season-btn {
+background: #ec4899;
+color: var(--white);
+border: none;
+}
+.reset-season-btn:hover {
+background: #db2777;
+transform: translateY(-2px);
+box-shadow: var(--shadow-lg);
+}
+.cancel-reset-season {
+background: transparent;
+color: var(--gray);
+border: 2px solid var(--light-gray);
+}
+.cancel-reset-season:hover {
+background: var(--light);
+border-color: var(--gray);
+}
 /* Confirmation modal */
 .confirmation-modal {
 position: fixed;
@@ -1450,7 +1608,7 @@ width: 100%;
 .admin-actions {
 flex-direction: column;
 }
-.file-input-wrapper, .export-btn, .save-btn, .add-player-btn, .delete-player-btn, .edit-player-btn {
+.file-input-wrapper, .export-btn, .save-btn, .add-player-btn, .delete-player-btn, .edit-player-btn, .reset-weekly-btn, .reset-season-btn {
 width: 100%;
 }
 .excel-export-dropdown {
@@ -1596,6 +1754,16 @@ width: 100%;
 <button class="edit-player-btn" id="editPlayerBtn">
 <i class="fas fa-user-edit"></i>
 <span data-i18n="editPlayer">Edit Player</span>
+</button>
+</div>
+<div class="admin-actions">
+<button class="reset-weekly-btn" id="resetWeeklyBtn">
+<i class="fas fa-redo"></i>
+<span data-i18n="resetWeekly">Reset Săptămânal</span>
+</button>
+<button class="reset-season-btn" id="resetSeasonBtn">
+<i class="fas fa-sync-alt"></i>
+<span data-i18n="resetSeason">Reset Sezon</span>
 </button>
 </div>
 </div>
@@ -1951,6 +2119,44 @@ width: 100%;
 <button class="cancel-edit-player" id="cancelEditPlayer" data-i18n="cancel">Cancel</button>
 </div>
 </div>
+<!-- Reset Weekly Modal -->
+<div class="reset-weekly-modal" id="resetWeeklyModal">
+<div class="reset-weekly-form">
+<h2 class="reset-weekly-title">
+<i class="fas fa-redo"></i>
+<span data-i18n="resetWeekly">Reset Săptămânal</span>
+</h2>
+<div class="reset-weekly-description">
+Această operațiune va seta punctajul de start la valoarea punctajului total curent. 
+Punctajul total va rămâne neschimbat. Va trebui să introduceți noul target pentru săptămâna de joc.
+</div>
+<div class="form-group">
+<label for="weeklyTarget" data-i18n="newTarget">Target Săptămânal Nou</label>
+<input type="number" id="weeklyTarget" placeholder="Introduceți noul target..." min="0">
+</div>
+<button class="reset-weekly-btn" id="confirmResetWeekly" data-i18n="resetWeekly">Reset Săptămânal</button>
+<button class="cancel-reset-weekly" id="cancelResetWeekly" data-i18n="cancel">Cancel</button>
+</div>
+</div>
+<!-- Reset Season Modal -->
+<div class="reset-season-modal" id="resetSeasonModal">
+<div class="reset-season-form">
+<h2 class="reset-season-title">
+<i class="fas fa-sync-alt"></i>
+<span data-i18n="resetSeason">Reset Sezon</span>
+</h2>
+<div class="reset-season-description">
+Această operațiune va reseta la 0 atât punctajul de start, cât și punctajul total al tuturor jucătorilor. 
+Va trebui să introduceți noul target pentru săptămâna de joc.
+</div>
+<div class="form-group">
+<label for="seasonTarget" data-i18n="newTarget">Target Sezon Nou</label>
+<input type="number" id="seasonTarget" placeholder="Introduceți noul target..." min="0">
+</div>
+<button class="reset-season-btn" id="confirmResetSeason" data-i18n="resetSeason">Reset Sezon</button>
+<button class="cancel-reset-season" id="cancelResetSeason" data-i18n="cancel">Cancel</button>
+</div>
+</div>
 <!-- Confirmation Modal -->
 <div class="confirmation-modal" id="confirmationModal">
 <div class="confirmation-form">
@@ -2086,7 +2292,15 @@ playerEdited: "Jucător modificat cu succes!",
 confirmation: "Confirmare",
 confirm: "Confirmă",
 deleteConfirmation: "Dorești să ștergi acest jucător din listă?",
-editConfirmation: "Ești sigur că dorești modificarea numelui?"
+editConfirmation: "Ești sigur că dorești modificarea numelui?",
+resetWeekly: "Reset Săptămânal",
+resetSeason: "Reset Sezon",
+newTarget: "Target Nou",
+resetWeeklySuccess: "Reset săptămânal efectuat cu succes!",
+resetSeasonSuccess: "Reset sezon efectuat cu succes!",
+invalidTarget: "Vă rugăm introduceți un target valid!",
+resetWeeklyConfirmation: "Sunteți sigur că doriți să efectuați resetul săptămânal?",
+resetSeasonConfirmation: "Sunteți sigur că doriți să efectuați resetul de sezon?"
 },
 en: {
 appTitle: "Scoring System",
@@ -2166,7 +2380,15 @@ playerEdited: "Player edited successfully!",
 confirmation: "Confirmation",
 confirm: "Confirm",
 deleteConfirmation: "Do you want to delete this player from the list?",
-editConfirmation: "Are you sure you want to change the name?"
+editConfirmation: "Are you sure you want to change the name?",
+resetWeekly: "Weekly Reset",
+resetSeason: "Season Reset",
+newTarget: "New Target",
+resetWeeklySuccess: "Weekly reset completed successfully!",
+resetSeasonSuccess: "Season reset completed successfully!",
+invalidTarget: "Please enter a valid target!",
+resetWeeklyConfirmation: "Are you sure you want to perform the weekly reset?",
+resetSeasonConfirmation: "Are you sure you want to perform the season reset?"
 },
 es: {
 appTitle: "Sistema de Puntuación",
@@ -2246,7 +2468,15 @@ playerEdited: "¡Jugador editado con éxito!",
 confirmation: "Confirmación",
 confirm: "Confirmar",
 deleteConfirmation: "¿Quieres eliminar a este jugador de la lista?",
-editConfirmation: "¿Estás seguro de que quieres cambiar el nombre?"
+editConfirmation: "¿Estás seguro de que quieres cambiar el nombre?",
+resetWeekly: "Reinicio Semanal",
+resetSeason: "Reinicio de Temporada",
+newTarget: "Nuevo Objetivo",
+resetWeeklySuccess: "¡Reinicio semanal completado con éxito!",
+resetSeasonSuccess: "¡Reinicio de temporada completado con éxito!",
+invalidTarget: "¡Por favor ingrese un objetivo válido!",
+resetWeeklyConfirmation: "¿Estás seguro de que quieres realizar el reinicio semanal?",
+resetSeasonConfirmation: "¿Estás seguro de que quieres realizar el reinicio de temporada?"
 }
 };
 // Firebase Configuration
@@ -2309,12 +2539,14 @@ const elementIds = [
 'excelExportMenu', 'addPlayerBtn', 'addPlayerModal', 'newPlayerName', 
 'confirmAddPlayer', 'cancelAddPlayer', 'deletePlayerBtn', 'deletePlayerModal', 
 'deletePlayerSelect', 'confirmDeletePlayer', 'cancelDeletePlayer',
-'bottomSccorersCard', 'bottomScorersModal', 'closeBottomScorers', 'bottomScorersList', 'bottomScorersCount',
+'bottomScorersCard', 'bottomScorersModal', 'closeBottomScorers', 'bottomScorersList', 'bottomScorersCount',
 'addDailyPlayerBtn', 'addDailyPlayerModal', 'newDailyPlayerName', 'confirmAddDailyPlayer', 'cancelAddDailyPlayer',
 'deleteDailyPlayerBtn', 'deleteDailyPlayerModal', 'deleteDailyPlayerSelect', 'confirmDeleteDailyPlayer', 'cancelDeleteDailyPlayer',
 'editPlayerBtn', 'editPlayerModal', 'editPlayerSelect', 'editPlayerName', 'confirmEditPlayer', 'cancelEditPlayer',
 'confirmationModal', 'confirmationMessage', 'confirmAction', 'cancelConfirmation',
-'startingPoints', 'targetPoints', 'totalScores'
+'startingPoints', 'targetPoints', 'totalScores', 'resetWeeklyBtn', 'resetSeasonBtn',
+'resetWeeklyModal', 'weeklyTarget', 'confirmResetWeekly', 'cancelResetWeekly',
+'resetSeasonModal', 'seasonTarget', 'confirmResetSeason', 'cancelResetSeason'
 ];
 elementIds.forEach(id => {
 const element = document.getElementById(id);
@@ -2787,6 +3019,14 @@ const isLoggedIn = currentUser && (userRole === 'admin' || userRole === 'editor'
         elements.editPlayerBtn.style.display = isLoggedIn && userRole === 'admin' ? 'block' : 'none';
     }
     
+    // Butoanele de reset pentru pagina principală
+    if (elements.resetWeeklyBtn) {
+        elements.resetWeeklyBtn.style.display = isLoggedIn && userRole === 'admin' ? 'block' : 'none';
+    }
+    if (elements.resetSeasonBtn) {
+        elements.resetSeasonBtn.style.display = isLoggedIn && userRole === 'admin' ? 'block' : 'none';
+    }
+    
     // Panoul de administrare pentru pagina de turnee zilnice
     if (elements.dailyImportWrapper) {
         elements.dailyImportWrapper.style.display = isLoggedIn && userRole === 'admin' ? 'block' : 'none';
@@ -3077,6 +3317,58 @@ elements.editPlayerModal.classList.remove('active');
 resetEditPlayerForm();
 });
 }
+// Reset weekly modal
+if (elements.resetWeeklyBtn) {
+elements.resetWeeklyBtn.addEventListener('click', () => {
+if (elements.resetWeeklyModal) {
+elements.resetWeeklyModal.classList.add('active');
+}
+});
+}
+if (elements.confirmResetWeekly) {
+elements.confirmResetWeekly.addEventListener('click', () => {
+showConfirmation(
+translations[currentLang].resetWeeklyConfirmation,
+() => performWeeklyReset()
+);
+});
+}
+if (elements.cancelResetWeekly) {
+elements.cancelResetWeekly.addEventListener('click', () => {
+if (elements.resetWeeklyModal) {
+elements.resetWeeklyModal.classList.remove('active');
+}
+if (elements.weeklyTarget) {
+elements.weeklyTarget.value = '';
+}
+});
+}
+// Reset season modal
+if (elements.resetSeasonBtn) {
+elements.resetSeasonBtn.addEventListener('click', () => {
+if (elements.resetSeasonModal) {
+elements.resetSeasonModal.classList.add('active');
+}
+});
+}
+if (elements.confirmResetSeason) {
+elements.confirmResetSeason.addEventListener('click', () => {
+showConfirmation(
+translations[currentLang].resetSeasonConfirmation,
+() => performSeasonReset()
+);
+});
+}
+if (elements.cancelResetSeason) {
+elements.cancelResetSeason.addEventListener('click', () => {
+if (elements.resetSeasonModal) {
+elements.resetSeasonModal.classList.remove('active');
+}
+if (elements.seasonTarget) {
+elements.seasonTarget.value = '';
+}
+});
+}
 // Add player modal for daily tournaments
 if (elements.addDailyPlayerBtn) {
 elements.addDailyPlayerBtn.addEventListener('click', () => {
@@ -3156,6 +3448,75 @@ pendingAction = action;
 if (elements.confirmationModal) {
 elements.confirmationModal.classList.add('active');
 }
+}
+// Perform weekly reset
+function performWeeklyReset() {
+if (!elements.weeklyTarget) return;
+    
+const newTarget = parseInt(elements.weeklyTarget.value);
+    
+if (isNaN(newTarget) || newTarget < 0) {
+showNotification(translations[currentLang].invalidTarget, 'error');
+return;
+}
+    
+// Reset all players
+players.forEach(player => {
+player.startingPoints = player.totalScores; // Corectat: setează punctajul de start la punctajul total
+player.targetPoints = newTarget; // Setează noul target
+});
+    
+// Save to Firebase
+saveDataToFirebase();
+    
+// Close modal and reset form
+if (elements.resetWeeklyModal) {
+elements.resetWeeklyModal.classList.remove('active');
+}
+if (elements.weeklyTarget) {
+elements.weeklyTarget.value = '';
+}
+    
+// Show success notification
+showNotification(translations[currentLang].resetWeeklySuccess, 'success');
+    
+// Re-render table
+renderTable();
+}
+// Perform season reset
+function performSeasonReset() {
+if (!elements.seasonTarget) return;
+    
+const newTarget = parseInt(elements.seasonTarget.value);
+    
+if (isNaN(newTarget) || newTarget < 0) {
+showNotification(translations[currentLang].invalidTarget, 'error');
+return;
+}
+    
+// Reset all players
+players.forEach(player => {
+player.startingPoints = 0; // Reset starting points to 0
+player.totalScores = 0; // Reset total scores to 0
+player.targetPoints = newTarget; // Set new target
+});
+    
+// Save to Firebase
+saveDataToFirebase();
+    
+// Close modal and reset form
+if (elements.resetSeasonModal) {
+elements.resetSeasonModal.classList.remove('active');
+}
+if (elements.seasonTarget) {
+elements.seasonTarget.value = '';
+}
+    
+// Show success notification
+showNotification(translations[currentLang].resetSeasonSuccess, 'success');
+    
+// Re-render table
+renderTable();
 }
 // Add new player for main page
 function addNewPlayer() {
