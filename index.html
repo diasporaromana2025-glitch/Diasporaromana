@@ -202,8 +202,7 @@ button{ font-family: inherit; }
   border:1px solid var(--border);
   background: var(--surface);
   white-space:nowrap;
-}
-.sync-pill .dot{
+}.sync-pill .dot{
   width:7px; height:7px; border-radius:50%;
   background: var(--cyan);
   box-shadow: 0 0 8px 1px var(--cyan);
@@ -212,6 +211,21 @@ button{ font-family: inherit; }
 .sync-pill.syncing .dot{ background: var(--amber); box-shadow:0 0 8px 1px var(--amber); }
 .sync-pill.error .dot{ background: var(--danger); box-shadow:0 0 8px 1px var(--danger); animation:none; }
 @keyframes pulse-dot{ 0%,100%{ opacity:1; } 50%{ opacity:.35; } }
+
+.countdown-pill{
+  display:flex; align-items:center; gap:7px;
+  font-family: var(--font-mono);
+  font-size:11.5px;
+  font-weight:600;
+  color: var(--amber);
+  padding:8px 12px;
+  border-radius: 20px;
+  border:1px solid var(--border);
+  background: var(--amber-soft);
+  white-space:nowrap;
+}
+.countdown-pill i{ font-size:11px; }
+.countdown-pill.urgent{ color: var(--danger); background: var(--danger-soft); animation: pulse-dot 1.4s ease-in-out infinite; }
 
 .lang-switch{ position:relative; }
 .lang-btn{
@@ -379,6 +393,20 @@ button{ font-family: inherit; }
   .kpi-value{ font-size:26px; }
 }
 
+/* ============================== CONFETTI ============================== */
+.confetti-overlay{ position:fixed; inset:0; pointer-events:none; z-index:900; overflow:hidden; }
+.confetti-piece{
+  position:absolute; top:-20px;
+  border-radius:2px;
+  animation-name: confetti-fall;
+  animation-timing-function: ease-in;
+  animation-fill-mode: forwards;
+}
+@keyframes confetti-fall{
+  0%{ transform: translateY(0) rotate(0deg); opacity:1; }
+  100%{ transform: translateY(105vh) rotate(560deg); opacity:0; }
+}
+
 /* ============================== BOARD PANEL ============================== */
 .board-panel{
   background: linear-gradient(160deg, rgba(35,44,77,.4), rgba(19,24,41,.75));
@@ -493,32 +521,108 @@ button{ font-family: inherit; }
   display:flex; align-items:center; gap:13px;
 }
 
-.ring{
-  width:44px; height:44px; border-radius:50%;
-  background: conic-gradient(var(--ring-color, var(--cyan)) calc(var(--pct, 0) * 3.6deg), var(--surface-3) 0deg);
-  display:grid; place-items:center;
+/* -------- Football jersey avatar -------- */
+.jersey{
+  width:42px; height:44px;
   flex-shrink:0;
+  position:relative;
+  display:flex; align-items:center; justify-content:center;
+  padding-top:6px;
+  background: linear-gradient(155deg, var(--jc-1, var(--cyan)), var(--jc-2, var(--cyan-2)));
+  clip-path: polygon(
+    32% 0%, 42% 9%, 50% 12%, 58% 9%, 68% 0%,
+    84% 9%, 100% 27%, 85% 39%,
+    85% 100%, 15% 100%,
+    15% 39%, 0% 27%, 16% 9%
+  );
+  box-shadow: 0 4px 10px -4px rgba(0,0,0,.5);
   transition: background 1s var(--ease);
 }
-.ring-inner{
-  width:35px; height:35px; border-radius:50%;
-  background: var(--surface-2);
-  display:grid; place-items:center;
+.jersey-initials{
   font-family: var(--font-display);
   font-weight:700;
-  font-size:12px;
-  color: var(--text);
+  font-size:12.5px;
+  color: rgba(0,0,0,.55);
+  text-shadow: 0 1px 0 rgba(255,255,255,.18);
+  letter-spacing:.02em;
 }
 
-.player-meta{ display:flex; flex-direction:column; gap:3px; min-width:0; }
+/* -------- Metallic 3D tiers: gold / silver / bronze -------- */
+.jersey.tier-gold, .jersey.tier-silver, .jersey.tier-bronze{
+  background-size: 220% 220%;
+  animation: jersey-shimmer 5s ease-in-out infinite;
+}
+.jersey.tier-gold{
+  background-image: linear-gradient(125deg, #7a5310 0%, #d4a017 20%, #fff6d0 42%, #ffe89a 50%, #d4a017 58%, #a6790f 78%, #7a5310 100%);
+  box-shadow: 0 6px 14px -4px rgba(180,130,10,.55), inset 0 1px 2px rgba(255,255,255,.7), inset 0 -3px 4px rgba(90,60,0,.45);
+}
+.jersey.tier-silver{
+  background-image: linear-gradient(125deg, #6b7380 0%, #aab3c2 20%, #ffffff 42%, #e6ebf3 50%, #aab3c2 58%, #838c9c 78%, #6b7380 100%);
+  box-shadow: 0 6px 14px -4px rgba(90,100,120,.55), inset 0 1px 2px rgba(255,255,255,.8), inset 0 -3px 4px rgba(40,45,55,.4);
+}
+.jersey.tier-bronze{
+  background-image: linear-gradient(125deg, #5c3618 0%, #a5652f 20%, #f0c090 42%, #e0a468 50%, #a5652f 58%, #7a4a26 78%, #5c3618 100%);
+  box-shadow: 0 6px 14px -4px rgba(120,70,20,.55), inset 0 1px 2px rgba(255,235,210,.7), inset 0 -3px 4px rgba(50,25,5,.45);
+}
+.jersey.tier-gold::after, .jersey.tier-silver::after, .jersey.tier-bronze::after{
+  content:''; position:absolute; inset:0;
+  background: radial-gradient(circle at 28% 16%, rgba(255,255,255,.75), transparent 42%);
+}
+@keyframes jersey-shimmer{ 0%,100%{ background-position:0% 0%; } 50%{ background-position:100% 100%; } }
+.jersey.tier-gold .jersey-initials, .jersey.tier-silver .jersey-initials, .jersey.tier-bronze .jersey-initials{
+  position:relative; z-index:1;
+}
+
+.player-meta{ display:flex; flex-direction:column; gap:5px; min-width:0; flex:1; }
 .player-name{
   font-weight:600; font-size:14.5px; color: var(--text);
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
 }
-.player-sub{
-  font-family: var(--font-mono);
-  font-size:11px; color: var(--text-faint);
+
+/* -------- "It's me!" search highlight -------- */
+.board-row.row-found{
+  box-shadow: inset 3px 0 0 var(--gold);
+  animation: found-pulse 1.4s ease-in-out 2;
 }
+@keyframes found-pulse{
+  0%,100%{ background: transparent; }
+  50%{ background: rgba(255,194,60,.1); }
+}
+.player-cell{ cursor:pointer; }
+.player-cell:hover .jersey{ transform: scale(1.06); transition: transform .18s var(--ease); }
+
+/* -------- Battery-style progress bar (replaces the old ring) -------- */
+.battery-bar{ display:flex; align-items:center; gap:3px; }
+.battery-seg{
+  width:15px; height:5px; border-radius:2.5px;
+  background: var(--surface-3);
+  transition: all .3s var(--ease);
+}
+.battery-seg.filled{ background: var(--seg-color, var(--cyan)); box-shadow: 0 0 5px 0 var(--seg-color, var(--cyan)); }
+.battery-bar.full .battery-seg.filled{ animation: seg-pulse 1.8s ease-in-out infinite; }
+@keyframes seg-pulse{ 0%,100%{ opacity:1; } 50%{ opacity:.55; } }
+.battery-pct{
+  font-family: var(--font-mono);
+  font-size:10.5px;
+  color: var(--text-faint);
+  margin-left:4px;
+  flex-shrink:0;
+}
+
+/* -------- Rank movement arrow -------- */
+.rank-move{
+  order:1;
+  display:inline-flex; align-items:center; gap:2px;
+  font-family: var(--font-mono);
+  font-size:10.5px;
+  font-weight:700;
+  padding:2px 5px;
+  border-radius:6px;
+  margin-left:4px;
+  flex-shrink:0;
+}
+.rank-move.up{ color: var(--cyan); background: var(--cyan-soft); }
+.rank-move.down{ color: var(--danger); background: var(--danger-soft); }
 
 .row-break{ order:4; flex-basis:100%; width:0; height:0; padding:0; margin:0; }
 
@@ -586,10 +690,10 @@ button{ font-family: inherit; }
   .rank-chip{ width:28px; height:28px; font-size:12.5px; border-radius:8px; }
 
   .player-cell{ min-width: 0; gap:10px; }
-  .ring{ width:38px; height:38px; }
-  .ring-inner{ width:30px; height:30px; font-size:11px; }
+  .jersey{ width:36px; height:38px; padding-top:5px; }
+  .jersey-initials{ font-size:11px; }
   .player-name{ font-size:14px; max-width: 46vw; }
-  .player-sub{ display:none; }
+  .battery-seg{ width:12px; height:4px; }
 
   /* status pill jumps up next to the name on mobile */
   .stat-left{ order:3; width:auto; flex-shrink:0; margin-left:0; }
@@ -620,6 +724,7 @@ button{ font-family: inherit; }
   font-family: var(--font-body);
   color: var(--text);
 }
+.share-card.wide{ width:800px; }
 .share-card .sc-head{
   display:flex; align-items:center; justify-content:space-between;
   margin-bottom:20px; padding-bottom:16px;
@@ -647,14 +752,34 @@ button{ font-family: inherit; }
 
 .share-card .sc-row{
   display:flex; align-items:center; justify-content:space-between;
-  padding:11px 4px; border-bottom:1px solid var(--border-soft);
+  padding:9px 4px; border-bottom:1px solid var(--border-soft);
+  gap:10px;
 }
 .share-card .sc-row:last-child{ border-bottom:none; }
-.share-card .sc-name{ font-weight:600; font-size:15px; }
-.share-card .sc-figures{ display:flex; align-items:center; gap:18px; }
+.share-card .sc-name{
+  font-weight:600; font-size:13.5px;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0; flex:1;
+}
+.share-card .sc-figures{ display:flex; align-items:center; gap:12px; flex-shrink:0; }
 .share-card .sc-figure{ text-align:right; }
-.share-card .sc-figure .f-val{ font-family: var(--font-mono); font-weight:700; font-size:15px; }
-.share-card .sc-figure .f-lbl{ font-size:9.5px; text-transform:uppercase; letter-spacing:.05em; color: var(--text-faint); }
+.share-card .sc-figure .f-val{ font-family: var(--font-mono); font-weight:700; font-size:13.5px; }
+.share-card .sc-figure .f-lbl{ font-size:8.5px; text-transform:uppercase; letter-spacing:.05em; color: var(--text-faint); }
+.share-card .sc-rest-chip{
+  font-family: var(--font-mono); font-weight:700; font-size:12.5px;
+  padding:4px 9px; border-radius:7px; min-width:52px; text-align:center;
+}
+
+.share-card .sc-columns{ display:flex; align-items:flex-start; gap:0; }
+.share-card .sc-col{ flex:1; min-width:0; }
+.share-card .sc-col-divider{ width:20px; flex-shrink:0; border-left:1px solid var(--border); margin: 0 0; align-self:stretch; }
+
+.share-card .sc-legend{
+  display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+  margin-bottom:14px; padding:8px 10px;
+  background: rgba(255,255,255,.03); border-radius:9px;
+  font-size:9.5px; color: var(--text-faint);
+}
+.share-card .sc-legend .lg-dot{ width:9px; height:9px; border-radius:50%; display:inline-block; margin-right:4px; vertical-align:middle; }
 
 .share-card .sc-footer{
   margin-top:18px; padding-top:14px; border-top:1px solid var(--border);
@@ -859,6 +984,54 @@ button{ font-family: inherit; }
 
 .modal-actions{ display:flex; gap:10px; margin-top:20px; }
 .modal-actions button{ flex:1; padding:12px; border-radius:10px; font-size:13.5px; font-weight:700; cursor:pointer; border:none; transition: all .18s var(--ease); }
+
+/* ============================== PERSONAL PLAYER CARD ============================== */
+.player-card-shell{ max-width:380px; padding:20px; position:relative; }
+.modal-close-x{ position:absolute; top:12px; right:12px; z-index:2; width:32px; height:32px; }
+
+.personal-card{
+  position:relative;
+  width:100%;
+  background: linear-gradient(165deg, #1c2444, #0d1122);
+  border-radius: 20px;
+  padding: 30px 22px 22px;
+  text-align:center;
+  overflow:hidden;
+  border:1px solid var(--border-glow);
+}
+.personal-card::before{
+  content:''; position:absolute; top:0; left:0; right:0; height:5px;
+  background: var(--pc-color, var(--gold));
+}
+.pc-rank-badge{
+  position:absolute; top:14px; left:14px;
+  font-family: var(--font-mono); font-weight:700; font-size:12px;
+  color: var(--pc-color, var(--gold));
+  background: var(--pc-soft, var(--gold-soft));
+  padding:4px 9px; border-radius:8px;
+}
+.pc-jersey-wrap .jersey{ width:84px; height:88px; padding-top:14px; margin:0 auto 14px; }
+.pc-jersey-wrap .jersey-initials{ font-size:24px; }
+.pc-name{
+  font-family: var(--font-display); font-weight:700; font-size:20px;
+  color: var(--text); margin-bottom:5px;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.pc-tagline{ font-size:12.5px; color: var(--text-dim); margin-bottom:18px; }
+.pc-score-block{ margin-bottom:14px; }
+.pc-score{
+  font-family: var(--font-mono); font-weight:700; font-size:34px;
+  color: var(--pc-color, var(--gold)); line-height:1;
+}
+.pc-score-label{ font-size:10.5px; text-transform:uppercase; letter-spacing:.07em; color: var(--text-faint); margin-top:4px; }
+.personal-card .battery-bar{ justify-content:center; margin: 6px auto 20px; }
+.pc-footer{
+  display:flex; align-items:center; justify-content:space-between;
+  padding-top:16px; border-top:1px solid var(--border-soft);
+  font-family: var(--font-mono); font-size:10px; color: var(--text-faint);
+}
+.pc-flag{ width:36px; height:3px; border-radius:3px;
+  background: linear-gradient(to right, var(--ro-blue) 0 33%, var(--ro-yellow) 33% 66%, var(--ro-red) 66% 100%); }
 .btn-primary{ background: linear-gradient(135deg, var(--gold), var(--gold-2)); color:#2a1804; box-shadow: 0 8px 20px -10px rgba(255,194,60,.6); }
 .btn-primary:hover{ filter: brightness(1.08); }
 .btn-primary.danger{ background: linear-gradient(135deg, var(--danger), var(--danger-2)); color:#fff; box-shadow: 0 8px 20px -10px rgba(255,77,112,.6); }
@@ -945,6 +1118,7 @@ button{ font-family: inherit; }
     </div>
 
     <div class="topbar-actions">
+      <div class="countdown-pill" id="countdownPill"><i class="fas fa-hourglass-half"></i><span id="countdownText">--:--:--</span></div>
       <div class="sync-pill" id="syncPill"><span class="dot"></span><span id="syncText" data-i18n="live">Live</span></div>
 
       <div class="lang-switch" id="langSwitch">
@@ -1246,8 +1420,22 @@ button{ font-family: inherit; }
   </div>
 </div>
 
+<!-- ============ PLAYER CARD MODAL ============ -->
+<div class="modal-overlay" id="playerCardModal">
+  <div class="modal-card player-card-shell">
+    <button class="icon-btn modal-close-x" id="closePlayerCardBtn" type="button"><i class="fas fa-times"></i></button>
+    <div id="playerCardPreview"></div>
+    <div class="modal-actions">
+      <button class="btn-primary" id="downloadPlayerCardBtn" type="button"><i class="fas fa-download"></i> <span data-i18n="downloadCard">Descarcă Imaginea</span></button>
+    </div>
+  </div>
+</div>
+
 <!-- ============ TOASTS ============ -->
 <div class="toast-stack" id="toastStack"></div>
+
+<!-- ============ CONFETTI ============ -->
+<div class="confetti-overlay" id="confettiOverlay"></div>
 
 <!-- Firebase + XLSX SDKs -->
 <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
@@ -1351,6 +1539,18 @@ const translations = {
     pctAchieved: "% Realizat",
     rest: "Rest",
     fullBoardTitle: "Clasament Complet",
+    justAchievedTarget: "a atins targetul! 🎯",
+    mostRemaining: "mai mult rămas",
+    mediumRemaining: "mediu",
+    leastRemaining: "mai puțin rămas",
+    viewPlayerCard: "Vezi cardul jucătorului",
+    downloadCard: "Descarcă Imaginea",
+    taglineGold: "Legendă de aur! 🏆✨",
+    taglineSilver: "Argint strălucitor! 🥈",
+    taglineBronze: "Bronz solid, tot mai sus! 🥉",
+    taglineClose: "Aproape de glorie! 🔥",
+    taglineAttention: "Încă puțin efort! 💪",
+    taglineRisk: "Hai, e timpul să revii! ⚡",
   },
   en: {
     appTitle: "Diaspora Română",
@@ -1442,6 +1642,18 @@ const translations = {
     pctAchieved: "% Achieved",
     rest: "Rest",
     fullBoardTitle: "Full Leaderboard",
+    justAchievedTarget: "just hit their target! 🎯",
+    mostRemaining: "most remaining",
+    mediumRemaining: "medium",
+    leastRemaining: "least remaining",
+    viewPlayerCard: "View player card",
+    downloadCard: "Download Image",
+    taglineGold: "Golden legend! 🏆✨",
+    taglineSilver: "Shining silver! 🥈",
+    taglineBronze: "Solid bronze, climbing up! 🥉",
+    taglineClose: "So close to glory! 🔥",
+    taglineAttention: "A little more push! 💪",
+    taglineRisk: "Time for a comeback! ⚡",
   },
   es: {
     appTitle: "Diaspora Română",
@@ -1533,6 +1745,18 @@ const translations = {
     pctAchieved: "% Logrado",
     rest: "Restante",
     fullBoardTitle: "Clasificación Completa",
+    justAchievedTarget: "¡acaba de alcanzar su objetivo! 🎯",
+    mostRemaining: "más restante",
+    mediumRemaining: "medio",
+    leastRemaining: "menos restante",
+    viewPlayerCard: "Ver tarjeta del jugador",
+    downloadCard: "Descargar Imagen",
+    taglineGold: "¡Leyenda de oro! 🏆✨",
+    taglineSilver: "¡Plata brillante! 🥈",
+    taglineBronze: "¡Bronce sólido, subiendo! 🥉",
+    taglineClose: "¡Tan cerca de la gloria! 🔥",
+    taglineAttention: "¡Un poco más de esfuerzo! 💪",
+    taglineRisk: "¡Hora de volver! ⚡",
   }
 };
 
@@ -1561,6 +1785,8 @@ let searchQuery = '';
 let currentSortMethod = 'rank';
 let excelExports = [];
 let pendingAction = null;
+let previousRankSnapshot = {};
+let hasInitialSnapshot = false;
 
 const defaultUsers = [
   { username: 'admin', password: 'diasporaromana123', role: 'admin' },
@@ -1580,6 +1806,8 @@ function initApp(){
   loadDataFromFirebase();
   loadExcelExportsFromFirebase();
   setInterval(updateLastUpdatedTime, 30000);
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
 }
 
 /* ---------------- Session ---------------- */
@@ -1640,7 +1868,22 @@ function setupEventListeners(){
   $('searchInput').addEventListener('input', (e) => {
     searchQuery = e.target.value.toLowerCase().trim();
     renderTable();
+    if (searchQuery){
+      const firstFound = document.querySelector('.board-row.row-found');
+      if (firstFound) firstFound.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
   });
+
+  // click a player's jersey/name to open their personal card
+  $('rankingBody').addEventListener('click', (e) => {
+    const cell = e.target.closest('.player-cell');
+    if (!cell) return;
+    const row = cell.closest('.board-row');
+    if (!row) return;
+    openPlayerCardModal(row.dataset.player);
+  });
+  $('closePlayerCardBtn').addEventListener('click', () => closeModal('playerCardModal'));
+  $('downloadPlayerCardBtn').addEventListener('click', downloadPlayerCard);
 
   // sort
   document.querySelectorAll('.sort-chip[data-sort]').forEach(btn => {
@@ -1794,6 +2037,10 @@ function loadDataFromFirebase(){
     try {
       const data = snapshot.val();
       players = data ? Object.values(data) : [];
+      if (!hasInitialSnapshot){
+        captureRankSnapshot();
+        hasInitialSnapshot = true;
+      }
       updateDashboard();
       renderTable();
       showLoading(false);
@@ -1852,10 +2099,16 @@ window.updatePlayerScore = function(playerName, newScore){
   if (!currentUser){ showToast(t('permissionDenied'), 'error'); return; }
   const player = players.find(p => p.player === playerName);
   if (player){
+    const wasDone = calculateLeftToAchieve(player) <= 0;
     player.totalScores = parseInt(newScore) || 0;
+    const isDoneNow = calculateLeftToAchieve(player) <= 0;
     updatePlayerScoreInFirebase(playerName, newScore);
     updateDashboard();
     renderTable();
+    if (!wasDone && isDoneNow){
+      createConfettiBurst();
+      showToast(`🎉 ${playerName} ${t('justAchievedTarget')}`, 'success');
+    }
   }
 };
 
@@ -1938,7 +2191,7 @@ function getProgressPct(p){
   if (needed <= 0) return week >= 0 ? 100 : 0;
   return Math.max(0, Math.min(100, Math.round((week / needed) * 100)));
 }
-function getRingColorVar(statusClass){
+function getSegmentColor(statusClass){
   switch(statusClass){
     case 'st-done': return 'var(--gold)';
     case 'st-close': return 'var(--cyan)';
@@ -1946,10 +2199,95 @@ function getRingColorVar(statusClass){
     default: return 'var(--danger)';
   }
 }
+function getFilledSegments(pct){
+  if (pct <= 0) return 0;
+  if (pct <= 20) return 1;
+  if (pct <= 40) return 2;
+  if (pct <= 60) return 3;
+  if (pct < 100) return 4;
+  return 5;
+}
+function buildBatteryHtml(pct, statusClass){
+  const filled = getFilledSegments(pct);
+  const color = getSegmentColor(statusClass);
+  const segs = Array.from({length:5}, (_, i) =>
+    `<span class="battery-seg${i < filled ? ' filled' : ''}" style="--seg-color:${color};"></span>`
+  ).join('');
+  const fullClass = filled >= 5 ? ' full' : '';
+  return `<div class="battery-bar${fullClass}">${segs}<span class="battery-pct">${Math.min(pct,999)}%</span></div>`;
+}
+
+/* -------- Jersey tiers: gold/silver/bronze (overall % of target) or red-to-blue gradient -------- */
+function getTargetPct(p){
+  const target = p.targetPoints || 0;
+  const achieved = p.totalScores || 0;
+  if (target > 0) return Math.round((achieved / target) * 100);
+  return achieved > 0 ? 100 : 0;
+}
+
+function computeBelowTargetRanking(){
+  const below = players.filter(p => getTargetPct(p) < 100);
+  const sorted = [...below].sort((a, b) => calculateLeftToAchieve(b) - calculateLeftToAchieve(a)); // most left first
+  const map = {};
+  sorted.forEach((p, i) => { map[p.player] = i; });
+  return { map, total: sorted.length };
+}
+
+function getJerseyTierInfo(p, belowMap, belowTotal){
+  const pct = getTargetPct(p);
+  if (pct > 140) return { tier: 'gold' };
+  if (pct >= 111) return { tier: 'silver' };
+  if (pct >= 100) return { tier: 'bronze' };
+  const idx = belowMap[p.player] ?? 0;
+  const c = getRestColor(idx, belowTotal || 1);
+  return { tier: 'color', c1: c.bg, c2: c.bg2 };
+}
+
+function buildJerseyHtml(initials, tierInfo){
+  if (tierInfo.tier === 'gold') return `<div class="jersey tier-gold"><span class="jersey-initials">${initials}</span></div>`;
+  if (tierInfo.tier === 'silver') return `<div class="jersey tier-silver"><span class="jersey-initials">${initials}</span></div>`;
+  if (tierInfo.tier === 'bronze') return `<div class="jersey tier-bronze"><span class="jersey-initials">${initials}</span></div>`;
+  return `<div class="jersey" style="--jc-1:${tierInfo.c1}; --jc-2:${tierInfo.c2};"><span class="jersey-initials">${initials}</span></div>`;
+}
+
 function getInitials(name){
   if (!name) return '?';
   const parts = name.trim().split(/\s+/);
   return ((parts[0]?.[0] || '') + (parts[1]?.[0] || '')).toUpperCase() || name.slice(0,2).toUpperCase();
+}
+
+function captureRankSnapshot(){
+  previousRankSnapshot = {};
+  sortPlayers(players, 'rank').forEach((p, i) => { previousRankSnapshot[p.player] = i + 1; });
+}
+
+function buildRankMoveHtml(player, newRank){
+  const oldRank = previousRankSnapshot[player.player];
+  if (typeof oldRank === 'undefined' || oldRank === newRank) return '';
+  const diff = oldRank - newRank;
+  if (diff > 0) return `<span class="rank-move up"><i class="fas fa-caret-up"></i>${diff}</span>`;
+  return `<span class="rank-move down"><i class="fas fa-caret-down"></i>${Math.abs(diff)}</span>`;
+}
+
+function createConfettiBurst(){
+  const overlay = $('confettiOverlay');
+  const colors = ['#ffc23c', '#35d6c4', '#a56bff', '#6c8bff', '#ff5876'];
+  const count = 60;
+  for (let i = 0; i < count; i++){
+    const piece = document.createElement('span');
+    piece.className = 'confetti-piece';
+    const size = 6 + Math.random() * 6;
+    piece.style.width = `${size}px`;
+    piece.style.height = `${size * 0.4}px`;
+    piece.style.left = `${Math.random() * 100}%`;
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+    const duration = 2.2 + Math.random() * 1.6;
+    const delay = Math.random() * 0.4;
+    piece.style.animationDuration = `${duration}s`;
+    piece.style.animationDelay = `${delay}s`;
+    overlay.appendChild(piece);
+    setTimeout(() => piece.remove(), (duration + delay) * 1000 + 200);
+  }
 }
 
 function sortPlayers(list, method){
@@ -1982,17 +2320,22 @@ function renderTable(){
     $('emptyState').style.display = isEmpty ? 'block' : 'none';
     document.querySelector('.board-list-header').style.display = isEmpty ? 'none' : 'flex';
 
+    const belowRanking = computeBelowTargetRanking();
+
     filtered.forEach(player => {
       const rank = calculateRank(player);
       const weekScore = calculateWeekScore(player);
       const leftToAchieve = calculateLeftToAchieve(player);
       const statusClass = getStatusClass(player);
       const pct = getProgressPct(player);
+      const tierInfo = getJerseyTierInfo(player, belowRanking.map, belowRanking.total);
       const canEdit = !!currentUser;
 
       const row = document.createElement('div');
       row.className = `board-row ${statusClass}`;
       if (rank <= 3) row.classList.add(`rank-${rank}`);
+      if (searchQuery) row.classList.add('row-found');
+      row.dataset.player = player.player;
 
       const deltaClass = weekScore > 0 ? 'positive' : (weekScore < 0 ? 'negative' : 'zero');
       const deltaSign = weekScore > 0 ? '+' : '';
@@ -2005,14 +2348,12 @@ function renderTable(){
       }
 
       row.innerHTML = `
-        <span class="rank-chip">${rank}</span>
-        <div class="player-cell">
-          <div class="ring" style="--pct:${pct}; --ring-color:${getRingColorVar(statusClass)};">
-            <div class="ring-inner">${getInitials(player.player)}</div>
-          </div>
+        <span class="rank-chip">${rank}</span>${buildRankMoveHtml(player, rank)}
+        <div class="player-cell" title="${escapeAttr(t('viewPlayerCard'))}">
+          ${buildJerseyHtml(getInitials(player.player), tierInfo)}
           <div class="player-meta">
             <span class="player-name">${escapeHtml(player.player)}</span>
-            <span class="player-sub">${t('targetPoints')}: ${player.targetPoints ?? 0}</span>
+            ${buildBatteryHtml(pct, statusClass)}
           </div>
         </div>
         <div class="row-break"></div>
@@ -2043,6 +2384,23 @@ function escapeHtml(str){
 }
 function escapeAttr(str){ return escapeHtml(str).replace(/`/g,'&#96;'); }
 
+function animateNumber(el, to){
+  const from = parseInt(el.dataset.val || '0', 10) || 0;
+  to = Number(to) || 0;
+  if (from === to){ el.textContent = to; el.dataset.val = to; return; }
+  const duration = 650;
+  const start = performance.now();
+  function step(now){
+    const progress = Math.min(1, (now - start) / duration);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const current = Math.round(from + (to - from) * eased);
+    el.textContent = current;
+    if (progress < 1) requestAnimationFrame(step);
+    else { el.textContent = to; el.dataset.val = to; }
+  }
+  requestAnimationFrame(step);
+}
+
 function updateDashboard(){
   const total = players.length;
   const targetAchieved = players.filter(p => calculateLeftToAchieve(p) <= 0).length;
@@ -2051,12 +2409,40 @@ function updateDashboard(){
   const zero = players.filter(p => calculateWeekScore(p) === 0).length;
   const avg = total > 0 ? Math.round(players.reduce((s, p) => s + calculateWeekScore(p), 0) / total) : 0;
 
-  $('kpiTotal').textContent = total;
-  $('kpiTarget').textContent = targetAchieved;
-  $('kpiClose').textContent = close;
-  $('kpiAttention').textContent = attention;
-  $('kpiZero').textContent = zero;
-  $('kpiAverage').textContent = avg;
+  animateNumber($('kpiTotal'), total);
+  animateNumber($('kpiTarget'), targetAchieved);
+  animateNumber($('kpiClose'), close);
+  animateNumber($('kpiAttention'), attention);
+  animateNumber($('kpiZero'), zero);
+  animateNumber($('kpiAverage'), avg);
+}
+
+/* ---------------- Weekly reset countdown (every Thursday 00:00) ---------------- */
+function getNextThursdayMidnight(){
+  const now = new Date();
+  const result = new Date(now);
+  result.setHours(0, 0, 0, 0);
+  const currentDay = result.getDay(); // 0=Sun ... 4=Thu
+  let daysUntilThursday = (4 - currentDay + 7) % 7;
+  if (daysUntilThursday === 0) daysUntilThursday = 7; // today's reset already happened at 00:00
+  result.setDate(result.getDate() + daysUntilThursday);
+  return result;
+}
+
+function updateCountdown(){
+  const target = getNextThursdayMidnight();
+  const diff = target - new Date();
+  const pill = $('countdownPill');
+  const text = $('countdownText');
+  if (diff <= 0){ text.textContent = '00:00:00'; return; }
+  const totalSec = Math.floor(diff / 1000);
+  const days = Math.floor(totalSec / 86400);
+  const hours = Math.floor((totalSec % 86400) / 3600);
+  const mins = Math.floor((totalSec % 3600) / 60);
+  const secs = totalSec % 60;
+  const pad = n => String(n).padStart(2, '0');
+  text.textContent = days > 0 ? `${days}z ${pad(hours)}:${pad(mins)}:${pad(secs)}` : `${pad(hours)}:${pad(mins)}:${pad(secs)}`;
+  pill.classList.toggle('urgent', diff < 3 * 3600000); // last 3 hours
 }
 
 function updateLastUpdatedTime(){
@@ -2098,6 +2484,89 @@ function showToast(message, type){
   }, 3200);
 }
 
+/* ---------------- Personal player card (cute, shareable) ---------------- */
+function getPlayerTagline(statusClass, tier){
+  if (tier === 'gold') return t('taglineGold');
+  if (tier === 'silver') return t('taglineSilver');
+  if (tier === 'bronze') return t('taglineBronze');
+  if (statusClass === 'st-close') return t('taglineClose');
+  if (statusClass === 'st-attention') return t('taglineAttention');
+  return t('taglineRisk');
+}
+
+function getTierAccentColor(tier){
+  switch(tier){
+    case 'gold': return { color: '#ffd35c', soft: 'rgba(255,211,92,.16)' };
+    case 'silver': return { color: '#d3dcf5', soft: 'rgba(211,220,245,.16)' };
+    case 'bronze': return { color: '#e8a565', soft: 'rgba(232,165,101,.16)' };
+    default: return { color: 'var(--cyan)', soft: 'var(--cyan-soft)' };
+  }
+}
+
+function buildPersonalCardHtml(player){
+  const rank = calculateRank(player);
+  const weekScore = calculateWeekScore(player);
+  const sign = weekScore > 0 ? '+' : '';
+  const pct = getProgressPct(player);
+  const statusClass = getStatusClass(player);
+  const belowRanking = computeBelowTargetRanking();
+  const tierInfo = getJerseyTierInfo(player, belowRanking.map, belowRanking.total);
+  const accent = getTierAccentColor(tierInfo.tier);
+  const tagline = getPlayerTagline(statusClass, tierInfo.tier);
+
+  return `
+    <div class="personal-card" style="--pc-color:${accent.color}; --pc-soft:${accent.soft};">
+      <div class="pc-rank-badge">#${rank}</div>
+      <div class="pc-jersey-wrap">${buildJerseyHtml(getInitials(player.player), tierInfo)}</div>
+      <div class="pc-name">${escapeHtml(player.player)}</div>
+      <div class="pc-tagline">${tagline}</div>
+      <div class="pc-score-block">
+        <div class="pc-score">${sign}${weekScore}</div>
+        <div class="pc-score-label">${escapeHtml(t('weekScore'))}</div>
+      </div>
+      ${buildBatteryHtml(pct, statusClass)}
+      <div class="pc-footer">
+        <span>${escapeHtml(t('appTitle'))}</span>
+        <span class="pc-flag"></span>
+      </div>
+    </div>`;
+}
+
+function openPlayerCardModal(playerName){
+  const player = players.find(p => p.player === playerName);
+  if (!player) return;
+  $('playerCardPreview').innerHTML = buildPersonalCardHtml(player);
+  openModal('playerCardModal');
+}
+
+function downloadPlayerCard(){
+  const cardNode = document.querySelector('#playerCardPreview .personal-card');
+  if (!cardNode){ showToast(t('noDataToExport'), 'error'); return; }
+  if (typeof html2canvas === 'undefined'){ showToast('html2canvas not loaded', 'error'); return; }
+
+  showLoading(true);
+  html2canvas(cardNode, { backgroundColor: null, scale: 3 }).then(canvas => {
+    canvas.toBlob(blob => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      const now = new Date();
+      const day = String(now.getDate()).padStart(2, '0');
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      a.href = url;
+      a.download = `card_jucator_${day}-${month}-${now.getFullYear()}.png`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showLoading(false);
+      showToast(t('screenshotReady'), 'success');
+    }, 'image/png');
+  }).catch(err => {
+    console.error('Error generating player card:', err);
+    showLoading(false);
+    showToast(t('permissionDenied') + ' ' + err.message, 'error');
+  });
+}
 /* ---------------- Players CRUD ---------------- */
 function populateSelect(selectId){
   const select = $(selectId);
@@ -2125,6 +2594,7 @@ function addPlayer(){
   closeModal('addPlayerModal');
   $('newPlayerName').value = ''; $('startingPoints').value = ''; $('targetPoints').value = ''; $('totalScores').value = '';
   showToast(t('playerAdded'), 'success');
+  captureRankSnapshot();
   updateDashboard(); renderTable();
 }
 
@@ -2153,6 +2623,7 @@ function confirmDeletePlayerAction(){
     players = players.filter(p => p.player !== selected);
     saveDataToFirebase();
     showToast(t('playerDeleted'), 'success');
+    captureRankSnapshot();
     updateDashboard(); renderTable();
   });
 }
@@ -2167,6 +2638,7 @@ function performWeeklyReset(){
   closeModal('resetWeeklyModal');
   $('weeklyTarget').value = '';
   showToast(t('resetWeeklySuccess'), 'success');
+  captureRankSnapshot();
   updateDashboard(); renderTable();
 }
 
@@ -2179,6 +2651,7 @@ function performSeasonReset(){
   closeModal('resetSeasonModal');
   $('seasonTarget').value = '';
   showToast(t('resetSeasonSuccess'), 'success');
+  captureRankSnapshot();
   updateDashboard(); renderTable();
 }
 
@@ -2218,6 +2691,7 @@ function handleFileImport(event){
       players = newPlayers;
       saveDataToFirebase();
       showToast(t('importSuccess'), 'success');
+      captureRankSnapshot();
       updateDashboard(); renderTable();
     } catch (err){
       console.error('Error processing file:', err);
@@ -2387,21 +2861,69 @@ const SHARE_CATEGORIES = {
   zero:      { filterFn: p => calculateWeekScore(p) === 0,                                            badgeClass: 'zero',     icon: 'fa-times-circle',      labelKey: 'zeroPoints' },
 };
 
+const REST_COLOR_SCALE = [
+  { bg: '#ff4d4d', bg2: '#d62d2d', text: '#ffffff' },  // most left to achieve — red
+  { bg: '#ff9f40', bg2: '#e07b1a', text: '#3a1f00' },  // orange
+  { bg: '#ffd93d', bg2: '#e0b400', text: '#4a3900' },  // amber
+  { bg: '#4ecdc4', bg2: '#2ba39b', text: '#04302c' },  // teal
+  { bg: '#4a90e2', bg2: '#2c6bb8', text: '#ffffff' },  // least left to achieve — blue
+];
+
+function getRestColor(index, total){
+  if (total <= 1) return REST_COLOR_SCALE[REST_COLOR_SCALE.length - 1];
+  const bucket = Math.min(REST_COLOR_SCALE.length - 1, Math.floor((index / total) * REST_COLOR_SCALE.length));
+  return REST_COLOR_SCALE[bucket];
+}
+
 function generateShareCard(category){
   const config = SHARE_CATEGORIES[category];
   if (!config) return;
 
-  const list = sortPlayers(players.filter(config.filterFn), 'score');
+  // most left-to-achieve first (reddest) down to least (bluest) — matches the visual gradient
+  const list = [...players.filter(config.filterFn)].sort((a, b) => calculateLeftToAchieve(b) - calculateLeftToAchieve(a));
   if (list.length === 0){ showToast(t('noPlayersInCategory'), 'error'); return; }
 
   if (typeof html2canvas === 'undefined'){ showToast('html2canvas not loaded', 'error'); return; }
 
   const now = new Date();
-  const dateStr = now.toLocaleDateString(currentLang === 'ro' ? 'ro-RO' : (currentLang === 'es' ? 'es-ES' : 'en-US'));
-  const timeStr = now.toLocaleTimeString(currentLang === 'ro' ? 'ro-RO' : (currentLang === 'es' ? 'es-ES' : 'en-US'), { hour:'2-digit', minute:'2-digit' });
+  const localeTag = currentLang === 'ro' ? 'ro-RO' : (currentLang === 'es' ? 'es-ES' : 'en-US');
+  const dateStr = now.toLocaleDateString(localeTag);
+  const timeStr = now.toLocaleTimeString(localeTag, { hour: '2-digit', minute: '2-digit' });
+  const isDoneCategory = category === 'target';
+  const n = list.length;
+
+  const rowHtml = (p, index) => {
+    const week = calculateWeekScore(p);
+    const weekSign = week > 0 ? '+' : '';
+    const rest = Math.max(0, calculateLeftToAchieve(p));
+    const restHtml = isDoneCategory
+      ? `<span class="sc-rest-chip" style="background:var(--gold-soft); color:var(--gold);"><i class="fas fa-check"></i></span>`
+      : (() => { const c = getRestColor(index, n); return `<span class="sc-rest-chip" style="background:${c.bg}; color:${c.text};">${rest}</span>`; })();
+    return `
+      <div class="sc-row">
+        <span class="sc-name">${escapeHtml(p.player)}</span>
+        <div class="sc-figures">
+          <div class="sc-figure"><div class="f-val">${weekSign}${week}</div><div class="f-lbl">${escapeHtml(t('weekScore'))}</div></div>
+          ${restHtml}
+        </div>
+      </div>`;
+  };
+
+  const rows = list.map((p, i) => rowHtml(p, i));
+  const half = Math.ceil(rows.length / 2);
+  const col1 = rows.slice(0, half).join('');
+  const col2 = rows.slice(half).join('');
+
+  const legendHtml = isDoneCategory ? '' : `
+    <div class="sc-legend">
+      <span>${escapeHtml(t('leftToAchieve'))}:</span>
+      <span><span class="lg-dot" style="background:${REST_COLOR_SCALE[0].bg};"></span>${t('mostRemaining')}</span>
+      <span><span class="lg-dot" style="background:${REST_COLOR_SCALE[2].bg};"></span>${t('mediumRemaining')}</span>
+      <span><span class="lg-dot" style="background:${REST_COLOR_SCALE[4].bg};"></span>${t('leastRemaining')}</span>
+    </div>`;
 
   const card = document.createElement('div');
-  card.className = 'share-card';
+  card.className = 'share-card wide';
   card.innerHTML = `
     <div class="sc-head">
       <div class="sc-brand">
@@ -2410,32 +2932,21 @@ function generateShareCard(category){
       </div>
       <div class="sc-date">${dateStr} · ${timeStr}</div>
     </div>
-    <div class="sc-badge ${config.badgeClass}"><i class="fas ${config.icon}"></i>${t(config.labelKey)}</div>
-    <div class="sc-list">
-      ${list.map(p => {
-        const week = calculateWeekScore(p);
-        const left = calculateLeftToAchieve(p);
-        const weekSign = week > 0 ? '+' : '';
-        const leftText = left <= 0 ? t('done') : left;
-        return `
-          <div class="sc-row">
-            <span class="sc-name">${escapeHtml(p.player)}</span>
-            <div class="sc-figures">
-              <div class="sc-figure"><div class="f-val">${weekSign}${week}</div><div class="f-lbl">${escapeHtml(t('weekScore'))}</div></div>
-              <div class="sc-figure"><div class="f-val">${leftText}</div><div class="f-lbl">${escapeHtml(t('leftToAchieve'))}</div></div>
-            </div>
-          </div>`;
-      }).join('')}
+    <div class="sc-badge ${config.badgeClass}"><i class="fas ${config.icon}"></i>${t(config.labelKey)} (${n})</div>
+    ${legendHtml}
+    <div class="sc-columns">
+      <div class="sc-col">${col1}</div>
+      ${col2 ? `<div class="sc-col-divider"></div><div class="sc-col">${col2}</div>` : ''}
     </div>
     <div class="sc-footer">
-      <span>${t('generatedOn')} ${dateStr}</span>
+      <span>${t('generatedOn')} ${dateStr} · ${timeStr}</span>
       <span class="sc-flag"></span>
     </div>
   `;
   document.body.appendChild(card);
 
   showLoading(true);
-  html2canvas(card, { backgroundColor: null, scale: 2 }).then(canvas => {
+  html2canvas(card, { backgroundColor: null, scale: 2.5 }).then(canvas => {
     canvas.toBlob(blob => {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
