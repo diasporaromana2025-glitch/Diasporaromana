@@ -2217,12 +2217,18 @@ function buildBatteryHtml(pct, statusClass){
   return `<div class="battery-bar${fullClass}">${segs}<span class="battery-pct">${Math.min(pct,999)}%</span></div>`;
 }
 
-/* -------- Jersey tiers: gold/silver/bronze (overall % of target) or red-to-blue gradient -------- */
+/* -------- Jersey tiers: gold/silver/bronze (% of WEEKLY target, start-adjusted) or red-to-blue gradient --------
+   FIX: previously compared raw totalScores/targetPoints, ignoring startingPoints. That made the % (and the
+   gold/silver/bronze tiers) wrong for anyone not starting from 0, and inconsistent with getProgressPct(), which
+   already does this correctly for the on-screen battery bar. Both now use the same formula:
+   pct = (Realizat - Puncte start sapt.) / (Target sapt. - Puncte start sapt.) * 100 */
 function getTargetPct(p){
+  const start = p.startingPoints || 0;
   const target = p.targetPoints || 0;
   const achieved = p.totalScores || 0;
-  if (target > 0) return Math.round((achieved / target) * 100);
-  return achieved > 0 ? 100 : 0;
+  const needed = target - start;
+  if (needed > 0) return Math.round(((achieved - start) / needed) * 100);
+  return (achieved - start) > 0 ? 100 : 0;
 }
 
 function computeBelowTargetRanking(){
@@ -2633,7 +2639,10 @@ function performWeeklyReset(){
   if (userRole !== 'admin'){ showToast(t('permissionDenied'), 'error'); return; }
   const newTarget = parseInt($('weeklyTarget').value);
   if (isNaN(newTarget) || newTarget < 0){ showToast(t('invalidTarget'), 'error'); return; }
-  players.forEach(p => { p.startingPoints = p.totalScores; p.targetPoints = newTarget; });
+  // FIX: targetPoints trebuie sa fie per-jucator (start + tinta saptamanala), nu aceeasi valoare fixa
+  // pentru toti. Altfel, jucatorii cu punctaj cumulat deja mai mare decat noul target apareau
+  // instant cu "target atins" desi nu punctasera nimic in noua saptamana.
+  players.forEach(p => { p.startingPoints = p.totalScores; p.targetPoints = p.totalScores + newTarget; });
   saveDataToFirebase();
   closeModal('resetWeeklyModal');
   $('weeklyTarget').value = '';
@@ -2755,9 +2764,13 @@ function getPctTier(pct){
 
 function buildLeaderboardTableHtml(list, achievedLabel){
   const rows = list.map(p => {
+    const start = p.startingPoints || 0;
     const target = p.targetPoints || 0;
     const achieved = p.totalScores || 0;
-    const pct = target > 0 ? Math.round((achieved / target) * 100) : (achieved > 0 ? 100 : 0);
+    // FIX: procent = (Realizat - Puncte start sapt.) / (Target sapt. - Puncte start sapt.) * 100
+    const needed = target - start;
+    const pct = needed > 0 ? Math.round(((achieved - start) / needed) * 100) : ((achieved - start) > 0 ? 100 : 0);
+    // Rest = Target sapt. - Realizat, minim 0
     const rest = Math.max(0, target - achieved);
     const tier = getPctTier(pct);
     return `
@@ -2791,7 +2804,13 @@ function generateFullBoardImage(){
   if (players.length === 0){ showToast(t('noDataToExport'), 'error'); return; }
   if (typeof html2canvas === 'undefined'){ showToast('html2canvas not loaded', 'error'); return; }
 
-  const sorted = sortPlayers(players, 'rank');
+  // FIX: clasamentul din captura trebuie ordonat dupa procentul de atingere al targetului (start-adjusted),
+  // nu dupa Week Score brut (asta facea sortPlayers(players,'rank')).
+  const sorted = [...players].sort((a, b) => {
+    const pctB = getTargetPct(b), pctA = getTargetPct(a);
+    if (pctB !== pctA) return pctB - pctA;
+    return a.player.localeCompare(b.player);
+  });
   const half = Math.ceil(sorted.length / 2);
   const block1 = sorted.slice(0, half);
   const block2 = sorted.slice(half);
